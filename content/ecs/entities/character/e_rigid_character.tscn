@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bpsk33ple18v6"]
 
 [ext_resource type="Script" uid="uid://dqkeh2ao3wliq" path="res://content/ecs/entities/character/e_rigid_character.gd" id="1_character"]
-[ext_resource type="Script" path="res://content/rig/character_rig.gd" id="2_rig"]
+[ext_resource type="Script" path="res://content/rig/primitive_character_rig.gd" id="2_rig"]
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_character"]
 radial_segments = 8
 rings = 4

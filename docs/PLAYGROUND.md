@@ -35,16 +35,7 @@
 
 ### Effects
 
-Шесть заранее размещённых stations:
-
-- Poison
-- Burning
-- Heal
-- Regeneration
-- Haste
-- Slow
-
-`E` применяет выбранный `EffectDefinition` к текущему actor через тот же `EffectService`, который используют abilities. Haste/Slow проходят через `R_ModifiesStat`; Poison/Burning/Regen используют duration/tick pipeline.
+Шесть заранее размещённых stations: Poison, Burning, Heal, Regeneration, Haste и Slow. `E` применяет выбранный `EffectDefinition` к текущему actor через тот же `EffectService`, который используют abilities. Haste/Slow проходят через `R_ModifiesStat`; Poison/Burning/Regen используют duration/tick pipeline.
 
 ### Items
 
@@ -58,7 +49,9 @@ HUD показывает текущую Entity, Health, Mana, MoveSpeed, Damage,
 
 ## Rig
 
-Оба базовых actor scene уже содержат `CharacterRig` child. На primitives у него нет AnimationPlayer, поэтому presentation events являются no-op визуально; при замене primitive на импортированную модель достаточно настроить `RigProfile`, AnimationTree/AnimationPlayer и sockets, не меняя Ability/Effect/Equipment systems.
+Primitive actors используют `PrimitiveCharacterRig`, который реализует тот же `CharacterRig` contract и визуализирует locomotion/action простым procedural bob/squash. Поэтому `presentation_action` заметен даже без art assets.
+
+При подключении готовой модели `PrimitiveCharacterRig` заменяется обычным `CharacterRig` + `RigProfile` с AnimationTree/AnimationPlayer и semantic sockets. Ability/Effect/Equipment systems при этом не меняются.
 
 ## Проверка
 
