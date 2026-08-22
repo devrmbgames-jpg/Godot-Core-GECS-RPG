@@ -1,0 +1,121 @@
+[gd_scene format=3 uid="uid://bdmgmui74oixw"]
+
+[ext_resource type="Script" uid="uid://doab2vybixpto" path="res://content/test/test.gd" id="1_yowwo"]
+[ext_resource type="Script" uid="uid://cdu5tlyk72uu4" path="res://addons/gecs/ecs/world.gd" id="2_h3sae"]
+[ext_resource type="Script" uid="uid://b3vi2ingux88g" path="res://addons/gecs/lib/system_group.gd" id="3_mb17m"]
+[ext_resource type="Script" uid="uid://dg8fahba2w4ef" path="res://content/ecs/systems/physics/s_gravity.gd" id="4_h3sae"]
+[ext_resource type="Script" uid="uid://dp144k8jljuue" path="res://content/ecs/systems/motion/s_rotation.gd" id="5_7eq7a"]
+[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="5_mb17m"]
+[ext_resource type="Script" uid="uid://wuq6aida0f7d" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="5_qfnqw"]
+[ext_resource type="Script" uid="uid://cayftpflei2nh" path="res://content/ecs/systems/input/s_input_player.gd" id="6_1ew2d"]
+[ext_resource type="Script" uid="uid://yognxp1g7kkf" path="res://content/ecs/systems/motion/s_motion.gd" id="6_yle7a"]
+[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="7_2ex5b"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bghjr"]
+size = Vector3(256, 0.5, 256)
+
+[sub_resource type="Gradient" id="Gradient_o5mei"]
+offsets = PackedFloat32Array(0, 0.58090186, 1)
+colors = PackedColorArray(0.34781694, 0.34781697, 0.3478169, 1, 1, 1, 1, 1, 0.5175632, 0.5175632, 0.51756316, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_f5i5i"]
+noise_type = 3
+fractal_type = 2
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_mn5t4"]
+noise = SubResource("FastNoiseLite_f5i5i")
+color_ramp = SubResource("Gradient_o5mei")
+seamless = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqn1g"]
+albedo_color = Color(0.36604986, 0.43781045, 0.19711742, 1)
+albedo_texture = SubResource("NoiseTexture2D_mn5t4")
+uv1_scale = Vector3(-0.19, -0.19, -0.19)
+uv1_triplanar = true
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_h3sae"]
+data = PackedVector3Array(-128, 0.25, 128, 128, 0.25, 128, -128, -0.25, 128, 128, 0.25, 128, 128, -0.25, 128, -128, -0.25, 128, 128, 0.25, -128, -128, 0.25, -128, 128, -0.25, -128, -128, 0.25, -128, -128, -0.25, -128, 128, -0.25, -128, 128, 0.25, 128, 128, 0.25, -128, 128, -0.25, 128, 128, 0.25, -128, 128, -0.25, -128, 128, -0.25, 128, -128, 0.25, -128, -128, 0.25, 128, -128, -0.25, -128, -128, 0.25, 128, -128, -0.25, 128, -128, -0.25, -128, 128, 0.25, 128, -128, 0.25, 128, 128, 0.25, -128, -128, 0.25, 128, -128, 0.25, -128, 128, 0.25, -128, -128, -0.25, 128, 128, -0.25, 128, -128, -0.25, -128, 128, -0.25, 128, 128, -0.25, -128, -128, -0.25, -128)
+
+[node name="Test" type="Node" unique_id=1174734207 node_paths=PackedStringArray("world")]
+script = ExtResource("1_yowwo")
+world = NodePath("World")
+
+[node name="World" type="Node" parent="." unique_id=726869366]
+script = ExtResource("2_h3sae")
+entity_nodes_root = NodePath("../Entityes")
+system_nodes_root = NodePath("Systems")
+metadata/_custom_type_script = "uid://cdu5tlyk72uu4"
+
+[node name="Systems" type="Node" parent="World" unique_id=76650860]
+
+[node name="Input" type="Node" parent="World/Systems" unique_id=2088606215]
+script = ExtResource("3_mb17m")
+metadata/_custom_type_script = "uid://b3vi2ingux88g"
+
+[node name="S_InputPlayer" type="Node" parent="World/Systems/Input" unique_id=1213716295]
+script = ExtResource("6_1ew2d")
+metadata/_custom_type_script = "uid://cayftpflei2nh"
+
+[node name="Motion" type="Node" parent="World/Systems" unique_id=1480723938]
+script = ExtResource("3_mb17m")
+metadata/_custom_type_script = "uid://b3vi2ingux88g"
+
+[node name="S_Rotation" type="Node" parent="World/Systems/Motion" unique_id=414113260]
+script = ExtResource("5_7eq7a")
+metadata/_custom_type_script = "uid://dp144k8jljuue"
+
+[node name="S_Motion" type="Node" parent="World/Systems/Motion" unique_id=1663898842]
+script = ExtResource("6_yle7a")
+metadata/_custom_type_script = "uid://yognxp1g7kkf"
+
+[node name="Physics" type="Node" parent="World/Systems" unique_id=10532345]
+script = ExtResource("3_mb17m")
+metadata/_custom_type_script = "uid://b3vi2ingux88g"
+
+[node name="S_Gravity" type="Node" parent="World/Systems/Physics" unique_id=1553956927]
+script = ExtResource("4_h3sae")
+group = &"Physics"
+metadata/_custom_type_script = "uid://dg8fahba2w4ef"
+
+[node name="S_KinematicCharacter" type="Node" parent="World/Systems/Physics" unique_id=1928218725]
+script = ExtResource("5_qfnqw")
+group = &"Physics"
+metadata/_custom_type_script = "uid://wuq6aida0f7d"
+
+[node name="ENV" type="Node3D" parent="." unique_id=1674520785]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="ENV" unique_id=4587041]
+transform = Transform3D(0.84671795, -0.375305, 0.37711388, 0, 0.70880467, 0.7054048, -0.532042, -0.59727895, 0.6001576, 0, 55.066715, 0)
+shadow_enabled = true
+
+[node name="LevelGeomentry" type="Node3D" parent="." unique_id=500729296]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="LevelGeomentry" unique_id=204768162]
+mesh = SubResource("BoxMesh_bghjr")
+surface_material_override/0 = SubResource("StandardMaterial3D_lqn1g")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="LevelGeomentry/MeshInstance3D" unique_id=1982156727]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelGeomentry/MeshInstance3D/StaticBody3D" unique_id=475287952]
+shape = SubResource("ConcavePolygonShape3D_h3sae")
+
+[node name="Entityes" type="Node3D" parent="." unique_id=1539316167]
+
+[node name="EKinematicCharacter" parent="Entityes" unique_id=1229642302 instance=ExtResource("5_mb17m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.906385, 0)
+
+[node name="ERigidCharacter" parent="Entityes" unique_id=1702542787 instance=ExtResource("7_2ex5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.81307, -2.4261403)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+
+[node name="ERigidCharacter2" parent="Entityes" unique_id=1194115280 instance=ExtResource("7_2ex5b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0667095, 11.81307, -2.4261403)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=805438368]
+transform = Transform3D(0.31314042, -0.8342841, 0.45377648, 0, 0.4778069, 0.87846494, -0.94970685, -0.27508286, 0.14962065, 5.506916, 19.708168, 4.9139137)
