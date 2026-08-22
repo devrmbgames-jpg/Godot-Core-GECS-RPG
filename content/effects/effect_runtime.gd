@@ -59,11 +59,7 @@ static func _spawn(target: Entity, request: EffectApplyRequest) -> Entity:
 	ECS.world.add_entity(effect, null, false)
 	target.add_relationship(Relationship.new(R_HasEffect.new(effect, definition.id), E_Effect))
 	_sync_stat_modifiers(effect)
-	ECS.world.emit_event(
-		&"presentation_action",
-		target,
-		{"action": definition.presentation_action, "phase": &"effect_applied", "effect": effect},
-	)
+	ECS.world.emit_event(&"presentation_action", target, {"action": definition.presentation_action, "phase": &"effect_applied", "effect": effect})
 	return effect
 
 
@@ -86,16 +82,20 @@ static func _sync_stat_modifiers(effect: Entity) -> void:
 	for modifier_definition in effect_component.definition.stat_modifiers:
 		if modifier_definition == null or modifier_definition.stat_type == null:
 			continue
+		var amount := _scaled_modifier_amount(modifier_definition, context.stacks)
 		context.target.add_relationship(
 			Relationship.new(
-				R_ModifiesStat.new(
-					effect,
-					modifier_definition.operation,
-					modifier_definition.amount * context.stacks,
-				),
+				R_ModifiesStat.new(effect, modifier_definition.operation, amount),
 				modifier_definition.stat_type,
 			)
 		)
+
+
+static func _scaled_modifier_amount(definition: StatModifierDefinition, stacks: int) -> float:
+	var count := maxi(stacks, 1)
+	if definition.operation == R_ModifiesStat.Operation.MORE:
+		return pow(definition.amount, count)
+	return definition.amount * count
 
 
 static func _remove_stat_modifiers(target: Entity, effect: Entity) -> void:

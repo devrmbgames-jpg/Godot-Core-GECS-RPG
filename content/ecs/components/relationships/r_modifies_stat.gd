@@ -1,35 +1,23 @@
-## Relationship component, описывающий вклад некоторого source-object в stat владельца.
+## Relationship component: вклад source-object в stat владельца relationship.
 ##
-## Relationship хранится на actor, а target — Script нужного stat:
 ## `Player --R_ModifiesStat(source=Sword, ADDED, 10)--> C_Damage`.
-## Это избегает высококардинальных exact Entity targets в GECS v8 archetypes.
-## Relation считается immutable после добавления.
+## Stable Script target избегает high-cardinality exact Entity pair archetypes GECS v8.
 extends Component
 class_name R_ModifiesStat
 
-enum Operation {
-	ADDED,
-	INCREASED,
-	MORE,
-}
+enum Operation { ADDED, INCREASED, MORE }
 
-## Entity, из-за которой modifier существует: item/effect/passive. Может быть null
-## для системных modifiers. Это metadata relation, а не GECS relationship target.
+## Item/Effect/Passive, из-за которого modifier существует. Может быть null.
 var modifier_source: Entity
 
-## Как [member amount] участвует в формуле.
-@export var operation: Operation = Operation.ADDED
+## Operation хранится как int для безопасной передачи через generic Resource definitions.
+@export var operation: int = Operation.ADDED
 
-## ADDED: плоское значение; INCREASED: доля (0.20 = +20%);
-## MORE: готовый multiplier (1.20 = 20% more, 0.80 = 20% less).
+## ADDED: flat; INCREASED: доля; MORE: готовый multiplier.
 @export var amount: float = 0.0
 
 
-func _init(
-	initial_source: Entity = null,
-	initial_operation: Operation = Operation.ADDED,
-	initial_amount: float = 0.0,
-) -> void:
+func _init(initial_source: Entity = null, initial_operation: int = Operation.ADDED, initial_amount: float = 0.0) -> void:
 	modifier_source = initial_source
 	operation = initial_operation
 	amount = initial_amount

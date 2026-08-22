@@ -9,8 +9,10 @@ func query() -> QueryBuilder:
 
 func each(_event: Variant, target: Entity, payload: Variant) -> void:
 	var request := payload as InteractionRequest
-	var interactable := target.get_component(C_Interactable) as C_Interactable if target != null else null
-	if target == null or request == null or request.actor == null or interactable == null or not interactable.enabled:
+	if target == null or request == null or request.actor == null:
+		return
+	var interactable := target.get_component(C_Interactable) as C_Interactable
+	if interactable == null or not interactable.enabled:
 		return
 	var actor_node := request.actor as Node as Node3D
 	var target_node := target as Node as Node3D

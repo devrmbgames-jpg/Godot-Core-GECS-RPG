@@ -13,5 +13,4 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 		var duration := durations[index] as C_Duration
 		duration.remaining -= delta
 		if duration.remaining <= 0.0:
-			var effect := entities[index]
-			cmd.add_custom(func(): EffectRuntime.remove(effect))
+			cmd.add_custom(EffectRuntime.remove.bind(entities[index]))

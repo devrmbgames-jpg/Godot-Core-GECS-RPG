@@ -1,10 +1,20 @@
-## Stateless поиск CharacterRig в actor subtree. Вызывается только presentation events/systems.
+## Cached scene-tree lookup CharacterRig. Cache хранится как metadata самого actor Node.
 extends RefCounted
 class_name RigLocator
 
+const META_KEY: StringName = &"arpg_character_rig"
+
 
 static func find(actor: Entity) -> CharacterRig:
-	return _find_recursive(actor) if actor != null else null
+	if actor == null:
+		return null
+	var cached: Variant = actor.get_meta(META_KEY, null)
+	if cached is CharacterRig and is_instance_valid(cached):
+		return cached as CharacterRig
+	var rig := _find_recursive(actor)
+	if rig != null:
+		actor.set_meta(META_KEY, rig)
+	return rig
 
 
 static func _find_recursive(node: Node) -> CharacterRig:

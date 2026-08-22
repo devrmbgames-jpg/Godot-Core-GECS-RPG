@@ -32,11 +32,17 @@
 [ext_resource type="Script" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
 [ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
 [ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_enemy"]
+[ext_resource type="Script" path="res://content/ecs/systems/controller/s_player_controller.gd" id="33_player_controller"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/interaction/e_activatable.tscn" id="34_activatable"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(256,0.5,256)
 [sub_resource type="BoxShape3D" id="GroundShape"]
 size = Vector3(256,0.5,256)
+[sub_resource type="BoxMesh" id="CrateMesh"]
+size = Vector3(1.2,1.2,1.2)
+[sub_resource type="BoxShape3D" id="CrateShape"]
+size = Vector3(1.2,1.2,1.2)
 
 [node name="Test" type="Node" node_paths=PackedStringArray("world")]
 script = ExtResource("1_test")
@@ -66,7 +72,6 @@ script = ExtResource("28_interaction")
 script = ExtResource("29_activatable")
 [node name="O_RigPresentation" type="Node" parent="World/Systems"]
 script = ExtResource("30_rig_presentation")
-
 [node name="Attributes" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
 [node name="S_StatRebuild" type="Node" parent="World/Systems/Attributes"]
@@ -81,6 +86,9 @@ group = &"AI"
 script = ExtResource("3_group")
 [node name="S_InputPlayer" type="Node" parent="World/Systems/Input"]
 script = ExtResource("8_input")
+group = &"Input"
+[node name="S_PlayerController" type="Node" parent="World/Systems/Input"]
+script = ExtResource("33_player_controller")
 group = &"Input"
 [node name="S_AIController" type="Node" parent="World/Systems/Input"]
 script = ExtResource("9_ai_controller")
@@ -132,7 +140,6 @@ script = ExtResource("3_group")
 [node name="S_RigLocomotion" type="Node" parent="World/Systems/Presentation"]
 script = ExtResource("22_rig_locomotion")
 group = &"Presentation"
-
 [node name="Environment" type="Node3D" parent="."]
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 rotation_degrees = Vector3(-45,-35,0)
@@ -142,11 +149,20 @@ mesh = SubResource("GroundMesh")
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ground"]
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D"]
 shape = SubResource("GroundShape")
+[node name="FallingCrate" type="RigidBody3D" parent="Environment"]
+position = Vector3(1.5,7,0)
+mass = 12.0
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/FallingCrate"]
+mesh = SubResource("CrateMesh")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/FallingCrate"]
+shape = SubResource("CrateShape")
 [node name="Entities" type="Node3D" parent="."]
 [node name="Player" parent="Entities" instance=ExtResource("31_player")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
 [node name="RigidActor" parent="Entities" instance=ExtResource("32_enemy")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,-6)
+[node name="InteractionCube" parent="Entities" instance=ExtResource("34_activatable")]
+position = Vector3(4,0.75,0)
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.70710677,-0.35355338,0.61237246,0,0.8660254,0.5,-0.70710677,-0.35355338,0.61237246,8,10,8)
 current = true

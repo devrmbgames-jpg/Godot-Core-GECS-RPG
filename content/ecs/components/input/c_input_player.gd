@@ -1,11 +1,10 @@
-## Помечает Entity как локально управляемую через Godot InputMap.
+## Помечает Entity как локальный источник device input через Godot InputMap.
 ##
-## [member profile] задаёт semantic action names; actual bindings остаются в InputMap.
+## Компонент выбирает InputProfile; перевод input в world-space выполняет Player Controller.
 extends Component
 class_name C_InputPlayer
 
 @export var profile: InputProfile
-@export var camera_relative: bool = true
 
 
 func _init(initial_profile: InputProfile = null) -> void:
