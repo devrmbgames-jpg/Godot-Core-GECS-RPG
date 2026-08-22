@@ -1,28 +1,28 @@
-## Переводит semantic presentation_action events в CharacterRig operations.
+## Переводит typed semantic presentation events в CharacterRig operations.
 extends Observer
 class_name O_RigPresentation
 
 
 func query() -> QueryBuilder:
-	return q.on_event(&"presentation_action")
+	return q.on_event(PresentationService.EVENT_ACTION)
 
 
 func each(_event: Variant, actor: Entity, payload: Variant = null) -> void:
-	if actor == null or not (payload is Dictionary):
+	var presentation := payload as PresentationActionEvent
+	if actor == null or presentation == null:
 		return
 	var rig := RigLocator.find(actor)
 	if rig == null:
 		return
-	var action := StringName(payload.get("action", &""))
-	var phase := StringName(payload.get("phase", &"start"))
-	if action == &"equip_item":
-		var definition := payload.get("definition") as ItemDefinition
-		if definition != null:
-			rig.attach_equipment(definition.rig_socket, definition.visual_scene)
+	if presentation.action == &"equip_item":
+		if presentation.item_definition != null:
+			rig.attach_equipment(
+				presentation.item_definition.rig_socket,
+				presentation.item_definition.visual_scene,
+			)
 		return
-	if action == &"unequip_item":
-		var definition := payload.get("definition") as ItemDefinition
-		if definition != null:
-			rig.detach_equipment(definition.rig_socket)
+	if presentation.action == &"unequip_item":
+		if presentation.item_definition != null:
+			rig.detach_equipment(presentation.item_definition.rig_socket)
 		return
-	rig.play_action(action, phase)
+	rig.play_action(presentation.action, presentation.phase)
