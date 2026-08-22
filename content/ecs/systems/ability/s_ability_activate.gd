@@ -37,10 +37,9 @@ func process(entities: Array[Entity], _components: Array, _delta: float) -> void
 		cooldown.remaining = maxf(0.0, definition.base_cooldown)
 		var target_component := actor.get_component(C_CombatTarget) as C_CombatTarget
 		var target := target_component.target if target_component != null else null
-		ECS.world.emit_event(
-			&"presentation_action",
+		PresentationService.publish(
 			actor,
-			{"action": definition.presentation_action, "phase": &"start", "ability": ability},
+			PresentationActionEvent.for_ability(definition.presentation_action, &"start", ability),
 		)
 		if definition.base_cast_work <= 0.0 or definition.timing == AbilityDefinition.Timing.INSTANT:
 			AbilityResolver.resolve(actor, ability, target, Vector3.ZERO, cmd)
