@@ -8,8 +8,13 @@ func query() -> QueryBuilder:
 
 
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
+	var request := payload as InteractionRequest
 	var activatable := target.get_component(C_Activatable) as C_Activatable
-	if activatable == null:
+	if activatable == null or request == null:
 		return
 	activatable.active = not activatable.active if activatable.toggle else true
-	ECS.world.emit_event(InteractionService.EVENT_STATE_CHANGED, target, {"active": activatable.active, "request": payload})
+	ECS.world.emit_event(
+		InteractionService.EVENT_STATE_CHANGED,
+		target,
+		InteractionStateChangedEvent.new(activatable.active, request),
+	)
