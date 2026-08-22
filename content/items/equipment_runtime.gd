@@ -9,7 +9,7 @@ static func equip(actor: Entity, item: Entity) -> void:
 	var item_component := item.get_component(C_Item) as C_Item
 	if item_component == null or item_component.definition == null:
 		return
-	var definition := item_component.definition
+	var definition: ItemDefinition = item_component.definition
 	var old := find_equipped(actor, definition.equipment_slot)
 	if old != null and old != item:
 		unequip(actor, old)
@@ -28,10 +28,9 @@ static func equip(actor: Entity, item: Entity) -> void:
 	for grant in definition.granted_abilities:
 		if grant != null and grant.ability != null:
 			AbilityFactory.grant(actor, grant.ability, grant.slot, item)
-	ECS.world.emit_event(
-		&"presentation_action",
+	PresentationService.publish(
 		actor,
-		{"action": &"equip_item", "phase": &"equip", "item": item, "definition": definition},
+		PresentationActionEvent.for_item(&"equip_item", &"equip", item, definition),
 	)
 
 
@@ -49,10 +48,10 @@ static func unequip(actor: Entity, item: Entity) -> void:
 			actor.remove_relationship(relationship, 1)
 	AbilityFactory.revoke_by_source(actor, item)
 	var item_component := item.get_component(C_Item) as C_Item
-	ECS.world.emit_event(
-		&"presentation_action",
+	var definition: ItemDefinition = item_component.definition if item_component != null else null
+	PresentationService.publish(
 		actor,
-		{"action": &"unequip_item", "phase": &"unequip", "item": item, "definition": item_component.definition if item_component != null else null},
+		PresentationActionEvent.for_item(&"unequip_item", &"unequip", item, definition),
 	)
 
 
