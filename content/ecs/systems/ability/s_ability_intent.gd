@@ -7,10 +7,12 @@ func query() -> QueryBuilder:
 	return q.with_all([C_ControllerIntent, C_AbilityQueue]).iterate([C_ControllerIntent, C_AbilityQueue])
 
 
-func process(_entities: Array[Entity], components: Array, _delta: float) -> void:
+func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var intents: Array = components[0]
 	var queues: Array = components[1]
 	for index in intents.size():
+		if entities[index].has_component(C_Dead):
+			continue
 		var intent := intents[index] as C_ControllerIntent
 		var queue := queues[index] as C_AbilityQueue
 		if intent.primary_pressed:

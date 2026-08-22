@@ -14,8 +14,10 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	for index in entities.size():
 		var actor := entities[index]
 		var casting := castings[index] as C_Casting
+		if casting == null or not casting.active:
+			continue
 		if actor.has_component(C_Dead) or casting.ability == null or not is_instance_valid(casting.ability):
-			cmd.remove_component(actor, C_Casting)
+			casting.clear()
 			continue
 		var speed := 1.0
 		match casting.timing:
@@ -27,4 +29,4 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 		if casting.remaining_work > 0.0:
 			continue
 		AbilityResolver.resolve(actor, casting.ability, casting.target, casting.target_position, cmd)
-		cmd.remove_component(actor, C_Casting)
+		casting.clear()

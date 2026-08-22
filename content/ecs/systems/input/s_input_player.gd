@@ -7,12 +7,19 @@ func query() -> QueryBuilder:
 	return q.with_all([C_InputPlayer, C_InputState]).iterate([C_InputPlayer, C_InputState])
 
 
-func process(_entities: Array[Entity], components: Array, _delta: float) -> void:
+func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var inputs: Array = components[0]
 	var states: Array = components[1]
 	for index in inputs.size():
-		var input_component := inputs[index] as C_InputPlayer
 		var state := states[index] as C_InputState
+		if entities[index].has_component(C_Dead):
+			state.move_axis = Vector2.ZERO
+			state.primary_pressed = false
+			state.secondary_pressed = false
+			state.skill_1_pressed = false
+			state.interact_pressed = false
+			continue
+		var input_component := inputs[index] as C_InputPlayer
 		var profile := input_component.profile
 		if profile == null:
 			profile = InputProfile.new()

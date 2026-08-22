@@ -48,7 +48,7 @@ static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, defin
 	var direction := _resolve_direction(actor, target, Vector3.ZERO)
 	var hit := CombatQuery.raycast_entity(actor, origin, origin + direction * definition.range)
 	var victim := hit.get("entity") as Entity
-	if victim == null or victim == actor:
+	if victim == null or victim == actor or not CombatRules.can_damage(actor, victim):
 		return
 	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.get("position", origin), direction))
 	EffectService.request_all(victim, definition.effects, actor, ability)

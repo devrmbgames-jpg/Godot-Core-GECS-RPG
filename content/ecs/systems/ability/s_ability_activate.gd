@@ -1,12 +1,12 @@
 ## Валидирует и запускает один queued ability request на actor за frame.
 ##
-## Mana/cooldown относятся к runtime state; immutable AbilityDefinition не мутируется.
+## C_Casting — постоянный runtime-state: frequent attacks не делают archetype churn.
 extends System
 class_name S_AbilityActivate
 
 
 func query() -> QueryBuilder:
-	return q.with_all([C_AbilityQueue, C_Mana, C_ManaCostMultiplier])
+	return q.with_all([C_AbilityQueue, C_Casting, C_Mana, C_ManaCostMultiplier])
 
 
 func process(entities: Array[Entity], _components: Array, _delta: float) -> void:
@@ -15,7 +15,8 @@ func process(entities: Array[Entity], _components: Array, _delta: float) -> void
 		if queue == null or queue.slots.is_empty():
 			continue
 		var slot := queue.pop()
-		if actor.has_component(C_Dead) or actor.has_component(C_Casting):
+		var casting := actor.get_component(C_Casting) as C_Casting
+		if actor.has_component(C_Dead) or casting == null or casting.active:
 			continue
 		var ability := AbilityFactory.find_ability(actor, slot)
 		if ability == null:
@@ -44,7 +45,4 @@ func process(entities: Array[Entity], _components: Array, _delta: float) -> void
 		if definition.base_cast_work <= 0.0 or definition.timing == AbilityDefinition.Timing.INSTANT:
 			AbilityResolver.resolve(actor, ability, target, Vector3.ZERO, cmd)
 		else:
-			cmd.add_component(
-				actor,
-				C_Casting.new(ability, target, Vector3.ZERO, definition.base_cast_work, definition.timing),
-			)
+			casting.start(ability, target, Vector3.ZERO, definition.base_cast_work, definition.timing)
