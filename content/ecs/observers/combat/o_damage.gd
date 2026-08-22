@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Health]).on_event(DamageService.EVENT_DAMAGE_REQUESTED)
 
 
-func each(_event: Variant, target: Entity, payload: Variant) -> void:
+func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var damage := payload as DamageRequest
 	if target == null or damage == null or not CombatRules.can_damage(damage.source, target):
 		return

@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Health, C_MaxHealth]).on_changed([&"value"])
 
 
-func each(_event: Variant, entity: Entity, _payload: Variant) -> void:
+func each(_event: Variant, entity: Entity, _payload: Variant = null) -> void:
 	var health := entity.get_component(C_Health) as C_Health
 	var maximum := entity.get_component(C_MaxHealth) as C_MaxHealth
 	if health != null and maximum != null:

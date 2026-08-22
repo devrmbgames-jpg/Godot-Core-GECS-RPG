@@ -10,7 +10,7 @@ func query() -> QueryBuilder:
 	return q.on_relationship_added([R_ModifiesStat]).on_relationship_removed([R_ModifiesStat])
 
 
-func each(_event: Variant, actor: Entity, payload: Variant) -> void:
+func each(_event: Variant, actor: Entity, payload: Variant = null) -> void:
 	var relationship := payload as Relationship
 	if actor == null or relationship == null or not (relationship.target is Script):
 		return

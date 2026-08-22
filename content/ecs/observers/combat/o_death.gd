@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Dead]).on_added()
 
 
-func each(_event: Variant, actor: Entity, _payload: Variant) -> void:
+func each(_event: Variant, actor: Entity, _payload: Variant = null) -> void:
 	var intent := actor.get_component(C_ControllerIntent) as C_ControllerIntent
 	if intent != null:
 		intent.move_direction = Vector3.ZERO

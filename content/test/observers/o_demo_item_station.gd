@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_DemoItemStation, C_Interactable]).on_event(InteractionService.EVENT_ACTIVATED)
 
 
-func each(_event: Variant, station: Entity, payload: Variant) -> void:
+func each(_event: Variant, station: Entity, payload: Variant = null) -> void:
 	var request := payload as InteractionRequest
 	var marker := station.get_component(C_DemoItemStation) as C_DemoItemStation
 	if request == null or request.actor == null or marker == null:

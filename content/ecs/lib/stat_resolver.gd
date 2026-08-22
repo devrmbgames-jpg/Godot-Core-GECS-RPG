@@ -36,7 +36,7 @@ static func _resolve_stat(stat: AttributeComponent, relationships: Array[Relatio
 	var added := 0.0
 	var increased := 0.0
 	var more := 1.0
-	var stat_script := stat.get_script()
+	var stat_script: Script = stat.get_script()
 	for relationship in relationships:
 		if relationship.target != stat_script:
 			continue

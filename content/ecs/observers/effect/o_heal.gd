@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Health, C_MaxHealth]).on_event(HealService.EVENT_HEAL_REQUESTED)
 
 
-func each(_event: Variant, target: Entity, payload: Variant) -> void:
+func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request := payload as HealRequest
 	if target == null or request == null or target.has_component(C_Dead):
 		return

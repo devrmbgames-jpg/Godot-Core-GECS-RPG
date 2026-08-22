@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.on_event(&"presentation_action")
 
 
-func each(_event: Variant, actor: Entity, payload: Variant) -> void:
+func each(_event: Variant, actor: Entity, payload: Variant = null) -> void:
 	if actor == null or not (payload is Dictionary):
 		return
 	var rig := RigLocator.find(actor)

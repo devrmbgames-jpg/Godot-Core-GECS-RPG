@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Interactable]).on_event(InteractionService.EVENT_REQUESTED)
 
 
-func each(_event: Variant, target: Entity, payload: Variant) -> void:
+func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request := payload as InteractionRequest
 	if target == null or request == null or request.actor == null:
 		return

@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.on_event(EffectService.EVENT_APPLY)
 
 
-func each(_event: Variant, target: Entity, payload: Variant) -> void:
+func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request := payload as EffectApplyRequest
 	if target == null or request == null or target.has_component(C_Dead):
 		return

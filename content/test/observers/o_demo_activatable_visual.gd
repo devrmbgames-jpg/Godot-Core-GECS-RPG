@@ -7,7 +7,7 @@ func query() -> QueryBuilder:
 	return q.with_all([C_Activatable]).on_event(InteractionService.EVENT_STATE_CHANGED)
 
 
-func each(_event: Variant, target: Entity, payload: Variant) -> void:
+func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var active: bool = payload.get("active", false) if payload is Dictionary else false
 	var mesh := target.get_node_or_null("MeshInstance3D") as MeshInstance3D
 	if mesh == null:
