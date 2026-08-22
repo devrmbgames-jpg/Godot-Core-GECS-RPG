@@ -12,7 +12,7 @@ class_name CharacterRig
 var model_root: Node3D
 var animation_tree: AnimationTree
 var animation_player: AnimationPlayer
-var _equipment_nodes: Dictionary = {}
+var _equipment_attachments: Array[RigEquipmentAttachment] = []
 
 
 func _ready() -> void:
@@ -46,14 +46,17 @@ func attach_equipment(socket: StringName, scene: PackedScene) -> void:
 		return
 	var visual := scene.instantiate()
 	anchor.add_child(visual)
-	_equipment_nodes[socket] = visual
+	_equipment_attachments.append(RigEquipmentAttachment.new(socket, visual))
 
 
 func detach_equipment(socket: StringName) -> void:
-	var visual: Node = _equipment_nodes.get(socket)
-	if visual != null and is_instance_valid(visual):
-		visual.queue_free()
-	_equipment_nodes.erase(socket)
+	for index in range(_equipment_attachments.size() - 1, -1, -1):
+		var attachment := _equipment_attachments[index]
+		if attachment == null or attachment.socket != socket:
+			continue
+		if attachment.visual != null and is_instance_valid(attachment.visual):
+			attachment.visual.queue_free()
+		_equipment_attachments.remove_at(index)
 
 
 func get_socket(socket: StringName) -> Node:
