@@ -22,11 +22,20 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 			continue
 		var from := node.global_position
 		var to := from + projectile.velocity * delta
-		var hit := CombatQuery.raycast_entity(projectile.source, from, to)
-		if not hit.is_empty():
-			var victim := hit.get("entity") as Entity
+		var hit: CombatHit = CombatQuery.raycast_entity(projectile.source, from, to)
+		if hit != null:
+			var victim := hit.entity
 			if victim != null and victim != projectile.source and CombatRules.can_damage(projectile.source, victim):
-				DamageService.request(victim, DamageRequest.new(projectile.source, projectile.ability, projectile.damage, hit.get("position", to), projectile.velocity.normalized()))
+				DamageService.request(
+					victim,
+					DamageRequest.new(
+						projectile.source,
+						projectile.ability,
+						projectile.damage,
+						hit.position,
+						projectile.velocity.normalized(),
+					),
+				)
 				if projectile.definition != null:
 					EffectService.request_all(victim, projectile.definition.effects, projectile.source, projectile.ability)
 			cmd.remove_entity(entity)
