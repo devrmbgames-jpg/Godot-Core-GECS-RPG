@@ -1,12 +1,10 @@
 ## Пример AI behavior: преследует target и запрашивает primary ability в радиусе атаки.
-##
-## System пишет только C_AIController/C_CombatTarget; Motion и Ability остаются общими.
 extends System
 class_name S_AIChase
 
 
 func query() -> QueryBuilder:
-	return q.with_all([C_AIController, C_AIChase, C_CombatTarget]).iterate([C_AIController, C_AIChase, C_CombatTarget])
+	return q.with_all([C_AIController, C_AIChase, C_CombatTarget]).with_none([C_Dead]).iterate([C_AIController, C_AIChase, C_CombatTarget])
 
 
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:

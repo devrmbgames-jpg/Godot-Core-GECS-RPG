@@ -9,26 +9,29 @@
 [ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_chase.gd" id="7_ai_chase"]
 [ext_resource type="Script" path="res://content/ecs/systems/input/s_input_player.gd" id="8_input"]
 [ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_controller.gd" id="9_ai_controller"]
-[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_intent.gd" id="10_ability_intent"]
-[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_activate.gd" id="11_activate"]
-[ext_resource type="Script" path="res://content/ecs/systems/ability/s_casting.gd" id="12_casting"]
-[ext_resource type="Script" path="res://content/ecs/systems/ability/s_cooldown.gd" id="13_cooldown"]
-[ext_resource type="Script" path="res://content/ecs/systems/interaction/s_interaction_intent.gd" id="14_interact"]
-[ext_resource type="Script" path="res://content/ecs/observers/combat/o_damage.gd" id="15_damage"]
-[ext_resource type="Script" path="res://content/ecs/observers/effect/o_effect_apply.gd" id="16_effect_apply"]
-[ext_resource type="Script" path="res://content/ecs/observers/effect/o_heal.gd" id="17_heal"]
-[ext_resource type="Script" path="res://content/ecs/observers/item/o_equipment.gd" id="18_equipment"]
-[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_interaction.gd" id="19_interaction"]
-[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_activatable.gd" id="20_activatable"]
-[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_tick.gd" id="21_effect_tick"]
-[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_duration.gd" id="22_effect_duration"]
-[ext_resource type="Script" path="res://content/ecs/systems/motion/s_motion.gd" id="23_motion"]
-[ext_resource type="Script" path="res://content/ecs/systems/motion/s_rotation.gd" id="24_rotation"]
-[ext_resource type="Script" path="res://content/ecs/systems/physics/s_gravity.gd" id="25_gravity"]
-[ext_resource type="Script" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="26_character"]
-[ext_resource type="Script" path="res://content/ecs/systems/combat/s_projectile.gd" id="27_projectile"]
-[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="28_player"]
-[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="29_enemy"]
+[ext_resource type="Script" path="res://content/ecs/systems/interaction/s_interaction_intent.gd" id="10_interact"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_intent.gd" id="11_ability_intent"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_activate.gd" id="12_activate"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_casting.gd" id="13_casting"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_cooldown.gd" id="14_cooldown"]
+[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_tick.gd" id="15_effect_tick"]
+[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_duration.gd" id="16_effect_duration"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_motion.gd" id="17_motion"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_rotation.gd" id="18_rotation"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_gravity.gd" id="19_gravity"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="20_character"]
+[ext_resource type="Script" path="res://content/ecs/systems/combat/s_projectile.gd" id="21_projectile"]
+[ext_resource type="Script" path="res://content/ecs/systems/presentation/s_rig_locomotion.gd" id="22_rig_locomotion"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_damage.gd" id="23_damage"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_death.gd" id="24_death"]
+[ext_resource type="Script" path="res://content/ecs/observers/effect/o_effect_apply.gd" id="25_effect_apply"]
+[ext_resource type="Script" path="res://content/ecs/observers/effect/o_heal.gd" id="26_heal"]
+[ext_resource type="Script" path="res://content/ecs/observers/item/o_equipment.gd" id="27_equipment"]
+[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_interaction.gd" id="28_interaction"]
+[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_activatable.gd" id="29_activatable"]
+[ext_resource type="Script" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
+[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
+[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_enemy"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(256,0.5,256)
@@ -48,17 +51,21 @@ script = ExtResource("5_stat_observer")
 [node name="O_HealthBounds" type="Node" parent="World/Systems"]
 script = ExtResource("6_health_bounds")
 [node name="O_Damage" type="Node" parent="World/Systems"]
-script = ExtResource("15_damage")
+script = ExtResource("23_damage")
+[node name="O_Death" type="Node" parent="World/Systems"]
+script = ExtResource("24_death")
 [node name="O_EffectApply" type="Node" parent="World/Systems"]
-script = ExtResource("16_effect_apply")
+script = ExtResource("25_effect_apply")
 [node name="O_Heal" type="Node" parent="World/Systems"]
-script = ExtResource("17_heal")
+script = ExtResource("26_heal")
 [node name="O_Equipment" type="Node" parent="World/Systems"]
-script = ExtResource("18_equipment")
+script = ExtResource("27_equipment")
 [node name="O_Interaction" type="Node" parent="World/Systems"]
-script = ExtResource("19_interaction")
+script = ExtResource("28_interaction")
 [node name="O_Activatable" type="Node" parent="World/Systems"]
-script = ExtResource("20_activatable")
+script = ExtResource("29_activatable")
+[node name="O_RigPresentation" type="Node" parent="World/Systems"]
+script = ExtResource("30_rig_presentation")
 
 [node name="Attributes" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
@@ -81,45 +88,50 @@ group = &"Input"
 [node name="Gameplay" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
 [node name="S_InteractionIntent" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("14_interact")
+script = ExtResource("10_interact")
 group = &"Gameplay"
 [node name="S_AbilityIntent" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("10_ability_intent")
+script = ExtResource("11_ability_intent")
 group = &"Gameplay"
 [node name="S_AbilityActivate" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("11_activate")
+script = ExtResource("12_activate")
 group = &"Gameplay"
 [node name="S_Casting" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("12_casting")
+script = ExtResource("13_casting")
 group = &"Gameplay"
 [node name="S_Cooldown" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("13_cooldown")
+script = ExtResource("14_cooldown")
 group = &"Gameplay"
 [node name="S_EffectTick" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("21_effect_tick")
+script = ExtResource("15_effect_tick")
 group = &"Gameplay"
 [node name="S_EffectDuration" type="Node" parent="World/Systems/Gameplay"]
-script = ExtResource("22_effect_duration")
+script = ExtResource("16_effect_duration")
 group = &"Gameplay"
 [node name="Motion" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
 [node name="S_Motion" type="Node" parent="World/Systems/Motion"]
-script = ExtResource("23_motion")
+script = ExtResource("17_motion")
 group = &"Motion"
 [node name="S_Rotation" type="Node" parent="World/Systems/Motion"]
-script = ExtResource("24_rotation")
+script = ExtResource("18_rotation")
 group = &"Motion"
 [node name="Physics" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
 [node name="S_Gravity" type="Node" parent="World/Systems/Physics"]
-script = ExtResource("25_gravity")
+script = ExtResource("19_gravity")
 group = &"Physics"
 [node name="S_KinematicCharacter" type="Node" parent="World/Systems/Physics"]
-script = ExtResource("26_character")
+script = ExtResource("20_character")
 group = &"Physics"
 [node name="S_Projectile" type="Node" parent="World/Systems/Physics"]
-script = ExtResource("27_projectile")
+script = ExtResource("21_projectile")
 group = &"Physics"
+[node name="Presentation" type="Node" parent="World/Systems"]
+script = ExtResource("3_group")
+[node name="S_RigLocomotion" type="Node" parent="World/Systems/Presentation"]
+script = ExtResource("22_rig_locomotion")
+group = &"Presentation"
 
 [node name="Environment" type="Node3D" parent="."]
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
@@ -131,9 +143,9 @@ mesh = SubResource("GroundMesh")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D"]
 shape = SubResource("GroundShape")
 [node name="Entities" type="Node3D" parent="."]
-[node name="Player" parent="Entities" instance=ExtResource("28_player")]
+[node name="Player" parent="Entities" instance=ExtResource("31_player")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
-[node name="RigidActor" parent="Entities" instance=ExtResource("29_enemy")]
+[node name="RigidActor" parent="Entities" instance=ExtResource("32_enemy")]
 transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,-6)
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.70710677,-0.35355338,0.61237246,0,0.8660254,0.5,-0.70710677,-0.35355338,0.61237246,8,10,8)

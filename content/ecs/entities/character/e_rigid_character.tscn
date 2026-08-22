@@ -1,35 +1,29 @@
 [gd_scene format=3 uid="uid://bpsk33ple18v6"]
 
 [ext_resource type="Script" uid="uid://dqkeh2ao3wliq" path="res://content/ecs/entities/character/e_rigid_character.gd" id="1_character"]
-
+[ext_resource type="Script" path="res://content/rig/character_rig.gd" id="2_rig"]
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_character"]
 radial_segments = 8
 rings = 4
-
 [sub_resource type="StandardMaterial3D" id="Material_character"]
-albedo_color = Color(0.84748656, 0.54234344, 0.54446536, 1)
-
+albedo_color = Color(0.84748656,0.54234344,0.54446536,1)
 [sub_resource type="BoxMesh" id="BoxMesh_facing"]
-size = Vector3(0.2, 0.2, 0.8919922)
-
+size = Vector3(0.2,0.2,0.8919922)
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_character"]
-
 [node name="ERigidCharacter" type="RigidBody3D"]
 script = ExtResource("1_character")
 axis_lock_angular_x = true
 axis_lock_angular_z = true
-
+[node name="Rig" type="Node3D" parent="."]
+script = ExtResource("2_rig")
 [node name="Visual" type="Node3D" parent="."]
-
 [node name="Body" type="MeshInstance3D" parent="Visual"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
 mesh = SubResource("CapsuleMesh_character")
 surface_material_override/0 = SubResource("Material_character")
-
 [node name="Facing" type="MeshInstance3D" parent="Visual/Body"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43812656, -0.79980755)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.43812656,-0.79980755)
 mesh = SubResource("BoxMesh_facing")
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
 shape = SubResource("CapsuleShape_character")

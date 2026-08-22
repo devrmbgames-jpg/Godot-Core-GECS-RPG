@@ -28,6 +28,7 @@ func _process(delta: float) -> void:
 	world.process(delta, "AI")
 	world.process(delta, "Input")
 	world.process(delta, "Gameplay")
+	world.process(delta, "Presentation")
 
 
 func _physics_process(delta: float) -> void:
