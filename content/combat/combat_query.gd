@@ -1,25 +1,29 @@
-## Stateless Godot-physics queries, возвращающие gameplay Entity.
+## Stateless Godot-physics queries, возвращающие typed gameplay results.
 extends RefCounted
 class_name CombatQuery
 
 
-## Возвращает первую Entity на ray, игнорируя source CollisionObject3D.
-static func raycast_entity(source: Entity, from: Vector3, to: Vector3) -> Dictionary:
+## Возвращает typed CombatHit для первого physics hit, игнорируя source CollisionObject3D.
+##
+## Dictionary существует только локально, потому что PhysicsDirectSpaceState3D.intersect_ray()
+## является Godot API с Dictionary return type. Строковые ключи не выходят из этого adapter.
+static func raycast_entity(source: Entity, from: Vector3, to: Vector3) -> CombatHit:
 	var source_node := source as Node as Node3D
 	if source_node == null or source_node.get_world_3d() == null:
-		return {}
+		return null
 	var parameters := PhysicsRayQueryParameters3D.create(from, to)
 	var collision_source := source as Node as CollisionObject3D
 	if collision_source != null:
 		parameters.exclude = [collision_source.get_rid()]
-	var hit := source_node.get_world_3d().direct_space_state.intersect_ray(parameters)
-	if hit.is_empty():
-		return {}
-	var node := hit.get("collider") as Node
+	var raw_hit: Dictionary = source_node.get_world_3d().direct_space_state.intersect_ray(parameters)
+	if raw_hit.is_empty():
+		return null
+	var node := raw_hit.get("collider") as Node
 	while node != null and not (node is Entity):
 		node = node.get_parent()
-	hit["entity"] = node as Entity
-	return hit
+	var hit_position: Vector3 = raw_hit.get("position", to)
+	var hit_normal: Vector3 = raw_hit.get("normal", Vector3.ZERO)
+	return CombatHit.new(node as Entity, hit_position, hit_normal)
 
 
 ## World-space direction actor currently intends to face.
