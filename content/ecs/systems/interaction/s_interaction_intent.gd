@@ -20,7 +20,11 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 			continue
 		var origin := actor_node.global_position + Vector3.UP
 		var direction := CombatQuery.facing(actor)
-		var hit := CombatQuery.raycast_entity(actor, origin, origin + direction * maxf((ranges[index] as C_InteractionRange).value, 0.0))
-		var target := hit.get("entity") as Entity
+		var hit: CombatHit = CombatQuery.raycast_entity(
+			actor,
+			origin,
+			origin + direction * maxf((ranges[index] as C_InteractionRange).value, 0.0),
+		)
+		var target := hit.entity if hit != null else null
 		if target != null and target.has_component(C_Interactable):
 			InteractionService.request(actor, target)
