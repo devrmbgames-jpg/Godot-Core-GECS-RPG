@@ -14,4 +14,5 @@ class_name InputProfile
 @export_group("Actions")
 @export var primary_action: StringName = &"game_primary_action"
 @export var secondary_action: StringName = &"game_secondary_action"
+@export var skill_1_action: StringName = &"game_skill_1"
 @export var interact: StringName = &"game_interact"

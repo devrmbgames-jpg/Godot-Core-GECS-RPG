@@ -5,18 +5,24 @@
 [ext_resource type="Script" uid="uid://b3vi2ingux88g" path="res://addons/gecs/lib/system_group.gd" id="3_group"]
 [ext_resource type="Script" path="res://content/ecs/systems/attributes/s_stat_rebuild.gd" id="4_stats"]
 [ext_resource type="Script" path="res://content/ecs/observers/attributes/o_stat_modifier_changed.gd" id="5_stat_observer"]
-[ext_resource type="Script" path="res://content/ecs/systems/input/s_input_player.gd" id="6_input"]
-[ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_controller.gd" id="7_ai"]
-[ext_resource type="Script" path="res://content/ecs/systems/motion/s_motion.gd" id="8_motion"]
-[ext_resource type="Script" path="res://content/ecs/systems/motion/s_rotation.gd" id="9_rotation"]
-[ext_resource type="Script" path="res://content/ecs/systems/physics/s_gravity.gd" id="10_gravity"]
-[ext_resource type="Script" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="11_character"]
-[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="12_player"]
-[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="13_rigid"]
+[ext_resource type="Script" path="res://content/ecs/observers/attributes/o_health_bounds.gd" id="6_health_bounds"]
+[ext_resource type="Script" path="res://content/ecs/systems/input/s_input_player.gd" id="7_input"]
+[ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_controller.gd" id="8_ai"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_intent.gd" id="9_intent"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_activate.gd" id="10_activate"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_casting.gd" id="11_casting"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_cooldown.gd" id="12_cooldown"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_damage.gd" id="13_damage"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_motion.gd" id="14_motion"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_rotation.gd" id="15_rotation"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_gravity.gd" id="16_gravity"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="17_character"]
+[ext_resource type="Script" path="res://content/ecs/systems/combat/s_projectile.gd" id="18_projectile"]
+[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="19_player"]
+[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="20_rigid"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(256, 0.5, 256)
-
 [sub_resource type="BoxShape3D" id="GroundShape"]
 size = Vector3(256, 0.5, 256)
 
@@ -28,74 +34,82 @@ world = NodePath("World")
 script = ExtResource("2_world")
 entity_nodes_root = NodePath("../Entities")
 system_nodes_root = NodePath("Systems")
-
 [node name="Systems" type="Node" parent="World"]
+
+[node name="O_StatModifierChanged" type="Node" parent="World/Systems"]
+script = ExtResource("5_stat_observer")
+[node name="O_HealthBounds" type="Node" parent="World/Systems"]
+script = ExtResource("6_health_bounds")
+[node name="O_Damage" type="Node" parent="World/Systems"]
+script = ExtResource("13_damage")
 
 [node name="Attributes" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
 [node name="S_StatRebuild" type="Node" parent="World/Systems/Attributes"]
 script = ExtResource("4_stats")
 group = &"Attributes"
 
-[node name="O_StatModifierChanged" type="Node" parent="World/Systems"]
-script = ExtResource("5_stat_observer")
-
 [node name="Input" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
 [node name="S_InputPlayer" type="Node" parent="World/Systems/Input"]
-script = ExtResource("6_input")
+script = ExtResource("7_input")
+group = &"Input"
+[node name="S_AIController" type="Node" parent="World/Systems/Input"]
+script = ExtResource("8_ai")
 group = &"Input"
 
-[node name="S_AIController" type="Node" parent="World/Systems/Input"]
-script = ExtResource("7_ai")
-group = &"Input"
+[node name="Gameplay" type="Node" parent="World/Systems"]
+script = ExtResource("3_group")
+[node name="S_AbilityIntent" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("9_intent")
+group = &"Gameplay"
+[node name="S_AbilityActivate" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("10_activate")
+group = &"Gameplay"
+[node name="S_Casting" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("11_casting")
+group = &"Gameplay"
+[node name="S_Cooldown" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("12_cooldown")
+group = &"Gameplay"
 
 [node name="Motion" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
 [node name="S_Motion" type="Node" parent="World/Systems/Motion"]
-script = ExtResource("8_motion")
+script = ExtResource("14_motion")
 group = &"Motion"
-
 [node name="S_Rotation" type="Node" parent="World/Systems/Motion"]
-script = ExtResource("9_rotation")
+script = ExtResource("15_rotation")
 group = &"Motion"
 
 [node name="Physics" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
 [node name="S_Gravity" type="Node" parent="World/Systems/Physics"]
-script = ExtResource("10_gravity")
+script = ExtResource("16_gravity")
 group = &"Physics"
-
 [node name="S_KinematicCharacter" type="Node" parent="World/Systems/Physics"]
-script = ExtResource("11_character")
+script = ExtResource("17_character")
+group = &"Physics"
+[node name="S_Projectile" type="Node" parent="World/Systems/Physics"]
+script = ExtResource("18_projectile")
 group = &"Physics"
 
 [node name="Environment" type="Node3D" parent="."]
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 rotation_degrees = Vector3(-45, -35, 0)
 shadow_enabled = true
-
 [node name="Ground" type="MeshInstance3D" parent="Environment"]
 mesh = SubResource("GroundMesh")
-
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ground"]
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D"]
 shape = SubResource("GroundShape")
 
 [node name="Entities" type="Node3D" parent="."]
-
-[node name="Player" parent="Entities" instance=ExtResource("12_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-
-[node name="RigidActor" parent="Entities" instance=ExtResource("13_rigid")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3, -2)
+[node name="Player" parent="Entities" instance=ExtResource("19_player")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
+[node name="RigidActor" parent="Entities" instance=ExtResource("20_rigid")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,3,3,-2)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.70710677, -0.35355338, 0.61237246, 0, 0.8660254, 0.5, -0.70710677, -0.35355338, 0.61237246, 8, 10, 8)
+transform = Transform3D(0.70710677,-0.35355338,0.61237246,0,0.8660254,0.5,-0.70710677,-0.35355338,0.61237246,8,10,8)
 current = true

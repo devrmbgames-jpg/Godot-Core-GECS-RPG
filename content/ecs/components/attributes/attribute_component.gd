@@ -2,17 +2,19 @@
 ##
 ## [member base_value] — исходное значение без временных modifiers.
 ## [member value] — закешированный итог, который читают hot-path systems.
-## Наследники должны быть отдельными типами (`C_MoveSpeed`, `C_Armor` и т.д.),
-## чтобы GECS мог фильтровать их обычными component queries.
 extends Component
 class_name AttributeComponent
 
 ## Базовое значение до применения R_ModifiesStat.
 @export var base_value: float = 0.0
 
-## Текущее resolved значение. Не изменяйте его вручную из gameplay systems;
-## значение принадлежит StatResolver/S_StatRebuild.
-var value: float = 0.0
+## Текущее resolved значение. Setter сообщает редкие rebuild-изменения Observers.
+var value: float = 0.0:
+	set(new_value):
+		var old_value := value
+		value = new_value
+		if not is_equal_approx(old_value, new_value):
+			property_changed.emit(self, "value", old_value, new_value)
 
 
 func _init(initial_base_value: float = 0.0) -> void:

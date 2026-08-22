@@ -19,4 +19,9 @@ func process(_entities: Array[Entity], components: Array, _delta: float) -> void
 		intent.facing_direction = controller.desired_facing_direction
 		intent.primary_pressed = controller.wants_primary
 		intent.secondary_pressed = controller.wants_secondary
+		intent.skill_1_pressed = controller.wants_skill_1
 		intent.interact_pressed = controller.wants_interact
+		controller.wants_primary = false
+		controller.wants_secondary = false
+		controller.wants_skill_1 = false
+		controller.wants_interact = false

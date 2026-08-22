@@ -1,7 +1,7 @@
 ## Унифицированный output любого Controller (player, AI, replay, network).
 ##
-## Motion и Ability systems читают этот component и не зависят от конкретного
-## источника управления. One-shot action flags перезаписываются controller'ом каждый frame.
+## Motion, Ability и Interaction systems читают этот component и не зависят от
+## конкретного источника управления. One-shot action flags обновляются controller'ом.
 extends Component
 class_name C_ControllerIntent
 
@@ -13,4 +13,5 @@ var facing_direction: Vector3 = Vector3.ZERO
 
 var primary_pressed: bool = false
 var secondary_pressed: bool = false
+var skill_1_pressed: bool = false
 var interact_pressed: bool = false

@@ -18,12 +18,7 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 		var profile := input_component.profile
 		if profile == null:
 			profile = InputProfile.new()
-		var raw := Input.get_vector(
-			profile.move_left,
-			profile.move_right,
-			profile.move_forward,
-			profile.move_backward,
-		)
+		var raw := Input.get_vector(profile.move_left, profile.move_right, profile.move_forward, profile.move_backward)
 		var direction := Vector3(raw.x, 0.0, raw.y)
 		if input_component.camera_relative and direction.length_squared() > 0.0:
 			var node3d := entities[index] as Node as Node3D
@@ -35,9 +30,10 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 				right.y = 0.0
 				forward = forward.normalized()
 				right = right.normalized()
-				direction = (forward * raw.y + right * raw.x)
+				direction = forward * raw.y + right * raw.x
 		intent.move_direction = direction.limit_length(1.0)
 		intent.facing_direction = intent.move_direction
 		intent.primary_pressed = Input.is_action_just_pressed(profile.primary_action)
 		intent.secondary_pressed = Input.is_action_just_pressed(profile.secondary_action)
+		intent.skill_1_pressed = Input.is_action_just_pressed(profile.skill_1_action)
 		intent.interact_pressed = Input.is_action_just_pressed(profile.interact)
