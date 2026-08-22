@@ -1,7 +1,4 @@
 ## Базовый third-person CharacterBody3D Entity.
-##
-## Actual transform/velocity принадлежат CharacterBody3D. GECS components содержат
-## controller intent, resolved locomotion/combat stats и runtime resources.
 @tool
 extends Entity
 class_name E_KinematicCharacter
@@ -15,5 +12,5 @@ func define_components() -> Array:
 		C_Health.new(), C_MaxHealth.new(), C_Mana.new(), C_MaxMana.new(),
 		C_Damage.new(), C_Armor.new(), C_AttackSpeed.new(), C_CastSpeed.new(),
 		C_CooldownRecovery.new(), C_ManaCostMultiplier.new(),
-		C_AbilityQueue.new(), C_CombatTarget.new(), C_StatsDirty.new(),
+		C_AbilityQueue.new(), C_CombatTarget.new(), C_Inventory.new(), C_StatsDirty.new(),
 	]

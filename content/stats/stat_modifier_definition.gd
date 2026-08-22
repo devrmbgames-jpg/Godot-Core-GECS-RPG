@@ -1,6 +1,6 @@
-## Design-time описание одного stat modifier внутри EffectDefinition.
+## Универсальное design-time описание stat modifier для Effects/Items/Passives.
 extends Resource
-class_name EffectStatModifier
+class_name StatModifierDefinition
 
 @export var stat_type: Script
 @export var operation: R_ModifiesStat.Operation = R_ModifiesStat.Operation.ADDED

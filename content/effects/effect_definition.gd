@@ -2,12 +2,7 @@
 extends Resource
 class_name EffectDefinition
 
-enum StackPolicy {
-	REFRESH,
-	STACK,
-	REPLACE,
-	INDEPENDENT,
-}
+enum StackPolicy { REFRESH, STACK, REPLACE, INDEPENDENT }
 
 @export var id: StringName = &"effect"
 @export var display_name: String = "Effect"
@@ -22,7 +17,7 @@ enum StackPolicy {
 @export var heal_per_tick: float = 0.0
 
 @export_group("Attributes")
-@export var stat_modifiers: Array[EffectStatModifier] = []
+@export var stat_modifiers: Array[StatModifierDefinition] = []
 
 @export_group("Presentation")
 @export var presentation_action: StringName = &"effect"
