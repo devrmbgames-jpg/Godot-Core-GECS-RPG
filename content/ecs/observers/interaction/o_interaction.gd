@@ -25,4 +25,7 @@ func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	if actor_node.global_position.distance_to(target_node.global_position) > allowed:
 		return
 	ECS.world.emit_event(InteractionService.EVENT_ACTIVATED, target, request)
-	ECS.world.emit_event(&"presentation_action", request.actor, {"action": interactable.presentation_action, "phase": &"interact", "target": target})
+	PresentationService.publish(
+		request.actor,
+		PresentationActionEvent.for_target(interactable.presentation_action, &"interact", target),
+	)
