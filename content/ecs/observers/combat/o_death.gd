@@ -19,7 +19,8 @@ func each(_event: Variant, actor: Entity, _payload: Variant = null) -> void:
 	var motor := actor.get_component(C_MotorState) as C_MotorState
 	if motor != null:
 		motor.controlled_velocity = Vector3.ZERO
-	if actor.has_component(C_Casting):
-		cmd.remove_component(actor, C_Casting)
-	ECS.world.emit_event(&"presentation_action", actor, {"action": &"death", "phase": &"start"})
+	var casting := actor.get_component(C_Casting) as C_Casting
+	if casting != null:
+		casting.clear()
+	PresentationService.publish(actor, PresentationActionEvent.simple(&"death", &"start"))
 	ECS.world.emit_event(&"actor_died", actor, null)
