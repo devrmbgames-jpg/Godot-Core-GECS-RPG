@@ -35,9 +35,17 @@ Component отвечает на вопрос **«что есть у Entity?»**:
 
 Relationship отвечает **«как Entity связан с чем-то?»**:
 
-`Player --HasAbility--> FireballAbility`, `Sword --ModifiesStat(+10 Damage)--> Player`.
+`Player --HasAbility--> FireballAbility`, `Player --ModifiesStat(from Sword)--> C_Damage`.
 
 Relation является Component instance и может хранить данные самой связи.
+
+### Cardinality rule для GECS v8
+
+Exact Entity target является частью archetype pair key. Поэтому relationship к уникальному transient target не надо использовать автоматически для каждого projectile/hit/effect.
+
+- Небольшая стабильная topology (`Player -> Ability`, `Item -> Owner`) — хороший кандидат.
+- Высокочастотная/высококардинальная transient ссылка (`Projectile #19372 -> unique target`) — обычно поле component/request.
+- Для stat modifiers target — **Script stat type**, а источник modifier хранится внутри relation data; это сохраняет маленький набор pair keys.
 
 ## 4. Когда связь превращать в Entity
 

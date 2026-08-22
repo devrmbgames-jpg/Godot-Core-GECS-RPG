@@ -26,22 +26,24 @@ C_AttackSpeed    base_value=1   value=1.3
 
 ## R_ModifiesStat
 
-Modifier source является Entity (equipment/effect/passive) и создаёт relationship к владельцу stat:
+Modifier relationship хранится **на владельце stat**, а target relationship — тип конкретного stat:
 
 ```text
-Sword -- R_ModifiesStat(C_Damage, ADDED, +10) --> Player
-Haste -- R_ModifiesStat(C_AttackSpeed, INCREASED, +0.25) --> Player
+Player -- R_ModifiesStat(source=Sword, ADDED, +10) ------> C_Damage
+Player -- R_ModifiesStat(source=Haste, INCREASED, +0.25) -> C_AttackSpeed
 ```
 
-Данные modifier принадлежат связи, а не Player и не Sword.
+Такой порядок выбран намеренно. В GECS v8 exact Entity target входит в archetype signature; схема `Effect -> Player123` создавала бы высокую target-cardinality и могла породить archetype explosion. Target-script (`C_Damage`, `C_MoveSpeed`) имеет маленькую стабильную кардинальность, а реальный источник modifier хранится в relation data.
 
-`R_ModifiesStat` считается структурно immutable. Если modifier изменился, предпочтительно удалить старую relationship и добавить новую. Это также гарантирует корректный dirty-event.
+Данные modifier принадлежат связи между actor и stat; `modifier_source` нужен для dispel/equipment cleanup и debugging.
+
+`R_ModifiesStat` считается структурно immutable. Если modifier изменился, предпочтительно удалить старую relationship и добавить новую. Это гарантирует корректный dirty-event.
 
 ## Dirty rebuild
 
-При добавлении/удалении `R_ModifiesStat` Observer помечает target через `C_StatsDirty`.
+При добавлении/удалении `R_ModifiesStat` Observer помечает **source Entity relationship**, то есть самого владельца stat, через `C_StatsDirty`.
 
-`S_StatRebuild` обрабатывает только dirty entities, собирает modifiers и записывает готовые `.value`. Затем marker удаляется.
+`S_StatRebuild` обрабатывает только dirty entities, собирает их локальные modifier relationships и записывает готовые `.value`. Затем marker удаляется.
 
 Так MovementSystem читает только:
 
