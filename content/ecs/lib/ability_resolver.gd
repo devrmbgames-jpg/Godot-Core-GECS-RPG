@@ -3,6 +3,8 @@
 extends RefCounted
 class_name AbilityResolver
 
+const EVENT_RESOLVED: StringName = &"ability_resolved"
+
 
 static func resolve(actor: Entity, ability: Entity, target: Entity, target_position: Vector3, command_buffer: CommandBuffer) -> void:
 	if actor == null or ability == null:
@@ -18,7 +20,7 @@ static func resolve(actor: Entity, ability: Entity, target: Entity, target_posit
 		AbilityDefinition.Delivery.PROJECTILE:
 			var direction := _resolve_direction(actor, target, target_position)
 			command_buffer.add_custom(func(): ProjectileFactory.spawn(actor, ability, definition, raw_damage, direction))
-	ECS.world.emit_event(&"ability_resolved", actor, {"ability": ability, "definition": definition})
+	ECS.world.emit_event(EVENT_RESOLVED, actor, AbilityResolvedEvent.new(ability, definition))
 
 
 static func _calculate_raw_damage(actor: Entity, definition: AbilityDefinition) -> float:
@@ -46,9 +48,9 @@ static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, defin
 		return
 	var origin := actor_node.global_position + Vector3.UP
 	var direction := _resolve_direction(actor, target, Vector3.ZERO)
-	var hit := CombatQuery.raycast_entity(actor, origin, origin + direction * definition.range)
-	var victim := hit.get("entity") as Entity
+	var hit: CombatHit = CombatQuery.raycast_entity(actor, origin, origin + direction * definition.range)
+	var victim := hit.entity if hit != null else null
 	if victim == null or victim == actor or not CombatRules.can_damage(actor, victim):
 		return
-	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.get("position", origin), direction))
+	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.position, direction))
 	EffectService.request_all(victim, definition.effects, actor, ability)
