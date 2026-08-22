@@ -16,7 +16,11 @@ func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var armor_value := armor.value if armor != null else 0.0
 	var applied := _mitigate(maxf(damage.amount, 0.0), armor_value)
 	health.current = maxf(0.0, health.current - applied)
-	ECS.world.emit_event(DamageService.EVENT_DAMAGE_APPLIED, target, {"request": damage, "amount": applied, "remaining_health": health.current})
+	ECS.world.emit_event(
+		DamageService.EVENT_DAMAGE_APPLIED,
+		target,
+		DamageAppliedEvent.new(damage, applied, health.current),
+	)
 	if health.current <= 0.0 and not target.has_component(C_Dead):
 		cmd.add_component(target, C_Dead.new())
 
