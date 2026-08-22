@@ -17,6 +17,7 @@
 - [PLAYGROUND.md](PLAYGROUND.md) — одна primitive scene со всеми реализованными механиками и controller switching.
 - [ROADMAP.md](ROADMAP.md) — этапы реализации ядра.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — authority, cardinality и границы ответственности.
+- [STRICT_TYPING.md](STRICT_TYPING.md) — typed event/request/result contracts и допустимые Dictionary boundaries.
 - [ATTRIBUTES.md](ATTRIBUTES.md) — resolved attributes и modifiers.
 - [MOTION_CONTROLLERS_INPUT.md](MOTION_CONTROLLERS_INPUT.md) — Input → Controller → Motion и physics authority.
 - [ABILITIES_RELATIONSHIPS.md](ABILITIES_RELATIONSHIPS.md) — ability instances, casts и relationships.
@@ -35,3 +36,4 @@
 3. Godot physics state не зеркалируется в ECS без явного одностороннего sync-contract.
 4. Transient action не становится Entity автоматически; Entity оправдана независимым lifecycle.
 5. В GECS v8 relationship target cardinality учитывается при проектировании pair keys.
+6. Project-owned semantic data не пересекает system/service boundaries как Dictionary: используются typed Request/Event/Result классы.
