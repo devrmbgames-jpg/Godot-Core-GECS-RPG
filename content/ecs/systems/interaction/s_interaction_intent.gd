@@ -14,17 +14,18 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 		var intent := intents[index] as C_ControllerIntent
 		if not intent.interact_pressed:
 			continue
-		var actor := entities[index]
+		var actor: Entity = entities[index]
 		var actor_node := actor as Node as Node3D
 		if actor_node == null:
 			continue
-		var origin := actor_node.global_position + Vector3.UP
-		var direction := CombatQuery.facing(actor)
+		var origin: Vector3 = actor_node.global_position + Vector3.UP
+		var direction: Vector3 = CombatQuery.facing(actor)
+		var interaction_range := ranges[index] as C_InteractionRange
 		var hit: CombatHit = CombatQuery.raycast_entity(
 			actor,
 			origin,
-			origin + direction * maxf((ranges[index] as C_InteractionRange).value, 0.0),
+			origin + direction * maxf(interaction_range.value, 0.0),
 		)
-		var target := hit.entity if hit != null else null
+		var target: Entity = hit.entity if hit != null else null
 		if target != null and target.has_component(C_Interactable):
 			InteractionService.request(actor, target)
