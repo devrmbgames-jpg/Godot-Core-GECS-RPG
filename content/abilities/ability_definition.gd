@@ -5,16 +5,8 @@
 extends Resource
 class_name AbilityDefinition
 
-enum Delivery {
-	MELEE,
-	PROJECTILE,
-}
-
-enum Timing {
-	ATTACK,
-	CAST,
-	INSTANT,
-}
+enum Delivery { MELEE, PROJECTILE }
+enum Timing { ATTACK, CAST, INSTANT }
 
 @export var id: StringName = &"ability"
 @export var display_name: String = "Ability"
@@ -36,6 +28,8 @@ enum Timing {
 @export var projectile_speed: float = 18.0
 @export var projectile_lifetime: float = 4.0
 
+@export_group("Effects")
+@export var effects: Array[EffectDefinition] = []
+
 @export_group("Presentation")
-## Semantic action id для CharacterRig, не имя конкретной AnimationPlayer animation.
 @export var presentation_action: StringName = &"ability"

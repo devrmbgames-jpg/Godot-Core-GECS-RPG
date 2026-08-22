@@ -26,16 +26,9 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 		if not hit.is_empty():
 			var victim := hit.get("entity") as Entity
 			if victim != null and victim != projectile.source:
-				DamageService.request(
-					victim,
-					DamageRequest.new(
-						projectile.source,
-						projectile.ability,
-						projectile.damage,
-						hit.get("position", to),
-						projectile.velocity.normalized(),
-					),
-				)
+				DamageService.request(victim, DamageRequest.new(projectile.source, projectile.ability, projectile.damage, hit.get("position", to), projectile.velocity.normalized()))
+				if projectile.definition != null:
+					EffectService.request_all(victim, projectile.definition.effects, projectile.source, projectile.ability)
 			cmd.remove_entity(entity)
 			continue
 		node.global_position = to

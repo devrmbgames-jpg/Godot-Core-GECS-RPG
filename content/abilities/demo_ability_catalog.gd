@@ -1,5 +1,4 @@
 ## Небольшой каталог definitions для integration demo.
-## Production content должен хранить AbilityDefinition в .tres/.res и data tables.
 extends RefCounted
 class_name DemoAbilityCatalog
 
@@ -12,7 +11,6 @@ static func attack() -> AbilityDefinition:
 	definition.timing = AbilityDefinition.Timing.ATTACK
 	definition.base_cast_work = 0.28
 	definition.base_cooldown = 0.35
-	definition.flat_damage = 0.0
 	definition.damage_scale = 1.0
 	definition.range = 2.4
 	definition.presentation_action = &"attack"
@@ -50,5 +48,6 @@ static func fireball() -> AbilityDefinition:
 	definition.range = 35.0
 	definition.projectile_speed = 20.0
 	definition.projectile_lifetime = 4.0
+	definition.effects = [DemoEffectCatalog.burning()]
 	definition.presentation_action = &"cast_fireball"
 	return definition

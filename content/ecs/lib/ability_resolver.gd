@@ -1,17 +1,10 @@
 ## Stateless delivery resolver для AbilityDefinition.
-##
 ## Здесь различаются механики доставки (melee/projectile), а не конкретные ability IDs.
 extends RefCounted
 class_name AbilityResolver
 
 
-static func resolve(
-	actor: Entity,
-	ability: Entity,
-	target: Entity,
-	target_position: Vector3,
-	command_buffer: CommandBuffer,
-) -> void:
+static func resolve(actor: Entity, ability: Entity, target: Entity, target_position: Vector3, command_buffer: CommandBuffer) -> void:
 	if actor == null or ability == null:
 		return
 	var ability_component := ability.get_component(C_Ability) as C_Ability
@@ -24,9 +17,7 @@ static func resolve(
 			_resolve_melee(actor, ability, target, definition, raw_damage)
 		AbilityDefinition.Delivery.PROJECTILE:
 			var direction := _resolve_direction(actor, target, target_position)
-			command_buffer.add_custom(
-				func(): ProjectileFactory.spawn(actor, ability, definition, raw_damage, direction)
-			)
+			command_buffer.add_custom(func(): ProjectileFactory.spawn(actor, ability, definition, raw_damage, direction))
 	ECS.world.emit_event(&"ability_resolved", actor, {"ability": ability, "definition": definition})
 
 
@@ -49,13 +40,7 @@ static func _resolve_direction(actor: Entity, target: Entity, target_position: V
 	return CombatQuery.facing(actor)
 
 
-static func _resolve_melee(
-	actor: Entity,
-	ability: Entity,
-	target: Entity,
-	definition: AbilityDefinition,
-	raw_damage: float,
-) -> void:
+static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, definition: AbilityDefinition, raw_damage: float) -> void:
 	var actor_node := actor as Node as Node3D
 	if actor_node == null:
 		return
@@ -65,7 +50,5 @@ static func _resolve_melee(
 	var victim := hit.get("entity") as Entity
 	if victim == null or victim == actor:
 		return
-	DamageService.request(
-		victim,
-		DamageRequest.new(actor, ability, raw_damage, hit.get("position", origin), direction),
-	)
+	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.get("position", origin), direction))
+	EffectService.request_all(victim, definition.effects, actor, ability)
