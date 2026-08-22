@@ -1,16 +1,25 @@
 ## Адаптер-конфигурация semantic gameplay actions к конкретному animation rig.
+##
+## Mappings хранятся typed Resources, а не Dictionary: ошибки action/socket names
+## видимы в Inspector и рефакторятся без строковых value-contracts.
 extends Resource
 class_name RigProfile
 
-@export var action_map: Dictionary = {}
+@export var action_bindings: Array[RigActionBinding] = []
 @export var state_machine_playback_path: StringName = &"parameters/playback"
 @export var locomotion_blend_path: StringName = &""
-@export var socket_paths: Dictionary = {}
+@export var socket_bindings: Array[RigSocketBinding] = []
 
 
 func action_name(action: StringName) -> StringName:
-	return StringName(action_map.get(action, action))
+	for binding in action_bindings:
+		if binding != null and binding.action == action:
+			return binding.animation if binding.animation != &"" else action
+	return action
 
 
 func socket_path(socket: StringName) -> NodePath:
-	return NodePath(str(socket_paths.get(socket, "")))
+	for binding in socket_bindings:
+		if binding != null and binding.socket == socket:
+			return binding.path
+	return NodePath()
