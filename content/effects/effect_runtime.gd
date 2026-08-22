@@ -59,7 +59,10 @@ static func _spawn(target: Entity, request: EffectApplyRequest) -> Entity:
 	ECS.world.add_entity(effect, null, false)
 	target.add_relationship(Relationship.new(R_HasEffect.new(effect, definition.id), E_Effect))
 	_sync_stat_modifiers(effect)
-	ECS.world.emit_event(&"presentation_action", target, {"action": definition.presentation_action, "phase": &"effect_applied", "effect": effect})
+	PresentationService.publish(
+		target,
+		PresentationActionEvent.for_effect(definition.presentation_action, &"effect_applied", effect),
+	)
 	return effect
 
 
