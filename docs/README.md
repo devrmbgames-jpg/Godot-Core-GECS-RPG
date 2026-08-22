@@ -14,6 +14,7 @@
 
 ## Документы
 
+- [PLAYGROUND.md](PLAYGROUND.md) — одна primitive scene со всеми реализованными механиками и controller switching.
 - [ROADMAP.md](ROADMAP.md) — этапы реализации ядра.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — authority, cardinality и границы ответственности.
 - [ATTRIBUTES.md](ATTRIBUTES.md) — resolved attributes и modifiers.

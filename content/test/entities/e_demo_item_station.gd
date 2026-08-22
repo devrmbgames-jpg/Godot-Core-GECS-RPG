@@ -1,4 +1,5 @@
-## Размещаемый primitive-item: одновременно Item Entity и interaction equipment stand.
+## Размещаемая в .tscn primitive-station, выдающая новый runtime Item Entity.
+## Station остаётся в мире как reusable design-time prototype, сам Item создаёт ItemFactory.
 @tool
 extends Entity
 class_name E_DemoItemStation
@@ -16,19 +17,19 @@ func define_components() -> Array:
 	var interactable := C_Interactable.new()
 	interactable.prompt = "Equip %s" % _display_name()
 	interactable.max_distance = 3.0
-	return [C_Item.new(_definition()), interactable]
+	return [C_DemoItemStation.new(_item_id()), interactable]
 
 
 func _ready() -> void:
 	_refresh_visual()
 
 
-func _definition() -> ItemDefinition:
+func _item_id() -> StringName:
 	match item_kind:
-		ItemKind.SWORD: return DemoItemCatalog.sword()
-		ItemKind.BOW: return DemoItemCatalog.bow()
-		ItemKind.STAFF: return DemoItemCatalog.staff()
-	return DemoItemCatalog.sword()
+		ItemKind.SWORD: return &"sword"
+		ItemKind.BOW: return &"bow"
+		ItemKind.STAFF: return &"staff"
+	return &"sword"
 
 
 func _display_name() -> String:

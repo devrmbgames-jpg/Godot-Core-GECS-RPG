@@ -1,4 +1,7 @@
-## Integration scene для GECS groups и demo ARPG core.
+## Полная primitive integration scene для ручной проверки ARPG core.
+##
+## Все spatial Entity/physics objects уже размещены в test.tscn. Код только связывает
+## существующие nodes и выдаёт стартовые runtime loadouts — позиции здесь не задаются.
 extends Node
 
 @export var world: World = null
@@ -6,21 +9,40 @@ extends Node
 
 func _ready() -> void:
 	ECS.world = world
+	call_deferred("_configure_demo")
+
+
+func _configure_demo() -> void:
 	var player := get_node_or_null("Entities/Player") as Entity
-	var enemy := get_node_or_null("Entities/RigidActor") as Entity
-	if player != null:
-		(player.get_component(C_Team) as C_Team).team_id = &"player"
-		AbilityFactory.grant(player, DemoAbilityCatalog.attack(), &"primary")
-		AbilityFactory.grant(player, DemoAbilityCatalog.shoot(), &"secondary")
-		AbilityFactory.grant(player, DemoAbilityCatalog.fireball(), &"skill_1")
-		var sword := ItemFactory.give(player, DemoItemCatalog.sword())
-		ItemFactory.give(player, DemoItemCatalog.bow())
-		ItemFactory.give(player, DemoItemCatalog.staff())
-		EquipmentService.equip(player, sword)
-	if enemy != null and player != null:
-		(enemy.get_component(C_Team) as C_Team).team_id = &"enemy"
-		(enemy.get_component(C_AIChase) as C_AIChase).target = player
-		AbilityFactory.grant(enemy, DemoAbilityCatalog.attack(), &"primary")
+	var warrior := get_node_or_null("Entities/RigidWarrior") as Entity
+	var archer := get_node_or_null("Entities/RigidArcher") as Entity
+	var mage := get_node_or_null("Entities/RigidMage") as Entity
+	var actors: Array[Entity] = [player, warrior, archer, mage]
+	for actor in actors:
+		if actor == null:
+			continue
+		# Secondary/skill slots всегда доступны; primary приходит от экипированного weapon.
+		AbilityFactory.grant(actor, DemoAbilityCatalog.shoot(), &"secondary")
+		AbilityFactory.grant(actor, DemoAbilityCatalog.fireball(), &"skill_1")
+	# Стартовые loadouts создают runtime Item Entity, но сами actors/stations уже стоят в .tscn.
+	_equip_new(player, DemoItemCatalog.sword())
+	_equip_new(warrior, DemoItemCatalog.sword())
+	_equip_new(archer, DemoItemCatalog.bow())
+	_equip_new(mage, DemoItemCatalog.staff())
+	for actor in [warrior, archer, mage]:
+		if actor == null or player == null:
+			continue
+		var chase := actor.get_component(C_AIChase) as C_AIChase
+		if chase != null:
+			chase.target = player
+
+
+func _equip_new(actor: Entity, definition: ItemDefinition) -> void:
+	if actor == null or definition == null:
+		return
+	var item := ItemFactory.give(actor, definition)
+	if item != null:
+		EquipmentService.equip(actor, item)
 
 
 func _process(delta: float) -> void:

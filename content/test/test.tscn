@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bdmgmui74oixw"]
 
-[ext_resource type="Script" uid="uid://doab2vybixpto" path="res://content/test/test.gd" id="1_test"]
-[ext_resource type="Script" uid="uid://cdu5tlyk72uu4" path="res://addons/gecs/ecs/world.gd" id="2_world"]
-[ext_resource type="Script" uid="uid://b3vi2ingux88g" path="res://addons/gecs/lib/system_group.gd" id="3_group"]
+[ext_resource type="Script" path="res://content/test/test.gd" id="1_test"]
+[ext_resource type="Script" path="res://addons/gecs/ecs/world.gd" id="2_world"]
+[ext_resource type="Script" path="res://addons/gecs/lib/system_group.gd" id="3_group"]
 [ext_resource type="Script" path="res://content/ecs/systems/attributes/s_stat_rebuild.gd" id="4_stats"]
 [ext_resource type="Script" path="res://content/ecs/observers/attributes/o_stat_modifier_changed.gd" id="5_stat_observer"]
 [ext_resource type="Script" path="res://content/ecs/observers/attributes/o_health_bounds.gd" id="6_health_bounds"]
@@ -30,23 +30,47 @@
 [ext_resource type="Script" path="res://content/ecs/observers/interaction/o_interaction.gd" id="28_interaction"]
 [ext_resource type="Script" path="res://content/ecs/observers/interaction/o_activatable.gd" id="29_activatable"]
 [ext_resource type="Script" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
-[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
-[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_enemy"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_rigid"]
 [ext_resource type="Script" path="res://content/ecs/systems/controller/s_player_controller.gd" id="33_player_controller"]
-[ext_resource type="PackedScene" path="res://content/ecs/entities/interaction/e_activatable.tscn" id="34_activatable"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/interaction/e_activatable.tscn" id="34_activatable_scene"]
+[ext_resource type="PackedScene" path="res://content/test/entities/e_demo_effect_station.tscn" id="35_effect_station"]
+[ext_resource type="PackedScene" path="res://content/test/entities/e_demo_item_station.tscn" id="36_item_station"]
+[ext_resource type="PackedScene" path="res://content/test/entities/e_demo_target_dummy.tscn" id="37_dummy"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_effect_station.gd" id="38_effect_observer"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_item_station.gd" id="39_item_observer"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_activatable_visual.gd" id="40_activate_visual"]
+[ext_resource type="Script" path="res://content/test/demo_controller_switcher.gd" id="41_switcher"]
 
 [sub_resource type="BoxMesh" id="GroundMesh"]
-size = Vector3(256,0.5,256)
+size = Vector3(36, 0.5, 34)
 [sub_resource type="BoxShape3D" id="GroundShape"]
-size = Vector3(256,0.5,256)
+size = Vector3(36, 0.5, 34)
+[sub_resource type="StandardMaterial3D" id="GroundMaterial"]
+albedo_color = Color(0.16, 0.18, 0.2, 1)
+[sub_resource type="BoxMesh" id="WallMesh"]
+size = Vector3(36, 2, 0.5)
+[sub_resource type="BoxShape3D" id="WallShape"]
+size = Vector3(36, 2, 0.5)
+[sub_resource type="BoxMesh" id="SideWallMesh"]
+size = Vector3(0.5, 2, 34)
+[sub_resource type="BoxShape3D" id="SideWallShape"]
+size = Vector3(0.5, 2, 34)
 [sub_resource type="BoxMesh" id="CrateMesh"]
-size = Vector3(1.2,1.2,1.2)
+size = Vector3(1.2, 1.2, 1.2)
 [sub_resource type="BoxShape3D" id="CrateShape"]
-size = Vector3(1.2,1.2,1.2)
+size = Vector3(1.2, 1.2, 1.2)
+[sub_resource type="StandardMaterial3D" id="CrateMaterial"]
+albedo_color = Color(0.45, 0.27, 0.12, 1)
+[sub_resource type="BoxMesh" id="RampMesh"]
+size = Vector3(5, 0.5, 3)
+[sub_resource type="BoxShape3D" id="RampShape"]
+size = Vector3(5, 0.5, 3)
 
 [node name="Test" type="Node" node_paths=PackedStringArray("world")]
 script = ExtResource("1_test")
 world = NodePath("World")
+
 [node name="World" type="Node" parent="."]
 script = ExtResource("2_world")
 entity_nodes_root = NodePath("../Entities")
@@ -72,6 +96,13 @@ script = ExtResource("28_interaction")
 script = ExtResource("29_activatable")
 [node name="O_RigPresentation" type="Node" parent="World/Systems"]
 script = ExtResource("30_rig_presentation")
+[node name="O_DemoEffectStation" type="Node" parent="World/Systems"]
+script = ExtResource("38_effect_observer")
+[node name="O_DemoItemStation" type="Node" parent="World/Systems"]
+script = ExtResource("39_item_observer")
+[node name="O_DemoActivatableVisual" type="Node" parent="World/Systems"]
+script = ExtResource("40_activate_visual")
+
 [node name="Attributes" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
 [node name="S_StatRebuild" type="Node" parent="World/Systems/Attributes"]
@@ -140,29 +171,160 @@ script = ExtResource("3_group")
 [node name="S_RigLocomotion" type="Node" parent="World/Systems/Presentation"]
 script = ExtResource("22_rig_locomotion")
 group = &"Presentation"
+
 [node name="Environment" type="Node3D" parent="."]
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
-rotation_degrees = Vector3(-45,-35,0)
+rotation_degrees = Vector3(-55, -35, 0)
 shadow_enabled = true
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
 [node name="Ground" type="MeshInstance3D" parent="Environment"]
 mesh = SubResource("GroundMesh")
+material_override = SubResource("GroundMaterial")
 [node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ground"]
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D"]
 shape = SubResource("GroundShape")
-[node name="FallingCrate" type="RigidBody3D" parent="Environment"]
-position = Vector3(1.5,7,0)
-mass = 12.0
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Environment/FallingCrate"]
+[node name="NorthWall" type="StaticBody3D" parent="Environment"]
+position = Vector3(0, 1, -17)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/NorthWall"]
+mesh = SubResource("WallMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/NorthWall"]
+shape = SubResource("WallShape")
+[node name="SouthWall" type="StaticBody3D" parent="Environment"]
+position = Vector3(0, 1, 17)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/SouthWall"]
+mesh = SubResource("WallMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/SouthWall"]
+shape = SubResource("WallShape")
+[node name="WestWall" type="StaticBody3D" parent="Environment"]
+position = Vector3(-18, 1, 0)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/WestWall"]
+mesh = SubResource("SideWallMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/WestWall"]
+shape = SubResource("SideWallShape")
+[node name="EastWall" type="StaticBody3D" parent="Environment"]
+position = Vector3(18, 1, 0)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/EastWall"]
+mesh = SubResource("SideWallMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/EastWall"]
+shape = SubResource("SideWallShape")
+[node name="Ramp" type="StaticBody3D" parent="Environment"]
+position = Vector3(10, 1.0, 2)
+rotation_degrees = Vector3(0, 0, -18)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Ramp"]
+mesh = SubResource("RampMesh")
+[node name="Collision" type="CollisionShape3D" parent="Environment/Ramp"]
+shape = SubResource("RampShape")
+[node name="FallingCrateA" type="RigidBody3D" parent="Environment"]
+position = Vector3(8.5, 7, 2)
+mass = 10.0
+[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateA"]
 mesh = SubResource("CrateMesh")
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/FallingCrate"]
+material_override = SubResource("CrateMaterial")
+[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateA"]
 shape = SubResource("CrateShape")
+[node name="FallingCrateB" type="RigidBody3D" parent="Environment"]
+position = Vector3(11, 9, 1.5)
+mass = 14.0
+[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateB"]
+mesh = SubResource("CrateMesh")
+material_override = SubResource("CrateMaterial")
+[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateB"]
+shape = SubResource("CrateShape")
+[node name="PushCrate" type="RigidBody3D" parent="Environment"]
+position = Vector3(5, 1, 3)
+mass = 18.0
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PushCrate"]
+mesh = SubResource("CrateMesh")
+material_override = SubResource("CrateMaterial")
+[node name="Collision" type="CollisionShape3D" parent="Environment/PushCrate"]
+shape = SubResource("CrateShape")
+
 [node name="Entities" type="Node3D" parent="."]
 [node name="Player" parent="Entities" instance=ExtResource("31_player")]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,0,2,0)
-[node name="RigidActor" parent="Entities" instance=ExtResource("32_enemy")]
-transform = Transform3D(1,0,0,0,1,0,0,0,1,0,3,-6)
-[node name="InteractionCube" parent="Entities" instance=ExtResource("34_activatable")]
-position = Vector3(4,0.75,0)
+position = Vector3(0, 1.5, 4)
+[node name="RigidWarrior" parent="Entities" instance=ExtResource("32_rigid")]
+position = Vector3(-7, 1.5, -3)
+[node name="RigidArcher" parent="Entities" instance=ExtResource("32_rigid")]
+position = Vector3(0, 1.5, -7)
+[node name="RigidMage" parent="Entities" instance=ExtResource("32_rigid")]
+position = Vector3(7, 1.5, -3)
+[node name="TargetDummy" parent="Entities" instance=ExtResource("37_dummy")]
+position = Vector3(0, 0.25, -13)
+[node name="InteractionCube" parent="Entities" instance=ExtResource("34_activatable_scene")]
+position = Vector3(-12, 0.75, 4)
+[node name="InteractionLabel" type="Label3D" parent="Entities"]
+position = Vector3(-12, 2.0, 4)
+font_size = 30
+outline_size = 8
+text = "E: Toggle Activatable"
+
+[node name="EffectPoison" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(-10, 0.4, 10)
+effect_kind = 0
+[node name="EffectBurning" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(-6, 0.4, 10)
+effect_kind = 1
+[node name="EffectHeal" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(-2, 0.4, 10)
+effect_kind = 2
+[node name="EffectRegen" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(2, 0.4, 10)
+effect_kind = 3
+[node name="EffectHaste" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(6, 0.4, 10)
+effect_kind = 4
+[node name="EffectSlow" parent="Entities" instance=ExtResource("35_effect_station")]
+position = Vector3(10, 0.4, 10)
+effect_kind = 5
+
+[node name="ItemSword" parent="Entities" instance=ExtResource("36_item_station")]
+position = Vector3(-5, 0.25, 14)
+item_kind = 0
+[node name="ItemBow" parent="Entities" instance=ExtResource("36_item_station")]
+position = Vector3(0, 0.25, 14)
+item_kind = 1
+[node name="ItemStaff" parent="Entities" instance=ExtResource("36_item_station")]
+position = Vector3(5, 0.25, 14)
+item_kind = 2
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.70710677,-0.35355338,0.61237246,0,0.8660254,0.5,-0.70710677,-0.35355338,0.61237246,8,10,8)
+position = Vector3(0, 22, 20)
+rotation_degrees = Vector3(-47, 0, 0)
 current = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="ControllerSwitcher" type="Control" parent="UI" node_paths=PackedStringArray("switch_button_path", "status_label_path")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("41_switcher")
+candidates = Array[NodePath]([NodePath("../../Entities/Player"), NodePath("../../Entities/RigidWarrior"), NodePath("../../Entities/RigidArcher"), NodePath("../../Entities/RigidMage")])
+switch_button_path = NodePath("Panel/VBox/SwitchButton")
+status_label_path = NodePath("Panel/VBox/Status")
+[node name="Panel" type="PanelContainer" parent="UI/ControllerSwitcher"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 390.0
+offset_bottom = 230.0
+mouse_filter = 0
+[node name="VBox" type="VBoxContainer" parent="UI/ControllerSwitcher/Panel"]
+layout_mode = 2
+[node name="Title" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "GECS ACTION RPG PLAYGROUND"
+[node name="SwitchButton" type="Button" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "Switch Controller"
+[node name="Status" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "Waiting for ECS..."
+[node name="Controls" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "WASD Move | Space Primary | F Shoot | Q Fireball | E Interact"
+[node name="Help" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "Stations: effects + weapons | Red box: combat | Orange cube: interaction"
