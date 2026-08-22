@@ -19,5 +19,5 @@ func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	ECS.world.emit_event(
 		HealService.EVENT_HEAL_APPLIED,
 		target,
-		{"request": request, "amount": applied, "current_health": health.current},
+		HealAppliedEvent.new(request, applied, health.current),
 	)
