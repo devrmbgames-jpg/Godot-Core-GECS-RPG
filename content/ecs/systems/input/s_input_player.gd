@@ -1,45 +1,32 @@
+## Снимает Godot InputMap в C_InputState. Не знает camera, Motion или Ability.
 extends System
 class_name S_InputPlayer
 
-func sub_systems() -> Array[Array]:
-	return [
-		[
-			q.with_all(
-				[C_MotionDirection, C_InputPlayer]
-			).iterate(
-				[C_MotionDirection]
-			), process_input_direction
-		]
-	]
+
+func query() -> QueryBuilder:
+	return q.with_all([C_InputPlayer, C_InputState]).iterate([C_InputPlayer, C_InputState])
 
 
-func process_input_direction(entities: Array[Entity], components: Array, _delta: float) -> void :
-	var c_motion_direction_list := components[0] as Array
-	for idx in entities.size() :
-		var c_motion_direction := c_motion_direction_list[idx] as C_MotionDirection
-		var entity := entities[0] as Node as Node3D
-		
-		var input_direction := Input.get_vector(
-			&"game_move_left", &"game_move_right",
-			&"game_move_forward", &"game_move_backward"
-		)
-		
-		var direction := Vector3(
-			input_direction.x,
-			0.0,
-			input_direction.y
-		)
-		var camera := entity.get_viewport().get_camera_3d()
-		if camera :
-			var camera_basis := camera.global_transform.basis # Adjust path to your camera node
-			
-			var camera_forward := camera_basis.z
-			var camera_right := camera_basis.x
-			camera_forward.y = 0.0
-			camera_forward = camera_forward.normalized()
-			camera_right.y = 0.0
-			camera_right = camera_right.normalized()
-			direction = (camera_forward * input_direction.y + camera_right * input_direction.x).normalized() * input_direction.length()
-		
-		#direction = direction.rotated(Vector3.UP, entity.rotation.y)
-		c_motion_direction.direction = direction
+func process(entities: Array[Entity], components: Array, _delta: float) -> void:
+	var inputs: Array = components[0]
+	var states: Array = components[1]
+	for index in inputs.size():
+		var state := states[index] as C_InputState
+		if entities[index].has_component(C_Dead):
+			state.move_axis = Vector2.ZERO
+			state.primary_pressed = false
+			state.secondary_pressed = false
+			state.skill_1_pressed = false
+			state.interact_pressed = false
+			continue
+		var input_component := inputs[index] as C_InputPlayer
+		var profile := input_component.profile
+		if profile == null:
+			profile = InputProfile.new()
+			input_component.profile = profile
+		InputBindingService.ensure_profile(profile)
+		state.move_axis = Input.get_vector(profile.move_left, profile.move_right, profile.move_forward, profile.move_backward)
+		state.primary_pressed = Input.is_action_just_pressed(profile.primary_action)
+		state.secondary_pressed = Input.is_action_just_pressed(profile.secondary_action)
+		state.skill_1_pressed = Input.is_action_just_pressed(profile.skill_1_action)
+		state.interact_pressed = Input.is_action_just_pressed(profile.interact)

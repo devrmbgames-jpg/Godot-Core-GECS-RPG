@@ -1,75 +1,27 @@
 [gd_scene format=3 uid="uid://b7eggt1ka1wyc"]
 
-[ext_resource type="Script" uid="uid://c2jdsrsgww80j" path="res://content/ecs/entities/character/e_kinematic_character.gd" id="1_m1n1o"]
-[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_vomcj"]
-[ext_resource type="Script" uid="uid://begwb355d6ctu" path="res://content/ecs/components/physics/c_motion_direction.gd" id="3_mf1n7"]
-[ext_resource type="Script" uid="uid://c6ljjwt7fk63p" path="res://content/ecs/components/physics/c_motion_acceleration.gd" id="4_kdeak"]
-[ext_resource type="Script" uid="uid://xbb1lohog6hu" path="res://content/ecs/components/physics/c_velocity.gd" id="5_vk281"]
-[ext_resource type="Script" uid="uid://cx1srbluqt5jc" path="res://content/ecs/components/physics/c_motion_speed.gd" id="6_kdeak"]
-[ext_resource type="Script" uid="uid://cppyodcrh4eki" path="res://content/ecs/components/physics/c_rotation.gd" id="6_ktgst"]
-[ext_resource type="Script" uid="uid://cpq08cnor2chg" path="res://content/ecs/components/physics/c_is_character.gd" id="7_ptc5c"]
-[ext_resource type="Script" uid="uid://3ebk61mm4grk" path="res://content/ecs/components/physics/c_gravity.gd" id="8_vomcj"]
-[ext_resource type="Script" uid="uid://pn8wcl5gkecj" path="res://content/ecs/components/physics/c_friction.gd" id="9_mf1n7"]
-
-[sub_resource type="Resource" id="Resource_o5mei"]
-script = ExtResource("7_ptc5c")
-metadata/_custom_type_script = "uid://cpq08cnor2chg"
-
-[sub_resource type="Resource" id="Resource_bghjr"]
-script = ExtResource("3_mf1n7")
-metadata/_custom_type_script = "uid://begwb355d6ctu"
-
-[sub_resource type="Resource" id="Resource_lqn1g"]
-script = ExtResource("4_kdeak")
-metadata/_custom_type_script = "uid://c6ljjwt7fk63p"
-
-[sub_resource type="Resource" id="Resource_kdeak"]
-script = ExtResource("6_kdeak")
-metadata/_custom_type_script = "uid://cx1srbluqt5jc"
-
-[sub_resource type="Resource" id="Resource_mn5t4"]
-script = ExtResource("5_vk281")
-metadata/_custom_type_script = "uid://xbb1lohog6hu"
-
-[sub_resource type="Resource" id="Resource_f5i5i"]
-script = ExtResource("6_ktgst")
-metadata/_custom_type_script = "uid://cppyodcrh4eki"
-
-[sub_resource type="Resource" id="Resource_n4s1q"]
-script = ExtResource("8_vomcj")
-metadata/_custom_type_script = "uid://3ebk61mm4grk"
-
-[sub_resource type="Resource" id="Resource_7eq7a"]
-script = ExtResource("9_mf1n7")
-metadata/_custom_type_script = "uid://pn8wcl5gkecj"
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_bghjr"]
+[ext_resource type="Script" uid="uid://c2jdsrsgww80j" path="res://content/ecs/entities/character/e_kinematic_character.gd" id="1_character"]
+[ext_resource type="Script" path="res://content/rig/primitive_character_rig.gd" id="2_rig"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_character"]
 radial_segments = 8
 rings = 4
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ew2d"]
-albedo_color = Color(0.5363527, 0.76424503, 0.88992304, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_bghjr"]
-size = Vector3(0.32226563, 0.34277344, 1.0546875)
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bghjr"]
-
-[node name="EKinematicCharacter" type="CharacterBody3D" unique_id=1229642302]
-script = ExtResource("1_m1n1o")
-component_resources = Array[ExtResource("2_vomcj")]([SubResource("Resource_o5mei"), SubResource("Resource_bghjr"), SubResource("Resource_lqn1g"), SubResource("Resource_kdeak"), SubResource("Resource_mn5t4"), SubResource("Resource_f5i5i"), SubResource("Resource_n4s1q"), SubResource("Resource_7eq7a")])
-
-[node name="Visual" type="Node3D" parent="." unique_id=1187617713]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual" unique_id=75319895]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_bghjr")
-surface_material_override/0 = SubResource("StandardMaterial3D_1ew2d")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual/MeshInstance3D" unique_id=145088712]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5449414, -0.7678832)
-mesh = SubResource("BoxMesh_bghjr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1138370298]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_bghjr")
+[sub_resource type="StandardMaterial3D" id="Material_character"]
+albedo_color = Color(0.5363527,0.76424503,0.88992304,1)
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+size = Vector3(0.32226563,0.34277344,1.0546875)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_character"]
+[node name="EKinematicCharacter" type="CharacterBody3D"]
+script = ExtResource("1_character")
+[node name="Rig" type="Node3D" parent="."]
+script = ExtResource("2_rig")
+[node name="Visual" type="Node3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
+mesh = SubResource("CapsuleMesh_character")
+surface_material_override/0 = SubResource("Material_character")
+[node name="Facing" type="MeshInstance3D" parent="Visual/Body"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.5449414,-0.7678832)
+mesh = SubResource("BoxMesh_facing")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
+shape = SubResource("CapsuleShape_character")

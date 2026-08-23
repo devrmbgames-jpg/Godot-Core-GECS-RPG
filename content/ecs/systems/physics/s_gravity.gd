@@ -1,20 +1,18 @@
+## Применяет project gravity к CharacterBody3D с модифицируемым C_Gravity multiplier.
+## RigidBody3D использует нативную gravity Jolt и здесь не обрабатывается.
 extends System
 class_name S_Gravity
 
 
-func sub_systems() -> Array[Array]:
-	return [
-		[
-			q.with_all(
-				[C_Velocity, C_Gravity, C_IsCharacter]
-			), process_kinematic_character
-		]
-	]
+func query() -> QueryBuilder:
+	return q.with_all([C_IsCharacter, C_Gravity]).iterate([C_Gravity])
 
 
-func process_kinematic_character(entities: Array[Entity], _components: Array, delta: float) -> void :
-	for idx in entities.size() :
-		var character := entities[idx] as Node as CharacterBody3D
-		var gravity := character.get_gravity()
-		character.velocity += gravity * delta
-	pass
+func process(entities: Array[Entity], components: Array, delta: float) -> void:
+	var gravities: Array = components[0]
+	for index in entities.size():
+		var body := entities[index] as Node as CharacterBody3D
+		if body == null or body.is_on_floor():
+			continue
+		var gravity_multiplier := (gravities[index] as C_Gravity).value
+		body.velocity += body.get_gravity() * gravity_multiplier * delta

@@ -1,70 +1,29 @@
 [gd_scene format=3 uid="uid://bpsk33ple18v6"]
 
-[ext_resource type="Script" uid="uid://dqkeh2ao3wliq" path="res://content/ecs/entities/character/e_rigid_character.gd" id="1_rqdms"]
-[ext_resource type="Script" uid="uid://b6k13gc2m4e5s" path="res://addons/gecs/ecs/component.gd" id="2_jiuc7"]
-[ext_resource type="Script" uid="uid://djiqwwxajvsbk" path="res://content/ecs/components/physics/c_is_rigid.gd" id="3_8jdp1"]
-[ext_resource type="Script" uid="uid://3ebk61mm4grk" path="res://content/ecs/components/physics/c_gravity.gd" id="4_kiocu"]
-[ext_resource type="Script" uid="uid://xbb1lohog6hu" path="res://content/ecs/components/physics/c_velocity.gd" id="5_taeve"]
-[ext_resource type="Script" uid="uid://cppyodcrh4eki" path="res://content/ecs/components/physics/c_rotation.gd" id="6_vjjvn"]
-[ext_resource type="Script" uid="uid://cx1srbluqt5jc" path="res://content/ecs/components/physics/c_motion_speed.gd" id="7_jbgay"]
-[ext_resource type="Script" uid="uid://begwb355d6ctu" path="res://content/ecs/components/physics/c_motion_direction.gd" id="8_5jqgc"]
-[ext_resource type="Script" uid="uid://c6ljjwt7fk63p" path="res://content/ecs/components/physics/c_motion_acceleration.gd" id="9_gx8j2"]
-
-[sub_resource type="Resource" id="Resource_rqdms"]
-script = ExtResource("3_8jdp1")
-metadata/_custom_type_script = "uid://djiqwwxajvsbk"
-
-[sub_resource type="Resource" id="Resource_woanx"]
-script = ExtResource("4_kiocu")
-metadata/_custom_type_script = "uid://3ebk61mm4grk"
-
-[sub_resource type="Resource" id="Resource_1rndp"]
-script = ExtResource("5_taeve")
-metadata/_custom_type_script = "uid://xbb1lohog6hu"
-
-[sub_resource type="Resource" id="Resource_ptdg8"]
-script = ExtResource("6_vjjvn")
-metadata/_custom_type_script = "uid://cppyodcrh4eki"
-
-[sub_resource type="Resource" id="Resource_od4nw"]
-script = ExtResource("7_jbgay")
-metadata/_custom_type_script = "uid://cx1srbluqt5jc"
-
-[sub_resource type="Resource" id="Resource_toifl"]
-script = ExtResource("8_5jqgc")
-metadata/_custom_type_script = "uid://begwb355d6ctu"
-
-[sub_resource type="Resource" id="Resource_2ves8"]
-script = ExtResource("9_gx8j2")
-metadata/_custom_type_script = "uid://c6ljjwt7fk63p"
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_bghjr"]
+[ext_resource type="Script" uid="uid://dqkeh2ao3wliq" path="res://content/ecs/entities/character/e_rigid_character.gd" id="1_character"]
+[ext_resource type="Script" path="res://content/rig/primitive_character_rig.gd" id="2_rig"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_character"]
 radial_segments = 8
 rings = 4
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lqn1g"]
-albedo_color = Color(0.84748656, 0.54234344, 0.54446536, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_bghjr"]
-size = Vector3(0.2, 0.2, 0.8919922)
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bghjr"]
-
-[node name="ERigidCharacter" type="RigidBody3D" unique_id=1702542787]
-script = ExtResource("1_rqdms")
-component_resources = Array[ExtResource("2_jiuc7")]([SubResource("Resource_rqdms"), SubResource("Resource_woanx"), SubResource("Resource_1rndp"), SubResource("Resource_ptdg8"), SubResource("Resource_od4nw"), SubResource("Resource_toifl"), SubResource("Resource_2ves8")])
-
-[node name="Visual" type="Node3D" parent="." unique_id=1713226443]
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual" unique_id=1351846950]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_bghjr")
-surface_material_override/0 = SubResource("StandardMaterial3D_lqn1g")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Visual/MeshInstance3D" unique_id=1147038442]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43812656, -0.79980755)
-mesh = SubResource("BoxMesh_bghjr")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1235037003]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_bghjr")
+[sub_resource type="StandardMaterial3D" id="Material_character"]
+albedo_color = Color(0.84748656,0.54234344,0.54446536,1)
+[sub_resource type="BoxMesh" id="BoxMesh_facing"]
+size = Vector3(0.2,0.2,0.8919922)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_character"]
+[node name="ERigidCharacter" type="RigidBody3D"]
+script = ExtResource("1_character")
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+[node name="Rig" type="Node3D" parent="."]
+script = ExtResource("2_rig")
+[node name="Visual" type="Node3D" parent="."]
+[node name="Body" type="MeshInstance3D" parent="Visual"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
+mesh = SubResource("CapsuleMesh_character")
+surface_material_override/0 = SubResource("Material_character")
+[node name="Facing" type="MeshInstance3D" parent="Visual/Body"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.43812656,-0.79980755)
+mesh = SubResource("BoxMesh_facing")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,0)
+shape = SubResource("CapsuleShape_character")

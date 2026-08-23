@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://content/ecs/entities/interaction/e_activatable.gd" id="1_entity"]
+[sub_resource type="BoxMesh" id="Mesh"]
+size = Vector3(1,1,1)
+[sub_resource type="BoxShape3D" id="Shape"]
+size = Vector3(1,1,1)
+[node name="Activatable" type="StaticBody3D"]
+script = ExtResource("1_entity")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")
