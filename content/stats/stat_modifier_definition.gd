@@ -7,6 +7,7 @@ class_name StatModifierDefinition
 @export var amount: float = 0.0
 
 
+## Создаёт immutable-style design modifier с stable stat Script target, operation и amount.
 func _init(
 	initial_stat_type: Script = null,
 	initial_operation: int = R_ModifiesStat.Operation.ADDED,

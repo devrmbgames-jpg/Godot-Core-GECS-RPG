@@ -3,6 +3,7 @@ extends RefCounted
 class_name DemoItemCatalog
 
 
+## Создаёт Sword definition: +10 Damage и primary melee Attack.
 static func sword() -> ItemDefinition:
 	var item := ItemDefinition.new()
 	item.id = &"sword"; item.display_name = "Sword"; item.equipment_slot = &"main_hand"
@@ -11,6 +12,7 @@ static func sword() -> ItemDefinition:
 	return item
 
 
+## Создаёт Bow definition: Damage/AttackSpeed modifiers и primary Shoot.
 static func bow() -> ItemDefinition:
 	var item := ItemDefinition.new()
 	item.id = &"bow"; item.display_name = "Bow"; item.equipment_slot = &"main_hand"
@@ -22,6 +24,7 @@ static func bow() -> ItemDefinition:
 	return item
 
 
+## Создаёт Magic Staff definition: +Damage, reduced mana cost и primary Fireball.
 static func staff() -> ItemDefinition:
 	var item := ItemDefinition.new()
 	item.id = &"staff"; item.display_name = "Magic Staff"; item.equipment_slot = &"main_hand"

@@ -9,6 +9,7 @@ var active: bool = false
 var request: InteractionRequest
 
 
+## Создаёт immutable state-change result с новым active state и исходным request.
 func _init(initial_active: bool, initial_request: InteractionRequest) -> void:
 	active = initial_active
 	request = initial_request

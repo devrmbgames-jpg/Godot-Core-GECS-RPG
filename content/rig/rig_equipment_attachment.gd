@@ -6,6 +6,7 @@ var socket: StringName = &""
 var visual: Node
 
 
+## Создаёт runtime record socket -> instantiated visual Node; ownership visual остаётся у SceneTree.
 func _init(initial_socket: StringName, initial_visual: Node) -> void:
 	socket = initial_socket
 	visual = initial_visual

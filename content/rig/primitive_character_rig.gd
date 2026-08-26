@@ -17,6 +17,7 @@ var _speed_ratio: float = 0.0
 var _pulse_remaining: float = 0.0
 
 
+## Инициализирует base CharacterRig и кеширует исходный transform primitive visual.
 func _ready() -> void:
 	super._ready()
 	_visual = get_node_or_null(visual_path) as Node3D
@@ -25,17 +26,20 @@ func _ready() -> void:
 		_base_scale = _visual.scale
 
 
+## Делегирует semantic action базовому rig и запускает короткий procedural pulse для demo phases.
 func play_action(action: StringName, phase: StringName = &"start") -> void:
 	super.play_action(action, phase)
 	if phase == &"start" or phase == &"resolve" or phase == &"interact":
 		_pulse_remaining = action_pulse_seconds
 
 
+## Делегирует locomotion базовому rig и кеширует grounded speed ratio для procedural bob.
 func set_locomotion(speed_ratio: float, grounded: bool) -> void:
 	super.set_locomotion(speed_ratio, grounded)
 	_speed_ratio = clampf(speed_ratio, 0.0, 1.0) if grounded else 0.0
 
 
+## Обновляет исключительно demo visual transform; gameplay/physics actor transform не меняется.
 func _process(delta: float) -> void:
 	if _visual == null:
 		return

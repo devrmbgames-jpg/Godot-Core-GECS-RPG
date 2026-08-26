@@ -3,6 +3,8 @@ extends RefCounted
 class_name EquipmentRuntime
 
 
+## Экипирует runtime item: заменяет предмет того же slot, добавляет equipment/stat relationships,
+## выдаёт abilities из definition и публикует presentation event.
 static func equip(actor: Entity, item: Entity) -> void:
 	if actor == null or item == null or not is_instance_valid(item):
 		return
@@ -34,6 +36,8 @@ static func equip(actor: Entity, item: Entity) -> void:
 	)
 
 
+## Снимает equipment/stat relationships и все abilities, источником которых был item,
+## затем публикует unequip presentation event. Сам inventory Item Entity не удаляется.
 static func unequip(actor: Entity, item: Entity) -> void:
 	if actor == null or item == null:
 		return
@@ -55,6 +59,7 @@ static func unequip(actor: Entity, item: Entity) -> void:
 	)
 
 
+## Возвращает живую runtime Item Entity, экипированную в semantic slot, либо null.
 static func find_equipped(actor: Entity, slot: StringName) -> Entity:
 	for relationship in actor.get_relationships(Relationship.new(R_Equipped.new(), E_Item)):
 		var data := relationship.relation as R_Equipped

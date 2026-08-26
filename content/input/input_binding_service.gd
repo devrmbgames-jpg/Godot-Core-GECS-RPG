@@ -36,6 +36,7 @@ static func ensure_profile(profile: InputProfile) -> void:
 		_ensure_action(action, 0.2)
 
 
+## Создаёт InputMap action при отсутствии или обновляет deadzone существующего action.
 static func _ensure_action(action: StringName, deadzone: float) -> void:
 	if action == &"":
 		return

@@ -3,6 +3,8 @@ extends RefCounted
 class_name ItemFactory
 
 
+## Создаёт off-tree runtime E_Item, привязывает owner, регистрирует в ECS.world и C_Inventory.
+## Spatial world-object этим вызовом не создаётся; возвращённая Entity является inventory identity.
 static func give(actor: Entity, definition: ItemDefinition) -> Entity:
 	if ECS.world == null or actor == null or definition == null:
 		return null

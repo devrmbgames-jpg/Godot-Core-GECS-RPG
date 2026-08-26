@@ -5,6 +5,7 @@ class_name RigLocator
 const META_KEY: StringName = &"arpg_character_rig"
 
 
+## Возвращает CharacterRig actor, используя metadata cache после первого recursive lookup.
 static func find(actor: Entity) -> CharacterRig:
 	if actor == null:
 		return null
@@ -17,6 +18,7 @@ static func find(actor: Entity) -> CharacterRig:
 	return rig
 
 
+## Ищет первый CharacterRig depth-first внутри subtree node.
 static func _find_recursive(node: Node) -> CharacterRig:
 	for child in node.get_children():
 		if child is CharacterRig:

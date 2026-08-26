@@ -15,11 +15,14 @@ var animation_player: AnimationPlayer
 var _equipment_attachments: Array[RigEquipmentAttachment] = []
 
 
+## Инициализирует model root и кеширует AnimationTree/AnimationPlayer presentation endpoints.
 func _ready() -> void:
 	_build_or_find_model()
 	_resolve_animation_nodes()
 
 
+## Воспроизводит semantic action через RigProfile: сначала AnimationTree state machine,
+## затем fallback AnimationPlayer. Unknown action безопасно игнорируется.
 func play_action(action: StringName, _phase: StringName = &"start") -> void:
 	var mapped := profile.action_name(action) if profile != null else action
 	if animation_tree != null and profile != null and profile.state_machine_playback_path != &"":
@@ -31,12 +34,14 @@ func play_action(action: StringName, _phase: StringName = &"start") -> void:
 		animation_player.play(mapped)
 
 
+## Записывает normalized locomotion speed [0..1] в настроенный AnimationTree blend parameter.
 func set_locomotion(speed_ratio: float, _grounded: bool) -> void:
 	if animation_tree == null or profile == null or profile.locomotion_blend_path == &"":
 		return
 	animation_tree.set(profile.locomotion_blend_path, clampf(speed_ratio, 0.0, 1.0))
 
 
+## Инстанцирует equipment visual в semantic socket; предыдущий visual того же socket снимается.
 func attach_equipment(socket: StringName, scene: PackedScene) -> void:
 	detach_equipment(socket)
 	if scene == null:
@@ -49,6 +54,7 @@ func attach_equipment(socket: StringName, scene: PackedScene) -> void:
 	_equipment_attachments.append(RigEquipmentAttachment.new(socket, visual))
 
 
+## Освобождает все runtime visuals, привязанные к semantic socket.
 func detach_equipment(socket: StringName) -> void:
 	for index in range(_equipment_attachments.size() - 1, -1, -1):
 		var attachment := _equipment_attachments[index]
@@ -59,6 +65,7 @@ func detach_equipment(socket: StringName) -> void:
 		_equipment_attachments.remove_at(index)
 
 
+## Разрешает semantic socket через RigProfile и возвращает Node внутри model_root.
 func get_socket(socket: StringName) -> Node:
 	if model_root == null or profile == null:
 		return null
@@ -66,6 +73,7 @@ func get_socket(socket: StringName) -> Node:
 	return model_root.get_node_or_null(path) if not path.is_empty() else null
 
 
+## Выбирает существующий model_root_path, инстанцирует model_scene или использует self как fallback.
 func _build_or_find_model() -> void:
 	if not model_root_path.is_empty():
 		model_root = get_node_or_null(model_root_path) as Node3D
@@ -77,6 +85,7 @@ func _build_or_find_model() -> void:
 		model_root = self
 
 
+## Разрешает explicit animation paths, затем рекурсивно ищет отсутствующие endpoints в model_root.
 func _resolve_animation_nodes() -> void:
 	if not animation_tree_path.is_empty():
 		animation_tree = get_node_or_null(animation_tree_path) as AnimationTree
@@ -88,6 +97,7 @@ func _resolve_animation_nodes() -> void:
 		animation_player = _find_animation_player(model_root)
 
 
+## Возвращает первый AnimationTree в depth-first обходе subtree.
 func _find_animation_tree(root: Node) -> AnimationTree:
 	if root == null:
 		return null
@@ -101,6 +111,7 @@ func _find_animation_tree(root: Node) -> AnimationTree:
 	return null
 
 
+## Возвращает первый AnimationPlayer в depth-first обходе subtree.
 func _find_animation_player(root: Node) -> AnimationPlayer:
 	if root == null:
 		return null
