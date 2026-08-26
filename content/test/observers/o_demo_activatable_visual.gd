@@ -3,10 +3,12 @@ extends Observer
 class_name O_DemoActivatableVisual
 
 
+## Слушает activation state changes только на demo-compatible targets с C_Activatable.
 func query() -> QueryBuilder:
 	return q.with_all([C_Activatable]).on_event(InteractionService.EVENT_STATE_CHANGED)
 
 
+## Меняет scale/material primitive cube согласно typed active state; gameplay state не вычисляется здесь.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var state_changed := payload as InteractionStateChangedEvent
 	if state_changed == null:

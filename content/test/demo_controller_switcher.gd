@@ -21,6 +21,7 @@ var _enemies_button: Button
 var _status: Label
 
 
+## Кеширует UI nodes, подключает buttons и deferred-инициализирует current controlled actor.
 func _ready() -> void:
 	_button = get_node_or_null(switch_button_path) as Button
 	_enemies_button = get_node_or_null(enemies_button_path) as Button
@@ -33,6 +34,7 @@ func _ready() -> void:
 	call_deferred("_initialize_selection")
 
 
+## Обновляет только demo HUD; controller/gameplay processing находится в GECS systems.
 func _process(_delta: float) -> void:
 	_update_status()
 
@@ -56,6 +58,7 @@ func toggle_enemies() -> void:
 	_update_enemies_button()
 
 
+## Выбирает candidate, который изначально имеет C_InputPlayer, затем применяет единый switch path.
 func _initialize_selection() -> void:
 	if candidates.is_empty():
 		return
@@ -67,6 +70,7 @@ func _initialize_selection() -> void:
 	_activate_index(selected_index)
 
 
+## Передаёт local control выбранному candidate, обновляет AI targets и UI label.
 func _activate_index(index: int) -> void:
 	if index < 0 or index >= candidates.size():
 		return
@@ -85,6 +89,7 @@ func _activate_index(index: int) -> void:
 		_button.text = "Switch Controller (now: %s)" % current_actor.name
 
 
+## Переключает controller components/team semantics actor без создания/перемещения Entity.
 func _set_local_control(actor: Entity, enabled: bool) -> void:
 	InteractionSelectionService.set_target(actor, null)
 	var intent := actor.get_component(C_ControllerIntent) as C_ControllerIntent
@@ -115,6 +120,7 @@ func _set_local_control(actor: Entity, enabled: bool) -> void:
 		_set_enemy_enabled(actor, enemies_enabled)
 
 
+## Включает/выключает AI controller и combat participation без удаления pre-placed actor.
 func _set_enemy_enabled(actor: Entity, enabled: bool) -> void:
 	var controller := actor.get_component(C_AIController) as C_AIController
 	if controller != null:
@@ -133,6 +139,7 @@ func _set_enemy_enabled(actor: Entity, enabled: bool) -> void:
 		combat_state.clear()
 
 
+## Обнуляет common controller output, чтобы старый controller не оставлял movement/action one-shots.
 func _clear_intent(intent: C_ControllerIntent) -> void:
 	intent.move_direction = Vector3.ZERO
 	intent.facing_direction = Vector3.ZERO
@@ -143,6 +150,7 @@ func _clear_intent(intent: C_ControllerIntent) -> void:
 	intent.interact_pressed = false
 
 
+## Переназначает C_AIChase.target всех неуправляемых candidates на current local actor.
 func _refresh_ai_targets() -> void:
 	for path in candidates:
 		var actor := get_node_or_null(path) as Entity
@@ -153,11 +161,13 @@ func _refresh_ai_targets() -> void:
 			chase.target = current_actor
 
 
+## Синхронизирует подпись demo button с enemies_enabled.
 func _update_enemies_button() -> void:
 	if _enemies_button != null:
 		_enemies_button.text = "Enemies: %s" % ("ON" if enemies_enabled else "OFF")
 
 
+## Собирает read-only snapshot основных runtime stats/selection/equipment текущего actor в HUD text.
 func _update_status() -> void:
 	if _status == null or current_actor == null or not is_instance_valid(current_actor):
 		return

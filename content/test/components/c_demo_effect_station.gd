@@ -5,5 +5,6 @@ class_name C_DemoEffectStation
 @export var effect_id: StringName = &"poison"
 
 
+## Создаёт demo marker со stable effect catalog id.
 func _init(initial_effect_id: StringName = &"poison") -> void:
 	effect_id = initial_effect_id

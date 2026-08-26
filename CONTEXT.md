@@ -10,6 +10,7 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 - `content/` — project-owned runtime/gameplay код.
 - `content/ecs/` — Components, Entity types, Systems, Observers и stat/ability helpers.
 - `docs/` — архитектурная документация и smoke-checklist.
+- `tools/` — project maintenance checks; начать с `tools/CONTEXT.md`.
 - `content/test/test.tscn` — primitive integration playground и main scene.
 
 ## Куда идти по задаче
@@ -27,6 +28,7 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 | Motion / physics | `content/ecs/systems/CONTEXT.md`, `docs/MOTION_CONTROLLERS_INPUT.md` |
 | Rig / animations / presentation | `content/rig/CONTEXT.md` |
 | Demo / reproduction | `content/test/CONTEXT.md` |
+| Documentation coverage | `tools/CONTEXT.md`, `tools/check_gdscript_docs.py` |
 | Architecture rules | `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.md` |
 
 ## Неподвижные архитектурные правила
@@ -54,3 +56,4 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 3. Найдите существующий service/event contract и переиспользуйте его.
 4. Сверьте `docs/STRICT_TYPING.md` и authority rules.
 5. Если добавляется новый маршрут/подсистема — обновите соответствующий `CONTEXT.md`.
+6. После изменения GDScript запустите `python tools/check_gdscript_docs.py`.

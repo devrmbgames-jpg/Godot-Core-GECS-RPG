@@ -3,10 +3,12 @@ extends Observer
 class_name O_DemoEffectStation
 
 
+## Слушает activated interaction events только на demo effect stations.
 func query() -> QueryBuilder:
 	return q.with_all([C_DemoEffectStation, C_Interactable]).on_event(InteractionService.EVENT_ACTIVATED)
 
 
+## Разрешает marker id в demo definition и вызывает production EffectService на interacting actor.
 func each(_event: Variant, station: Entity, payload: Variant = null) -> void:
 	var request := payload as InteractionRequest
 	var marker := station.get_component(C_DemoEffectStation) as C_DemoEffectStation
@@ -17,6 +19,7 @@ func each(_event: Variant, station: Entity, payload: Variant = null) -> void:
 		EffectService.request(request.actor, definition, station)
 
 
+## Возвращает новую demo EffectDefinition для stable catalog id либо null для unknown id.
 func _definition(effect_id: StringName) -> EffectDefinition:
 	match effect_id:
 		&"poison": return DemoEffectCatalog.poison()
