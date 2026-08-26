@@ -3,5 +3,6 @@ extends AttributeComponent
 class_name C_Armor
 
 
+## Создаёт armor stat; ноль означает отсутствие mitigation modifier.
 func _init(initial_base_value: float = 0.0) -> void:
 	super(initial_base_value)

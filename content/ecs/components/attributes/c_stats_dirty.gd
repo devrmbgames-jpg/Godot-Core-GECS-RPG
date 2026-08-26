@@ -8,6 +8,7 @@ class_name C_StatsDirty
 var stat_types: Array[Script] = []
 
 
+## Создаёт full-dirty marker при null либо partial-dirty marker для одного stat Script.
 func _init(initial_stat_type: Script = null) -> void:
 	if initial_stat_type != null:
 		stat_types.append(initial_stat_type)

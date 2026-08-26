@@ -11,6 +11,7 @@ var ability: Entity
 @export var slot: StringName = &""
 
 
+## Создаёт ability relation payload; concrete ability хранится в data, не pair target.
 func _init(initial_ability: Entity = null, initial_slot: StringName = &"") -> void:
 	ability = initial_ability
 	slot = initial_slot

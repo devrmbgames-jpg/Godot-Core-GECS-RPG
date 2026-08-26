@@ -17,6 +17,7 @@ var value: float = 0.0:
 			property_changed.emit(self, "value", old_value, new_value)
 
 
+## Инициализирует base и resolved cache одинаковым значением до первого stat rebuild.
 func _init(initial_base_value: float = 0.0) -> void:
 	base_value = initial_base_value
 	value = initial_base_value

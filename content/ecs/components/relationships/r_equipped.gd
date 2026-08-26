@@ -7,6 +7,7 @@ var item: Entity
 @export var slot: StringName = &""
 
 
+## Создаёт equipment relation payload; pair target должен оставаться stable E_Item Script.
 func _init(initial_item: Entity = null, initial_slot: StringName = &"") -> void:
 	item = initial_item
 	slot = initial_slot

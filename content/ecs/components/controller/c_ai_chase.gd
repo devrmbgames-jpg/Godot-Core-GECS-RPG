@@ -7,5 +7,6 @@ var target: Entity
 @export var attack_distance: float = 2.5
 
 
+## Создаёт chase configuration с optional runtime target; distances остаются editor-tunable.
 func _init(initial_target: Entity = null) -> void:
 	target = initial_target

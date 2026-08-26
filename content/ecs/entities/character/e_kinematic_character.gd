@@ -4,6 +4,8 @@ extends Entity
 class_name E_KinematicCharacter
 
 
+## Возвращает baseline component set локально управляемого CharacterBody3D actor.
+## Physics transform/velocity остаются authority самого CharacterBody3D Node.
 func define_components() -> Array:
 	return [
 		C_IsCharacter.new(), C_InputPlayer.new(), C_InputState.new(), C_PlayerController.new(), C_ControllerIntent.new(),

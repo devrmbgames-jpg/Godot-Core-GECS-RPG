@@ -3,5 +3,6 @@ extends AttributeComponent
 class_name C_InteractionRange
 
 
+## Создаёт interaction range stat; default 2.0 соответствует двухметровому gameplay radius.
 func _init(initial_base_value: float = 2.0) -> void:
 	super(initial_base_value)
