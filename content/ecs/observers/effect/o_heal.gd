@@ -3,10 +3,12 @@ extends Observer
 class_name O_Heal
 
 
+## Слушает heal requests только на targets с current/max health data.
 func query() -> QueryBuilder:
 	return q.with_all([C_Health, C_MaxHealth]).on_event(HealService.EVENT_HEAL_REQUESTED)
 
 
+## Clamp-ает heal к MaxHealth, вычисляет фактически восстановленный amount и публикует HealAppliedEvent.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request := payload as HealRequest
 	if target == null or request == null or target.has_component(C_Dead):

@@ -12,6 +12,7 @@ var amount: float = 0.0
 var current_health: float = 0.0
 
 
+## Создаёт immutable result с фактическим heal amount и Health после clamp.
 func _init(
 	initial_request: HealRequest,
 	initial_amount: float,

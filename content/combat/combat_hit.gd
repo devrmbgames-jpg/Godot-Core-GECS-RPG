@@ -16,6 +16,7 @@ var position: Vector3 = Vector3.ZERO
 var normal: Vector3 = Vector3.ZERO
 
 
+## Создаёт typed snapshot одного physics hit; entity может быть null для world geometry.
 func _init(
 	initial_entity: Entity = null,
 	initial_position: Vector3 = Vector3.ZERO,

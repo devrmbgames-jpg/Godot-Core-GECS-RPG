@@ -6,6 +6,7 @@ extends System
 class_name S_Motion
 
 
+## Регистрирует отдельные CharacterBody/RigidBody queries с соответствующими motor callbacks.
 func sub_systems() -> Array[Array]:
 	return [
 		[
@@ -27,6 +28,7 @@ func sub_systems() -> Array[Array]:
 	]
 
 
+## Обновляет только controlled horizontal contribution CharacterBody и складывает её с external motion.
 func _process_character_motor(entities: Array[Entity], components: Array, delta: float) -> void:
 	var intents: Array = components[0]
 	var speeds: Array = components[1]
@@ -62,6 +64,7 @@ func _process_character_motor(entities: Array[Entity], components: Array, delta:
 		body.velocity.z = horizontal.z
 
 
+## Сервит горизонтальную RigidBody velocity к desired target через force, не overwrite linear_velocity.
 func _process_rigid_motor(entities: Array[Entity], components: Array, delta: float) -> void:
 	if delta <= 0.0:
 		return
@@ -95,6 +98,7 @@ func _process_rigid_motor(entities: Array[Entity], components: Array, delta: flo
 		body.apply_central_force(acceleration_vector * body.mass)
 
 
+## Возвращает target speed с плавным backpedal penalty по dot(move, facing) только в combat state.
 func _movement_speed(actor: Entity, intent: C_ControllerIntent, base_speed: float) -> float:
 	var state: C_CombatState = actor.get_component(C_CombatState) as C_CombatState
 	if state == null or not state.active:

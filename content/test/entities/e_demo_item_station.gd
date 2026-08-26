@@ -13,6 +13,7 @@ enum ItemKind { SWORD, BOW, STAFF }
 			_refresh_visual()
 
 
+## Возвращает item-id marker + interactable + optional highlight capability для station.
 func define_components() -> Array:
 	var interactable := C_Interactable.new()
 	interactable.prompt = "Equip %s" % _display_name()
@@ -20,10 +21,12 @@ func define_components() -> Array:
 	return [C_DemoItemStation.new(_item_id()), interactable, C_InterractDrawing.new()]
 
 
+## Синхронизирует primitive visual с editor-selected ItemKind при входе в SceneTree.
 func _ready() -> void:
 	_refresh_visual()
 
 
+## Переводит editor enum ItemKind в stable DemoItemCatalog id.
 func _item_id() -> StringName:
 	match item_kind:
 		ItemKind.SWORD: return &"sword"
@@ -32,6 +35,7 @@ func _item_id() -> StringName:
 	return &"sword"
 
 
+## Возвращает человекочитаемое имя текущего demo item.
 func _display_name() -> String:
 	match item_kind:
 		ItemKind.SWORD: return "Sword"
@@ -40,6 +44,7 @@ func _display_name() -> String:
 	return "Item"
 
 
+## Возвращает demo-only цвет primitive mesh текущего item kind.
 func _item_color() -> Color:
 	match item_kind:
 		ItemKind.SWORD: return Color(0.8, 0.82, 0.9)
@@ -48,6 +53,7 @@ func _item_color() -> Color:
 	return Color.WHITE
 
 
+## Обновляет только demo Label3D/material; ItemDefinition и runtime inventory не мутируются.
 func _refresh_visual() -> void:
 	var label := get_node_or_null("Label3D") as Label3D
 	if label != null:

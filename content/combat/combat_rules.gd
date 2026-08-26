@@ -6,6 +6,8 @@ class_name CombatRules
 static var friendly_fire: bool = false
 
 
+## Проверяет, считаются ли две живые combat-enabled Entity противниками для awareness/AI.
+## Neutral или Entity без C_Team не считаются enemies этим базовым правилом.
 static func are_enemies(source: Entity, target: Entity) -> bool:
 	if source == null or target == null or source == target or target.has_component(C_Dead):
 		return false
@@ -20,6 +22,8 @@ static func are_enemies(source: Entity, target: Entity) -> bool:
 	return source_team.team_id != target_team.team_id
 
 
+## Проверяет право source нанести damage target с учётом death, combat_enabled и friendly_fire.
+## Source без C_Team разрешён как environmental/system damage; neutral также damageable.
 static func can_damage(source: Entity, target: Entity) -> bool:
 	if target == null or target.has_component(C_Dead):
 		return false

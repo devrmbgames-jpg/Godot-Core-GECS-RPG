@@ -4,10 +4,12 @@ extends System
 class_name S_KinematicCharacter
 
 
+## Выбирает CharacterBody-tagged Entity; конкретный Node type проверяется во время process.
 func query() -> QueryBuilder:
 	return q.with_all([C_IsCharacter])
 
 
+## Выполняет move_and_slide(), затем переводит slide contacts с RigidBody в gameplay external impulse.
 func process(entities: Array[Entity], _components: Array, _delta: float) -> void:
 	for entity in entities:
 		var body := entity as Node as CharacterBody3D
@@ -17,6 +19,7 @@ func process(entities: Array[Entity], _components: Array, _delta: float) -> void
 		_apply_rigid_contacts(entity, body)
 
 
+## Оценивает относительную contact speed/mass ratio и добавляет transferred velocity через MotionImpulse.
 func _apply_rigid_contacts(entity: Entity, body: CharacterBody3D) -> void:
 	var external := entity.get_component(C_ExternalMotion) as C_ExternalMotion
 	if external == null:

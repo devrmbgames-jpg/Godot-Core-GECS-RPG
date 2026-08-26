@@ -3,6 +3,7 @@ extends System
 class_name S_Rotation
 
 
+## Регистрирует отдельные direct-transform и torque-based rotation callbacks для двух body types.
 func sub_systems() -> Array[Array]:
 	return [
 		[
@@ -16,6 +17,7 @@ func sub_systems() -> Array[Array]:
 	]
 
 
+## Нормализует facing_direction, используя move_direction только как fallback.
 func _wanted_direction(intent: C_ControllerIntent) -> Vector3:
 	var direction := intent.facing_direction
 	if direction.length_squared() <= 0.0001:
@@ -24,6 +26,7 @@ func _wanted_direction(intent: C_ControllerIntent) -> Vector3:
 	return direction.normalized() if direction.length_squared() > 0.0001 else Vector3.ZERO
 
 
+## Поворачивает CharacterBody yaw через rotate_toward с resolved C_TurnSpeed.
 func _process_character_rotation(entities: Array[Entity], components: Array, delta: float) -> void:
 	var intents: Array = components[0]
 	var turns: Array = components[1]
@@ -40,6 +43,7 @@ func _process_character_rotation(entities: Array[Entity], components: Array, del
 		)
 
 
+## Прикладывает yaw torque к RigidBody, сохраняя physics angular velocity authority.
 func _process_rigid_rotation(entities: Array[Entity], components: Array, delta: float) -> void:
 	var intents: Array = components[0]
 	var turns: Array = components[1]

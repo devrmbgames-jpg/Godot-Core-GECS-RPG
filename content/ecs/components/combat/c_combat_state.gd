@@ -14,12 +14,14 @@ var remaining: float = 0.0
 var nearby_enemy_count: int = 0
 
 
+## Включает combat state и продлевает remaining timer, никогда не сокращая уже больший linger.
 func refresh(duration: float = -1.0) -> void:
 	active = true
 	var resolved_duration: float = linger_duration if duration < 0.0 else duration
 	remaining = maxf(remaining, maxf(resolved_duration, 0.0))
 
 
+## Полностью сбрасывает combat state и cached nearby-enemy count.
 func clear() -> void:
 	active = false
 	remaining = 0.0

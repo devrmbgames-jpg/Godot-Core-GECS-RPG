@@ -11,6 +11,7 @@ class_name RigProfile
 @export var socket_bindings: Array[RigSocketBinding] = []
 
 
+## Возвращает animation/state name для semantic action; без binding сохраняет исходное имя.
 func action_name(action: StringName) -> StringName:
 	for binding in action_bindings:
 		if binding != null and binding.action == action:
@@ -18,6 +19,7 @@ func action_name(action: StringName) -> StringName:
 	return action
 
 
+## Возвращает model-relative NodePath semantic equipment socket или пустой NodePath.
 func socket_path(socket: StringName) -> NodePath:
 	for binding in socket_bindings:
 		if binding != null and binding.socket == socket:

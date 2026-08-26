@@ -4,6 +4,8 @@ extends Entity
 class_name E_RigidCharacter
 
 
+## Возвращает baseline component set AI-controlled RigidBody3D actor.
+## Linear/angular velocity остаются authority RigidBody3D; locomotion systems прикладывают forces/torque.
 func define_components() -> Array:
 	return [
 		C_IsRigid.new(), C_AIController.new(), C_AIChase.new(), C_AIInteractionGoal.new(), C_ControllerIntent.new(),

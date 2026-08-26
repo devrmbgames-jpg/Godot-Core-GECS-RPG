@@ -3,10 +3,13 @@ extends System
 class_name S_EffectTick
 
 
+## Выбирает effects с definition, runtime context и periodic clock.
 func query() -> QueryBuilder:
 	return q.with_all([C_Effect, C_EffectContext, C_EffectTick]).iterate([C_Effect, C_EffectContext, C_EffectTick])
 
 
+## Выполняет накопившиеся ticks, масштабирует amount stacks и публикует typed damage/heal requests.
+## Periodic damage всегда маркируется DamageRequest.Kind.PERIODIC.
 func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 	var effects: Array = components[0]
 	var contexts: Array = components[1]

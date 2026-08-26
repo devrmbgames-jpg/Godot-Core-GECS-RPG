@@ -4,10 +4,12 @@ extends System
 class_name S_Casting
 
 
+## Выбирает actors с persistent casting state и обоими timeline speed stats.
 func query() -> QueryBuilder:
 	return q.with_all([C_Casting, C_AttackSpeed, C_CastSpeed]).iterate([C_Casting, C_AttackSpeed, C_CastSpeed])
 
 
+## Обновляет player aim во время windup, уменьшает remaining_work и resolve-ит ability при завершении.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var castings: Array = components[0]
 	var attack_speeds: Array = components[1]

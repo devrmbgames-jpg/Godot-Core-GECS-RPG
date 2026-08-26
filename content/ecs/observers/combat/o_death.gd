@@ -3,10 +3,12 @@ extends Observer
 class_name O_Death
 
 
+## Срабатывает один раз при structural add C_Dead.
 func query() -> QueryBuilder:
 	return q.with_all([C_Dead]).on_added()
 
 
+## Обнуляет movement/action intent, controlled motor/casting и публикует death presentation + actor_died event.
 func each(_event: Variant, actor: Entity, _payload: Variant = null) -> void:
 	var intent := actor.get_component(C_ControllerIntent) as C_ControllerIntent
 	if intent != null:

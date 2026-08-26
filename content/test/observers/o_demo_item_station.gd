@@ -3,10 +3,12 @@ extends Observer
 class_name O_DemoItemStation
 
 
+## Слушает activated interaction events только на demo item stations.
 func query() -> QueryBuilder:
 	return q.with_all([C_DemoItemStation, C_Interactable]).on_event(InteractionService.EVENT_ACTIVATED)
 
 
+## Разрешает marker id, создаёт runtime inventory item через ItemFactory и отправляет EquipmentService request.
 func each(_event: Variant, station: Entity, payload: Variant = null) -> void:
 	var request := payload as InteractionRequest
 	var marker := station.get_component(C_DemoItemStation) as C_DemoItemStation
@@ -20,6 +22,7 @@ func each(_event: Variant, station: Entity, payload: Variant = null) -> void:
 		EquipmentService.equip(request.actor, item)
 
 
+## Возвращает новую demo ItemDefinition для stable catalog id либо null для unknown id.
 func _definition(item_id: StringName) -> ItemDefinition:
 	match item_id:
 		&"sword": return DemoItemCatalog.sword()

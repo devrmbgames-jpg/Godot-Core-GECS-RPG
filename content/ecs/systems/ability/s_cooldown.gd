@@ -3,10 +3,12 @@ extends System
 class_name S_Cooldown
 
 
+## Выбирает runtime Ability Entity с cooldown и owner reference.
 func query() -> QueryBuilder:
 	return q.with_all([C_Ability, C_Cooldown, C_EntityOwner]).iterate([C_Cooldown, C_EntityOwner])
 
 
+## Уменьшает remaining на delta * owner.C_CooldownRecovery.value, clamp-ая результат к нулю.
 func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 	var cooldowns: Array = components[0]
 	var owners: Array = components[1]

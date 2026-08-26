@@ -13,6 +13,7 @@ var ability: Entity
 var definition: AbilityDefinition
 
 
+## Создаёт projectile gameplay state; spatial position по-прежнему принадлежит Node3D Entity.
 func _init(
 	initial_velocity: Vector3 = Vector3.ZERO,
 	initial_damage: float = 0.0,

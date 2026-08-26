@@ -12,6 +12,8 @@ var direction: Vector3 = Vector3.ZERO
 var kind: Kind = Kind.DIRECT
 
 
+## Создаёт damage command snapshot. Kind.DIRECT может удерживать combat state,
+## тогда как Kind.PERIODIC предназначен для DoT и не должен обновлять combat linger.
 func _init(
 	initial_source: Entity = null,
 	initial_ability: Entity = null,

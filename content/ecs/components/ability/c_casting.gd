@@ -13,6 +13,7 @@ var remaining_work: float = 0.0
 var timing: int = AbilityDefinition.Timing.CAST
 
 
+## Создаёт idle casting state или сразу запускает cast, если передана initial_ability.
 func _init(
 	initial_ability: Entity = null,
 	initial_target: Entity = null,

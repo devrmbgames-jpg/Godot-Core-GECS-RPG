@@ -3,10 +3,13 @@ extends System
 class_name S_Projectile
 
 
+## Выбирает spatial projectile Entities с C_Projectile runtime payload.
 func query() -> QueryBuilder:
 	return q.with_all([C_Projectile]).iterate([C_Projectile])
 
 
+## Продвигает lifetime/Node3D position и делает swept ray между old/new position.
+## При первом hit отправляет damage/effects и deferred-remove projectile независимо от victim type.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var projectiles: Array = components[0]
 	for index in entities.size():

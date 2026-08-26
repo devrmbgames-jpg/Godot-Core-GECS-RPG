@@ -3,6 +3,8 @@ extends RefCounted
 class_name InteractionDrawingPresenter
 
 
+## Включает/выключает material_overlay выбранного interactable и сохраняет исходный overlay.
+## Если target не имеет C_InterractDrawing или указанного MeshInstance3D, ничего не меняет.
 static func set_highlight(target: Entity, enabled: bool) -> void:
 	if target == null or not is_instance_valid(target):
 		return

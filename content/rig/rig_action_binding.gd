@@ -6,6 +6,7 @@ class_name RigActionBinding
 @export var animation: StringName = &""
 
 
+## Создаёт typed semantic-action mapping для RigProfile.
 func _init(initial_action: StringName = &"", initial_animation: StringName = &"") -> void:
 	action = initial_action
 	animation = initial_animation

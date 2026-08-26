@@ -17,6 +17,7 @@ var modifier_source: Entity
 @export var amount: float = 0.0
 
 
+## Создаёт modifier relation payload; stat Script передаётся как relationship target отдельно.
 func _init(initial_source: Entity = null, initial_operation: int = Operation.ADDED, initial_amount: float = 0.0) -> void:
 	modifier_source = initial_source
 	operation = initial_operation

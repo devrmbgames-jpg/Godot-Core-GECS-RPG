@@ -12,5 +12,6 @@ class_name C_Health
 			property_changed.emit(self, "current", old_value, new_value)
 
 
+## Создаёт runtime current Health; clamp к C_MaxHealth выполняется отдельным observer/system boundary.
 func _init(initial_current: float = 100.0) -> void:
 	current = initial_current

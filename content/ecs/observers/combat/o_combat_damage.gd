@@ -3,10 +3,12 @@ extends Observer
 class_name O_CombatDamage
 
 
+## Слушает post-mitigation DamageAppliedEvent для любых targets.
 func query() -> QueryBuilder:
 	return q.on_event(DamageService.EVENT_DAMAGE_APPLIED)
 
 
+## Продлевает combat state обеих сторон только для DamageRequest.Kind.DIRECT.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var applied: DamageAppliedEvent = payload as DamageAppliedEvent
 	if applied == null or applied.request == null:

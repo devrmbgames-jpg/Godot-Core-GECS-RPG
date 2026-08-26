@@ -3,10 +3,12 @@ extends Observer
 class_name O_RigPresentation
 
 
+## Слушает единственный PresentationService semantic event channel.
 func query() -> QueryBuilder:
 	return q.on_event(PresentationService.EVENT_ACTION)
 
 
+## Разрешает rig actor и маршрутизирует equipment attach/detach либо generic play_action.
 func each(_event: Variant, actor: Entity, payload: Variant = null) -> void:
 	var presentation := payload as PresentationActionEvent
 	if actor == null or presentation == null:

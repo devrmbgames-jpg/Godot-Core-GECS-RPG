@@ -3,10 +3,12 @@ extends Observer
 class_name O_Interaction
 
 
+## Слушает InteractionService requests только на targets с C_Interactable.
 func query() -> QueryBuilder:
 	return q.with_all([C_Interactable]).on_event(InteractionService.EVENT_REQUESTED)
 
 
+## Повторно валидирует actor/target, публикует activation и semantic presentation target event.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request: InteractionRequest = payload as InteractionRequest
 	if target == null or request == null or request.actor == null:

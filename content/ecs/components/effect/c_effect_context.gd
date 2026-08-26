@@ -8,6 +8,7 @@ var ability: Entity
 var stacks: int = 1
 
 
+## Создаёт high-cardinality runtime context target/source/ability без relationship pair targets.
 func _init(
 	initial_target: Entity = null,
 	initial_source: Entity = null,

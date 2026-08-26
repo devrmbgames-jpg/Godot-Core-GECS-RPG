@@ -5,6 +5,7 @@ class_name EffectService
 const EVENT_APPLY: StringName = &"effect_apply_requested"
 
 
+## Запрашивает применение одной immutable EffectDefinition к target с optional source context.
 static func request(
 	target: Entity,
 	definition: EffectDefinition,
@@ -16,6 +17,7 @@ static func request(
 	ECS.world.emit_event(EVENT_APPLY, target, EffectApplyRequest.new(definition, source, ability))
 
 
+## Публикует независимый apply request для каждой definition в порядке массива.
 static func request_all(
 	target: Entity,
 	definitions: Array[EffectDefinition],

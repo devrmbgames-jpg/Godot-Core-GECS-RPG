@@ -6,6 +6,7 @@ extends RefCounted
 class_name InteractionTargeting
 
 
+## Возвращает ближайшую валидную gameplay Entity среди текущих overlapping bodies sensor Area3D.
 static func nearest_valid(actor: Entity, sensor: C_InteractionSensor) -> Entity:
 	var area: Area3D = _resolve_area(actor, sensor)
 	var actor_node: Node3D = actor as Node as Node3D
@@ -27,6 +28,7 @@ static func nearest_valid(actor: Entity, sensor: C_InteractionSensor) -> Entity:
 	return best
 
 
+## Проверяет одновременно gameplay validity target и его фактическое присутствие в overlap set Area3D.
 static func contains_valid(actor: Entity, sensor: C_InteractionSensor, target: Entity) -> bool:
 	if not InteractionRules.is_valid(actor, target):
 		return false
@@ -39,6 +41,7 @@ static func contains_valid(actor: Entity, sensor: C_InteractionSensor, target: E
 	return false
 
 
+## Находит Area3D по C_InteractionSensor.area_path относительно actor Node.
 static func _resolve_area(actor: Entity, sensor: C_InteractionSensor) -> Area3D:
 	if actor == null or sensor == null:
 		return null
@@ -46,6 +49,7 @@ static func _resolve_area(actor: Entity, sensor: C_InteractionSensor) -> Area3D:
 	return actor_node.get_node_or_null(sensor.area_path) as Area3D if actor_node != null else null
 
 
+## Поднимается от overlapping physics body по SceneTree до ближайшей gameplay Entity.
 static func _entity_from_node(node: Node) -> Entity:
 	var current: Node = node
 	while current != null:

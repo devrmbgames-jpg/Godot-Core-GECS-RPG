@@ -12,6 +12,7 @@ enum EffectKind { POISON, BURNING, HEAL, REGENERATION, HASTE, SLOW }
 			_refresh_visual()
 
 
+## Возвращает interactable + effect-id marker + optional highlight capability для station.
 func define_components() -> Array:
 	var interactable := C_Interactable.new()
 	interactable.prompt = "Apply %s" % _display_name()
@@ -19,10 +20,12 @@ func define_components() -> Array:
 	return [interactable, C_DemoEffectStation.new(_effect_id()), C_InterractDrawing.new()]
 
 
+## Синхронизирует primitive visual с editor-selected EffectKind при входе в SceneTree.
 func _ready() -> void:
 	_refresh_visual()
 
 
+## Переводит editor enum EffectKind в stable DemoEffectCatalog id.
 func _effect_id() -> StringName:
 	match effect_kind:
 		EffectKind.POISON: return &"poison"
@@ -34,10 +37,12 @@ func _effect_id() -> StringName:
 	return &"poison"
 
 
+## Возвращает человекочитаемое имя текущего effect id для Label3D/prompt.
 func _display_name() -> String:
 	return String(_effect_id()).capitalize()
 
 
+## Возвращает demo-only цвет, визуально различающий стандартные effects.
 func _effect_color() -> Color:
 	match effect_kind:
 		EffectKind.POISON: return Color(0.55, 0.2, 0.8)
@@ -49,6 +54,7 @@ func _effect_color() -> Color:
 	return Color.WHITE
 
 
+## Обновляет только demo Label3D/material; gameplay EffectDefinition этим не мутируется.
 func _refresh_visual() -> void:
 	var label := get_node_or_null("Label3D") as Label3D
 	if label != null:

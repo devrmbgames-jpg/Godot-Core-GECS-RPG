@@ -4,6 +4,8 @@ extends RefCounted
 class_name InteractionSelectionService
 
 
+## Меняет C_InteractionSensor.selected_target и синхронизирует optional highlight local player.
+## Повторная установка той же цели является no-op.
 static func set_target(actor: Entity, target: Entity) -> void:
 	if actor == null:
 		return

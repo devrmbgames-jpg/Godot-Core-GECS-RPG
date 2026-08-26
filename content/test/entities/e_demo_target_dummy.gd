@@ -7,6 +7,7 @@ class_name E_DemoTargetDummy
 @export var armor: float = 10.0
 
 
+## Возвращает минимальный damageable enemy component set для статической demo target.
 func define_components() -> Array:
 	return [
 		C_Health.new(max_health),
@@ -17,6 +18,7 @@ func define_components() -> Array:
 	]
 
 
+## Обновляет demo Label3D из runtime Health и показывает DEAD после появления C_Dead.
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		return

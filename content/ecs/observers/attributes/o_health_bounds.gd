@@ -3,10 +3,12 @@ extends Observer
 class_name O_HealthBounds
 
 
+## Слушает изменения resolved `value` на Entity, имеющих Health и MaxHealth.
 func query() -> QueryBuilder:
 	return q.with_all([C_Health, C_MaxHealth]).on_changed([&"value"])
 
 
+## Clamp-ает current Health в [0, resolved MaxHealth] после изменения maximum stat.
 func each(_event: Variant, entity: Entity, _payload: Variant = null) -> void:
 	var health := entity.get_component(C_Health) as C_Health
 	var maximum := entity.get_component(C_MaxHealth) as C_MaxHealth

@@ -10,6 +10,7 @@ var target: Entity
 var request_interaction: bool = false
 
 
+## Сбрасывает AI interaction decision и one-shot request после выполнения/отмены.
 func clear() -> void:
 	target = null
 	request_interaction = false

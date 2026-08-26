@@ -4,6 +4,7 @@ extends System
 class_name S_RigLocomotion
 
 
+## Регистрирует presentation readback отдельно для CharacterBody и RigidBody actors.
 func sub_systems() -> Array[Array]:
 	return [
 		[q.with_all([C_IsCharacter, C_MoveSpeed]).iterate([C_MoveSpeed]), _process_character],
@@ -11,6 +12,7 @@ func sub_systems() -> Array[Array]:
 	]
 
 
+## Читает CharacterBody.get_real_velocity(), нормализует к MoveSpeed и обновляет rig locomotion/grounded.
 func _process_character(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var speeds: Array = components[0]
 	for index in entities.size():
@@ -24,6 +26,7 @@ func _process_character(entities: Array[Entity], components: Array, _delta: floa
 		rig.set_locomotion(horizontal.length() / max_speed, body.is_on_floor())
 
 
+## Читает RigidBody.linear_velocity и обновляет rig locomotion без ECS-копии velocity.
 func _process_rigid(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var speeds: Array = components[0]
 	for index in entities.size():

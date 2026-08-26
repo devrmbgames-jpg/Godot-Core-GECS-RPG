@@ -3,10 +3,13 @@ extends System
 class_name S_PlayerController
 
 
+## Выбирает живых local-player actors с device snapshot и common controller output.
 func query() -> QueryBuilder:
 	return q.with_all([C_PlayerController, C_InputState, C_ControllerIntent]).with_none([C_Dead]).iterate([C_PlayerController, C_InputState, C_ControllerIntent])
 
 
+## Конвертирует camera-relative movement, cursor aim и action flags в C_ControllerIntent.
+## В combat state или при ability press facing следует aim; вне боя — movement direction.
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var controllers: Array = components[0]
 	var states: Array = components[1]
@@ -41,6 +44,7 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 		intent.interact_pressed = state.interact_pressed
 
 
+## Проецирует viewport pointer ray на горизонтальную plane actor-а; physics world query не выполняется.
 func _update_cursor_aim(actor: Node3D, camera: Camera3D, pointer: Vector2, intent: C_ControllerIntent) -> void:
 	if actor == null or camera == null:
 		intent.aim_direction = Vector3.ZERO

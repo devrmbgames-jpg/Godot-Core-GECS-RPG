@@ -3,6 +3,8 @@ extends RefCounted
 class_name EffectRuntime
 
 
+## Применяет definition к target: instant heal выполняется сразу, duration effects
+## refresh/stack/replace/spawn согласно StackPolicy. Возвращает runtime Effect Entity либо null.
 static func apply(target: Entity, request: EffectApplyRequest) -> Entity:
 	if ECS.world == null or target == null or request == null or request.definition == null:
 		return null
@@ -33,6 +35,7 @@ static func apply(target: Entity, request: EffectApplyRequest) -> Entity:
 	return _spawn(target, request)
 
 
+## Снимает stat modifiers/relationship эффекта и удаляет runtime Effect Entity из ECS.world.
 static func remove(effect: Entity) -> void:
 	if ECS.world == null or effect == null or not is_instance_valid(effect):
 		return
@@ -47,6 +50,7 @@ static func remove(effect: Entity) -> void:
 	ECS.world.remove_entity(effect)
 
 
+## Создаёт off-tree E_Effect, runtime components, owner relationship, modifiers и presentation event.
 static func _spawn(target: Entity, request: EffectApplyRequest) -> Entity:
 	var definition := request.definition
 	var effect := E_Effect.new()
@@ -66,6 +70,7 @@ static func _spawn(target: Entity, request: EffectApplyRequest) -> Entity:
 	return effect
 
 
+## Перезапускает duration и нормализует следующий periodic tick под текущий definition.
 static func _refresh(effect: Entity, definition: EffectDefinition) -> void:
 	var duration := effect.get_component(C_Duration) as C_Duration
 	if duration != null:
@@ -76,6 +81,7 @@ static func _refresh(effect: Entity, definition: EffectDefinition) -> void:
 		tick.remaining = minf(tick.remaining, tick.interval)
 
 
+## Полностью пересоздаёт R_ModifiesStat relationships этого effect source с учётом stacks.
 static func _sync_stat_modifiers(effect: Entity) -> void:
 	var effect_component := effect.get_component(C_Effect) as C_Effect
 	var context := effect.get_component(C_EffectContext) as C_EffectContext
@@ -94,6 +100,7 @@ static func _sync_stat_modifiers(effect: Entity) -> void:
 		)
 
 
+## Масштабирует modifier по stacks: MORE возводится в степень, остальные операции умножаются.
 static func _scaled_modifier_amount(definition: StatModifierDefinition, stacks: int) -> float:
 	var count := maxi(stacks, 1)
 	if definition.operation == R_ModifiesStat.Operation.MORE:
@@ -101,6 +108,7 @@ static func _scaled_modifier_amount(definition: StatModifierDefinition, stacks: 
 	return definition.amount * count
 
 
+## Удаляет все stat relationships target, чей modifier_source равен runtime effect.
 static func _remove_stat_modifiers(target: Entity, effect: Entity) -> void:
 	for relationship in target.get_relationships(Relationship.new(R_ModifiesStat.new(), null)):
 		var modifier := relationship.relation as R_ModifiesStat
@@ -108,6 +116,7 @@ static func _remove_stat_modifiers(target: Entity, effect: Entity) -> void:
 			target.remove_relationship(relationship, 1)
 
 
+## Возвращает живые runtime effects target с указанным stable effect id.
 static func _find_effects(target: Entity, effect_id: StringName) -> Array[Entity]:
 	var result: Array[Entity] = []
 	for relationship in target.get_relationships(Relationship.new(R_HasEffect.new(), E_Effect)):

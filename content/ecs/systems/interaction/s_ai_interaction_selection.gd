@@ -6,10 +6,12 @@ extends System
 class_name S_AIInteractionSelection
 
 
+## Выбирает живых AI actors с interaction goal и Area3D selection state.
 func query() -> QueryBuilder:
 	return q.with_all([C_AIController, C_AIInteractionGoal, C_InteractionSensor]).with_none([C_Dead]).iterate([C_AIController, C_AIInteractionGoal, C_InteractionSensor])
 
 
+## Валидирует только goal.target против current overlaps; consume-ит request_interaction и выставляет wants_interact.
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var controllers: Array = components[0]
 	var goals: Array = components[1]

@@ -3,6 +3,8 @@ extends RefCounted
 class_name AbilityFactory
 
 
+## Создаёт off-tree runtime ability для semantic slot. Existing ability того же slot
+## сначала revoke-ится; optional grant_source позволяет позже снять grants конкретного item/passive.
 static func grant(
 	actor: Entity,
 	definition: AbilityDefinition,
@@ -26,6 +28,7 @@ static func grant(
 	return ability
 
 
+## Удаляет actor R_HasAbility relation и runtime Ability Entity из ECS.world.
 static func revoke(actor: Entity, ability: Entity) -> void:
 	if actor == null or ability == null:
 		return
@@ -38,6 +41,7 @@ static func revoke(actor: Entity, ability: Entity) -> void:
 		ECS.world.remove_entity(ability)
 
 
+## Снимает все runtime abilities actor, у которых C_GrantedBy.source совпадает с source.
 static func revoke_by_source(actor: Entity, source: Entity) -> void:
 	if actor == null or source == null:
 		return
@@ -53,6 +57,7 @@ static func revoke_by_source(actor: Entity, source: Entity) -> void:
 		revoke(actor, ability)
 
 
+## Возвращает живую runtime Ability Entity, назначенную semantic slot actor, либо null.
 static func find_ability(actor: Entity, slot: StringName) -> Entity:
 	if actor == null:
 		return null

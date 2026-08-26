@@ -3,6 +3,8 @@ extends RefCounted
 class_name InteractionRules
 
 
+## Проверяет, может ли actor взаимодействовать с target прямо сейчас.
+## Учитывает lifecycle, C_Interactable.enabled, actor range и optional target max_distance.
 static func is_valid(actor: Entity, target: Entity) -> bool:
 	if actor == null or target == null or actor == target or not is_instance_valid(target):
 		return false
