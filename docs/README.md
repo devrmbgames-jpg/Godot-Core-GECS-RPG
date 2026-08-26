@@ -12,6 +12,13 @@
 - **Observer** — реакция на событие/структурное изменение.
 - **Godot Node glue** — physics/presentation integration там, где Node уже является естественным authority.
 
+## Навигация для разработчиков и ИИ
+
+- [`../CONTEXT.md`](../CONTEXT.md) — корневая карта проекта: куда идти по типу задачи и какие архитектурные правила нельзя ломать.
+- [`../SKILL.md`](../SKILL.md) — workflow/skill работы именно с этим Godot + GECS проектом.
+- Ближайшие `CONTEXT.md` внутри `content/*`, `content/ecs/*`, `docs/` и `tools/` — локальные entry points подсистем.
+- [`../tools/check_gdscript_docs.py`](../tools/check_gdscript_docs.py) — проверка, что project-owned GDScript functions имеют соседний `##` Doc Comment. `addons/gecs` намеренно исключён как внешняя зависимость.
+
 ## Документы
 
 - [PLAYGROUND.md](PLAYGROUND.md) — одна primitive scene со всеми реализованными механиками и controller switching.
