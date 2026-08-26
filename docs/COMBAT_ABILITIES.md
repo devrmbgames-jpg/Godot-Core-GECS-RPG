@@ -6,7 +6,7 @@
 
 Local player хранит screen pointer только в `C_InputState`. `S_PlayerController` проектирует camera ray на горизонтальную плоскость actor-а и записывает typed `aim_world_position/aim_direction` в `C_ControllerIntent`.
 
-При запуске ability player не использует stale `C_CombatTarget`: `S_AbilityActivate` передаёт cursor world position в cast/resolve pipeline. Поэтому melee/projectile направлены к курсору. AI по-прежнему использует `C_CombatTarget`.
+При запуске ability player не использует stale `C_CombatTarget`: `S_AbilityActivate` передаёт cursor world position в cast/resolve pipeline. Во время windup `S_Casting` обновляет target position текущим cursor aim, поэтому Attack/Fireball могут продолжать доворачиваться до момента resolve. AI по-прежнему использует entity `C_CombatTarget`.
 
 ## Combat state
 
