@@ -1,4 +1,5 @@
-## Снимает Godot InputMap в C_InputState. Не знает camera, Motion или Ability.
+## Снимает Godot InputMap и pointer position в C_InputState.
+## Camera/world-space conversion остаётся ответственностью Player Controller.
 extends System
 class_name S_InputPlayer
 
@@ -12,6 +13,9 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var states: Array = components[1]
 	for index in inputs.size():
 		var state := states[index] as C_InputState
+		var actor_node: Node = entities[index] as Node
+		if actor_node != null:
+			state.pointer_position = actor_node.get_viewport().get_mouse_position()
 		if entities[index].has_component(C_Dead):
 			state.move_axis = Vector2.ZERO
 			state.primary_pressed = false

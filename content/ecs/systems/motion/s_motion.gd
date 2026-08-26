@@ -1,9 +1,7 @@
 ## Locomotion motor для CharacterBody3D и RigidBody3D.
 ##
-## CharacterBody: вычисляет только управляемую horizontal velocity и складывает её
-## с C_ExternalMotion; actual body.velocity остаётся physical authority.
-## RigidBody: прикладывает force к target velocity вместо перезаписи linear_velocity,
-## поэтому внешние силы и collision impulses сохраняются.
+## Physical velocity остаётся authority Godot body. В combat state движение назад
+## относительно aim/facing плавно замедляется через C_CombatState multiplier.
 extends System
 class_name S_Motion
 
@@ -14,7 +12,7 @@ func sub_systems() -> Array[Array]:
 			q.with_all([
 				C_IsCharacter, C_ControllerIntent, C_MoveSpeed, C_Acceleration,
 				C_Deceleration, C_MotorState, C_ExternalMotion,
-			]).iterate([
+			]).with_none([C_Dead]).iterate([
 				C_ControllerIntent, C_MoveSpeed, C_Acceleration,
 				C_Deceleration, C_MotorState, C_ExternalMotion,
 			]),
@@ -23,7 +21,7 @@ func sub_systems() -> Array[Array]:
 		[
 			q.with_all([
 				C_IsRigid, C_ControllerIntent, C_MoveSpeed, C_Acceleration, C_Deceleration,
-			]).iterate([C_ControllerIntent, C_MoveSpeed, C_Acceleration, C_Deceleration]),
+			]).with_none([C_Dead]).iterate([C_ControllerIntent, C_MoveSpeed, C_Acceleration, C_Deceleration]),
 			_process_rigid_motor,
 		],
 	]
@@ -37,7 +35,8 @@ func _process_character_motor(entities: Array[Entity], components: Array, delta:
 	var motor_states: Array = components[4]
 	var external_states: Array = components[5]
 	for index in entities.size():
-		var body := entities[index] as Node as CharacterBody3D
+		var actor: Entity = entities[index]
+		var body := actor as Node as CharacterBody3D
 		if body == null:
 			continue
 		var intent := intents[index] as C_ControllerIntent
@@ -49,7 +48,8 @@ func _process_character_motor(entities: Array[Entity], components: Array, delta:
 		var direction := intent.move_direction
 		direction.y = 0.0
 		direction = direction.limit_length(1.0)
-		var target := direction * speed.value
+		var resolved_speed: float = _movement_speed(actor, intent, speed.value)
+		var target := direction * resolved_speed
 		var rate := acceleration.value if direction.length_squared() > 0.0001 else deceleration.value
 		motor.controlled_velocity = motor.controlled_velocity.move_toward(target, maxf(rate, 0.0) * delta)
 		motor.controlled_velocity.y = 0.0
@@ -70,14 +70,16 @@ func _process_rigid_motor(entities: Array[Entity], components: Array, delta: flo
 	var accelerations: Array = components[2]
 	var decelerations: Array = components[3]
 	for index in entities.size():
-		var body := entities[index] as Node as RigidBody3D
+		var actor: Entity = entities[index]
+		var body := actor as Node as RigidBody3D
 		if body == null:
 			continue
 		var intent := intents[index] as C_ControllerIntent
 		var direction := intent.move_direction
 		direction.y = 0.0
 		direction = direction.limit_length(1.0)
-		var speed := (speeds[index] as C_MoveSpeed).value
+		var base_speed: float = (speeds[index] as C_MoveSpeed).value
+		var speed: float = _movement_speed(actor, intent, base_speed)
 		var rate := (
 			(accelerations[index] as C_Acceleration).value
 			if direction.length_squared() > 0.0001
@@ -91,3 +93,18 @@ func _process_rigid_motor(entities: Array[Entity], components: Array, delta: flo
 			delta_velocity = delta_velocity.normalized() * max_delta
 		var acceleration_vector := delta_velocity / delta
 		body.apply_central_force(acceleration_vector * body.mass)
+
+
+func _movement_speed(actor: Entity, intent: C_ControllerIntent, base_speed: float) -> float:
+	var state: C_CombatState = actor.get_component(C_CombatState) as C_CombatState
+	if state == null or not state.active:
+		return base_speed
+	var move: Vector3 = intent.move_direction
+	var facing: Vector3 = intent.facing_direction
+	move.y = 0.0
+	facing.y = 0.0
+	if move.length_squared() <= 0.0001 or facing.length_squared() <= 0.0001:
+		return base_speed
+	var dot: float = move.normalized().dot(facing.normalized())
+	var backward_weight: float = clampf(-dot, 0.0, 1.0)
+	return base_speed * lerpf(1.0, state.backpedal_speed_multiplier, backward_weight)

@@ -13,9 +13,14 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var combat_targets: Array = components[2]
 	for index in entities.size():
 		var actor_node := entities[index] as Node as Node3D
-		var controller := controllers[index] as C_AIController
+		var controller: C_AIController = controllers[index] as C_AIController
 		var chase := chases[index] as C_AIChase
 		var combat_target := combat_targets[index] as C_CombatTarget
+		if not controller.enabled:
+			controller.desired_move_direction = Vector3.ZERO
+			controller.desired_facing_direction = Vector3.ZERO
+			combat_target.target = null
+			continue
 		if actor_node == null or chase.target == null or not is_instance_valid(chase.target):
 			controller.desired_move_direction = Vector3.ZERO
 			combat_target.target = null
