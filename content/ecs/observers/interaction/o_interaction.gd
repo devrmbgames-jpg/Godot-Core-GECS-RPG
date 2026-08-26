@@ -15,7 +15,11 @@ func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 		return
 	var interactable: C_Interactable = target.get_component(C_Interactable) as C_Interactable
 	ECS.world.emit_event(InteractionService.EVENT_ACTIVATED, target, request)
-	PresentationService.emit_action(
+	PresentationService.publish(
 		request.actor,
-		PresentationActionEvent.for_interaction(interactable.presentation_action, target),
+		PresentationActionEvent.for_target(
+			interactable.presentation_action,
+			&"interact",
+			target,
+		),
 	)
