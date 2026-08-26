@@ -21,10 +21,8 @@ func _configure_demo() -> void:
 	for actor in actors:
 		if actor == null:
 			continue
-		# Secondary/skill slots всегда доступны; primary приходит от экипированного weapon.
 		AbilityFactory.grant(actor, DemoAbilityCatalog.shoot(), &"secondary")
 		AbilityFactory.grant(actor, DemoAbilityCatalog.fireball(), &"skill_1")
-	# Стартовые loadouts создают runtime Item Entity, но сами actors/stations уже стоят в .tscn.
 	_equip_new(player, DemoItemCatalog.sword())
 	_equip_new(warrior, DemoItemCatalog.sword())
 	_equip_new(archer, DemoItemCatalog.bow())
@@ -47,6 +45,7 @@ func _equip_new(actor: Entity, definition: ItemDefinition) -> void:
 
 func _process(delta: float) -> void:
 	world.process(delta, "Attributes")
+	world.process(delta, "Combat")
 	world.process(delta, "AI")
 	world.process(delta, "Input")
 	world.process(delta, "Gameplay")

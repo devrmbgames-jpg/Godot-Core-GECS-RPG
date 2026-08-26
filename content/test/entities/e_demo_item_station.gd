@@ -16,8 +16,8 @@ enum ItemKind { SWORD, BOW, STAFF }
 func define_components() -> Array:
 	var interactable := C_Interactable.new()
 	interactable.prompt = "Equip %s" % _display_name()
-	interactable.max_distance = 3.0
-	return [C_DemoItemStation.new(_item_id()), interactable]
+	interactable.max_distance = 2.0
+	return [C_DemoItemStation.new(_item_id()), interactable, C_InterractDrawing.new()]
 
 
 func _ready() -> void:

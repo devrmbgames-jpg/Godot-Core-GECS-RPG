@@ -5,6 +5,8 @@
 extends Component
 class_name C_AIController
 
+@export var enabled: bool = true
+
 var desired_move_direction: Vector3 = Vector3.ZERO
 var desired_facing_direction: Vector3 = Vector3.ZERO
 var wants_primary: bool = false

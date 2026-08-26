@@ -5,54 +5,42 @@
 ## Управление
 
 - `WASD` — движение.
+- Mouse — направление атаки/aim.
 - `Space` — primary ability текущего weapon.
 - `F` — Shoot.
 - `Q` — Fireball.
-- `E` — Interaction.
-- UI-кнопка **Switch Controller** — циклически передаёт локальный `C_InputPlayer + C_PlayerController` между `Player`, `RigidWarrior`, `RigidArcher`, `RigidMage`.
+- `E` — Interaction с единственной выбранной целью.
+- **Switch Controller** — передаёт local controller между заранее размещёнными actors.
+- **Enemies: ON/OFF** — временно выключает AI/combat participation остальных actors, не удаляя их со сцены.
 
-При переключении новый actor становится team `player`; остальные controllable AI actors становятся team `enemy`, получают обратно `C_AIController` и преследуют текущего игрока через `C_AIChase`. Поэтому один и тот же Input → ControllerIntent → Ability/Motion pipeline проверяется и на CharacterBody3D, и на RigidBody3D.
+## Interaction test
+
+Каждый actor имеет child `InteractionSensor: Area3D` радиусом 2 м. `S_PlayerInteractionSelection` выбирает ближайший валидный `C_Interactable`; никакого постоянного interaction raycast нет. HUD показывает `Interact target`.
+
+`InteractionCube`, effect stations и item stations имеют optional `C_InterractDrawing`, поэтому ближайшая выбранная цель подсвечивается. Удаление этого компонента демонстрирует, что drawing не является условием самой interaction.
+
+AI использует отдельный `C_AIInteractionGoal`: это placeholder для будущего BT/Utility AI/GOAP, где behavior сначала решает, **какой** рычаг/кнопка ему нужна, и только затем generic Area3D integration проверяет доступность.
+
+## Combat test
+
+Actors также имеют `CombatSensor: Area3D` радиусом 8 м. Nearby enemy удерживает `C_CombatState`; offensive ability и direct damage запускают/продлевают linger timer. В HUD видны `Combat ON/OFF` и количество nearby enemies.
+
+В combat state персонаж постоянно смотрит на mouse cursor, поэтому `WASD` превращается в forward/strafe/backpedal относительно aim. Backpedal медленнее. Вне combat state actor снова поворачивается по направлению движения, но в момент Attack/Shoot/Fireball всё равно разворачивается к cursor.
 
 ## Что находится на сцене
 
-### Actors
-
 - `Player` — CharacterBody3D motor.
-- `RigidWarrior` — RigidBody3D force motor, Sword/Attack loadout.
-- `RigidArcher` — RigidBody3D force motor, Bow/Shoot loadout.
-- `RigidMage` — RigidBody3D force motor, Staff/Fireball loadout.
-- `TargetDummy` — красный static combat target с Health, Armor и death lifecycle.
+- `RigidWarrior` — RigidBody3D, Sword/Attack.
+- `RigidArcher` — RigidBody3D, Bow/Shoot.
+- `RigidMage` — RigidBody3D, Staff/Fireball.
+- `TargetDummy` — Health/Armor/death test.
+- `InteractionCube` — generic activatable.
+- 6 effect stations: Poison, Burning, Heal, Regeneration, Haste, Slow.
+- 3 equipment stations: Sword, Bow, Magic Staff.
+- PushCrate, ramp и падающие RigidBody crates для physics interaction.
 
-Каждый actor дополнительно имеет Shoot в `secondary` и Fireball в `skill_1`, поэтому delivery/cast/cooldown можно сравнивать независимо от текущего main-hand weapon.
-
-### Motion / physics
-
-Справа расположены `PushCrate`, ramp и два падающих RigidBody crate. Они проверяют, что CharacterBody external motion и RigidBody force motor не заменяют physics-world authority прямой записью искусственного `C_Velocity`.
-
-### Interaction
-
-Оранжевый `InteractionCube` использует обычные `C_Interactable + C_Activatable`. `E` переключает state, а demo presentation observer меняет размер/цвет cube. Gameplay Interaction system не знает об этом визуальном эффекте.
-
-### Effects
-
-Шесть заранее размещённых stations: Poison, Burning, Heal, Regeneration, Haste и Slow. `E` применяет выбранный `EffectDefinition` к текущему actor через тот же `EffectService`, который используют abilities. Haste/Slow проходят через `R_ModifiesStat`; Poison/Burning/Regen используют duration/tick pipeline.
-
-### Items
-
-Три reusable stations: Sword, Bow, Magic Staff. `E` создаёт runtime Item Entity через `ItemFactory`, кладёт его в `C_Inventory` и отправляет обычный `EquipmentService.equip`. Equipment затем создаёт stat-modifier relationships и выдаёт primary ability. Spatial station остаётся design-time Entity в сцене; runtime inventory item не является world-space object.
-
-## Controller switching
-
-`DemoControllerSwitcher` не создаёт actors. В Inspector/`.tscn` он хранит только NodePath списка уже размещённых candidates. При переключении он меняет controller components и обновляет `C_AIChase.target`. Это demo/debug utility, а не часть production gameplay core.
-
-HUD показывает текущую Entity, Health, Mana, MoveSpeed, Damage, AttackSpeed и main-hand item — удобно сразу видеть эффект экипировки и buffs/debuffs.
+Все эти spatial nodes уже стоят в `test.tscn` и редактируются через Godot editor.
 
 ## Rig
 
-Primitive actors используют `PrimitiveCharacterRig`, который реализует тот же `CharacterRig` contract и визуализирует locomotion/action простым procedural bob/squash. Поэтому `presentation_action` заметен даже без art assets.
-
-При подключении готовой модели `PrimitiveCharacterRig` заменяется обычным `CharacterRig` + `RigProfile` с AnimationTree/AnimationPlayer и semantic sockets. Ability/Effect/Equipment systems при этом не меняются.
-
-## Проверка
-
-Проект настроен запускать `content/test/test.tscn` как main scene. Полный smoke checklist остаётся в [TESTING.md](TESTING.md).
+Primitive actors используют `PrimitiveCharacterRig`, реализующий тот же `CharacterRig` contract. При замене на готовую модель Ability/Effect/Equipment/Combat systems менять не требуется.

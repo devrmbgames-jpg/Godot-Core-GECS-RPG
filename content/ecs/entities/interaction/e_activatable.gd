@@ -5,4 +5,4 @@ class_name E_Activatable
 
 
 func define_components() -> Array:
-	return [C_Interactable.new(), C_Activatable.new()]
+	return [C_Interactable.new(), C_Activatable.new(), C_InterractDrawing.new()]
