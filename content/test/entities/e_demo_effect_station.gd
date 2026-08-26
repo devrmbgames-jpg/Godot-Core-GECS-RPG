@@ -15,8 +15,8 @@ enum EffectKind { POISON, BURNING, HEAL, REGENERATION, HASTE, SLOW }
 func define_components() -> Array:
 	var interactable := C_Interactable.new()
 	interactable.prompt = "Apply %s" % _display_name()
-	interactable.max_distance = 3.0
-	return [interactable, C_DemoEffectStation.new(_effect_id())]
+	interactable.max_distance = 2.0
+	return [interactable, C_DemoEffectStation.new(_effect_id()), C_InterractDrawing.new()]
 
 
 func _ready() -> void:

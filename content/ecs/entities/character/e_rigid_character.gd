@@ -6,7 +6,8 @@ class_name E_RigidCharacter
 
 func define_components() -> Array:
 	return [
-		C_IsRigid.new(), C_AIController.new(), C_AIChase.new(), C_ControllerIntent.new(),
+		C_IsRigid.new(), C_AIController.new(), C_AIChase.new(), C_AIInteractionGoal.new(), C_ControllerIntent.new(),
+		C_InteractionSensor.new(),
 		C_MoveSpeed.new(), C_Acceleration.new(), C_Deceleration.new(), C_TurnSpeed.new(), C_InteractionRange.new(),
 		C_Health.new(), C_MaxHealth.new(), C_Mana.new(), C_MaxMana.new(),
 		C_Damage.new(), C_Armor.new(), C_AttackSpeed.new(), C_CastSpeed.new(),

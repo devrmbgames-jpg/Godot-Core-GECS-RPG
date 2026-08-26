@@ -68,6 +68,8 @@ func _activate_index(index: int) -> void:
 
 
 func _set_local_control(actor: Entity, enabled: bool) -> void:
+	# Clear selection before C_InputPlayer is removed so optional highlight is restored.
+	InteractionSelectionService.set_target(actor, null)
 	var intent := actor.get_component(C_ControllerIntent) as C_ControllerIntent
 	if intent != null:
 		intent.move_direction = Vector3.ZERO
