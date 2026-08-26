@@ -25,7 +25,14 @@ func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 			if definition.damage_per_tick > 0.0:
 				DamageService.request(
 					context.target,
-					DamageRequest.new(context.source, context.ability, definition.damage_per_tick * stacks),
+					DamageRequest.new(
+						context.source,
+						context.ability,
+						definition.damage_per_tick * stacks,
+						Vector3.ZERO,
+						Vector3.ZERO,
+						DamageRequest.Kind.PERIODIC,
+					),
 				)
 			if definition.heal_per_tick > 0.0:
 				HealService.request(

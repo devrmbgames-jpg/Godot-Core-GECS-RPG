@@ -12,6 +12,8 @@ enum Timing { ATTACK, CAST, INSTANT }
 @export var display_name: String = "Ability"
 @export var delivery: Delivery = Delivery.MELEE
 @export var timing: Timing = Timing.ATTACK
+## Offensive ability переводит actor в combat state сразу при успешном запуске.
+@export var is_offensive: bool = true
 
 @export_group("Costs and Timing")
 @export var base_mana_cost: float = 0.0

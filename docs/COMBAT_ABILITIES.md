@@ -1,20 +1,24 @@
 # Combat и базовые Abilities
 
-Ядро содержит три примера, собранные одним pipeline:
+Ядро содержит три примера, собранные одним pipeline: Attack, Shoot и Fireball. Они отличаются `AbilityDefinition`, а не отдельными manager-классами.
 
-- **Attack** — melee ray delivery, AttackSpeed timing.
-- **Shoot** — projectile delivery, AttackSpeed timing.
-- **Fireball** — projectile delivery, CastSpeed timing и mana cost.
+## Cursor aim
 
-Они отличаются конфигурацией `AbilityDefinition`, а не отдельными manager'ами.
+Local player хранит screen pointer только в `C_InputState`. `S_PlayerController` проектирует camera ray на горизонтальную плоскость actor-а и записывает typed `aim_world_position/aim_direction` в `C_ControllerIntent`.
 
-## Delivery
+При запуске ability player не использует stale `C_CombatTarget`: `S_AbilityActivate` передаёт cursor world position в cast/resolve pipeline. Во время windup `S_Casting` обновляет target position текущим cursor aim, поэтому Attack/Fireball могут продолжать доворачиваться до момента resolve. AI по-прежнему использует entity `C_CombatTarget`.
 
-`AbilityDefinition.Delivery` пока содержит `MELEE` и `PROJECTILE`. Это механика доставки, а не ID конкретной ability. Новые мечи/заклинания могут переиспользовать delivery без изменения центрального switch по сотням ability IDs.
+## Combat state
 
-## Request queue
+`C_CombatState` становится active, если:
 
-`S_AbilityIntent` переводит controller flags в semantic slots `primary`, `secondary`, `skill_1`. `S_AbilityActivate` находит `R_HasAbility` для слота и валидирует runtime instance.
+- успешно запускается `AbilityDefinition.is_offensive`;
+- actor получает `DamageRequest.Kind.DIRECT`;
+- `CombatSensor Area3D` видит хотя бы одного живого enemy.
+
+После последнего offensive action/direct hit состояние держится `linger_duration` (по умолчанию 4 секунды). Nearby enemy постоянно обновляет timer. Periodic Poison/Burning damage помечен `DamageRequest.Kind.PERIODIC` и сам по себе linger не продлевает.
+
+В combat state Player Controller постоянно задаёт facing к cursor aim. Motion сравнивает movement с facing и плавно снижает скорость движения назад до `backpedal_speed_multiplier` (по умолчанию 0.75). Стрейф и движение вперёд остаются ближе к полной скорости.
 
 ## Projectile
 
@@ -22,4 +26,4 @@ Projectile — Node3D Entity с `C_Projectile`. Фактическая пози�
 
 ## Death
 
-`O_Damage` добавляет `C_Dead` при HP <= 0. На следующих этапах death lifecycle получит отдельные presentation/loot/cleanup systems; damage observer уже не наносит повторный damage dead entity.
+`O_Damage` добавляет `C_Dead` при HP <= 0. Dead actor исключается из player/AI control, motion и combat-state processing.
