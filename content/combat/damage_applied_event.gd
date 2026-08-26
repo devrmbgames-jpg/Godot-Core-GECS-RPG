@@ -12,6 +12,7 @@ var amount: float = 0.0
 var remaining_health: float = 0.0
 
 
+## Создаёт immutable result с фактическим damage и Health после применения.
 func _init(
 	initial_request: DamageRequest,
 	initial_amount: float,

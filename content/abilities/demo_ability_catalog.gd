@@ -3,6 +3,7 @@ extends RefCounted
 class_name DemoAbilityCatalog
 
 
+## Создаёт melee Attack definition; cadence определяется AttackSpeed, а не cooldown.
 static func attack() -> AbilityDefinition:
 	var definition := AbilityDefinition.new()
 	definition.id = &"attack"; definition.display_name = "Attack"
@@ -16,6 +17,7 @@ static func attack() -> AbilityDefinition:
 	return definition
 
 
+## Создаёт быстрый projectile Shoot definition с AttackSpeed timing.
 static func shoot() -> AbilityDefinition:
 	var definition := AbilityDefinition.new()
 	definition.id = &"shoot"; definition.display_name = "Shoot"
@@ -29,6 +31,7 @@ static func shoot() -> AbilityDefinition:
 	return definition
 
 
+## Создаёт mana-consuming Fireball definition с CastSpeed timing, cooldown и Burning effect.
 static func fireball() -> AbilityDefinition:
 	var definition := AbilityDefinition.new()
 	definition.id = &"fireball"; definition.display_name = "Fireball"

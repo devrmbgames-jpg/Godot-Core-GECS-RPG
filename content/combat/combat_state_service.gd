@@ -3,6 +3,8 @@ extends RefCounted
 class_name CombatStateService
 
 
+## Продлевает combat state actor; отрицательная duration использует linger_duration компонента.
+## Dead Entity и actor без C_CombatState безопасно игнорируются.
 static func refresh(actor: Entity, duration: float = -1.0) -> void:
 	if actor == null or actor.has_component(C_Dead):
 		return

@@ -3,6 +3,8 @@ extends RefCounted
 class_name CombatAwareness
 
 
+## Возвращает количество уникальных hostile Entity внутри actor CombatSensor Area3D.
+## Обычная world geometry и повторные colliders одной Entity не учитываются.
 static func count_nearby_enemies(actor: Entity, state: C_CombatState) -> int:
 	var area: Area3D = _resolve_area(actor, state)
 	if area == null:
@@ -16,6 +18,7 @@ static func count_nearby_enemies(actor: Entity, state: C_CombatState) -> int:
 	return _count_hostile(actor, seen)
 
 
+## Фильтрует готовый набор gameplay Entity через CombatRules.are_enemies().
 static func _count_hostile(actor: Entity, candidates: Array[Entity]) -> int:
 	var count: int = 0
 	for candidate in candidates:
@@ -24,6 +27,7 @@ static func _count_hostile(actor: Entity, candidates: Array[Entity]) -> int:
 	return count
 
 
+## Находит Area3D по C_CombatState.sensor_path относительно actor Node.
 static func _resolve_area(actor: Entity, state: C_CombatState) -> Area3D:
 	if actor == null or state == null:
 		return null
@@ -31,6 +35,7 @@ static func _resolve_area(actor: Entity, state: C_CombatState) -> Area3D:
 	return actor_node.get_node_or_null(state.sensor_path) as Area3D if actor_node != null else null
 
 
+## Поднимается от physics body по SceneTree до ближайшего gameplay Entity owner.
 static func _entity_from_node(node: Node) -> Entity:
 	var current: Node = node
 	while current != null:

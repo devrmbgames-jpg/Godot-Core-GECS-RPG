@@ -3,6 +3,7 @@ extends RefCounted
 class_name DemoEffectCatalog
 
 
+## Создаёт stackable periodic Poison definition до пяти stacks.
 static func poison() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"poison"; effect.display_name = "Poison"
@@ -12,6 +13,7 @@ static func poison() -> EffectDefinition:
 	return effect
 
 
+## Создаёт refreshable periodic Burning definition.
 static func burning() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"burning"; effect.display_name = "Burning"
@@ -21,6 +23,7 @@ static func burning() -> EffectDefinition:
 	return effect
 
 
+## Создаёт instant Heal definition с настраиваемой величиной восстановления.
 static func heal(amount: float = 30.0) -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"heal"; effect.display_name = "Heal"; effect.instant_heal = amount
@@ -28,6 +31,7 @@ static func heal(amount: float = 30.0) -> EffectDefinition:
 	return effect
 
 
+## Создаёт refreshable periodic regeneration definition.
 static func regeneration() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"regeneration"; effect.display_name = "Regeneration"
@@ -37,6 +41,7 @@ static func regeneration() -> EffectDefinition:
 	return effect
 
 
+## Создаёт Haste, увеличивающий AttackSpeed, CastSpeed и CooldownRecovery на 25%.
 static func haste() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"haste"; effect.display_name = "Haste"; effect.duration = 6.0
@@ -49,6 +54,7 @@ static func haste() -> EffectDefinition:
 	return effect
 
 
+## Создаёт Slow с multiplicative MoveSpeed factor 0.60.
 static func slow() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"slow"; effect.display_name = "Slow"; effect.duration = 4.0

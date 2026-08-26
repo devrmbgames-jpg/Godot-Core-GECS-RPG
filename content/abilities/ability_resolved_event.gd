@@ -9,6 +9,7 @@ var ability: Entity
 var definition: AbilityDefinition
 
 
+## Создаёт immutable event с runtime ability и её design definition.
 func _init(initial_ability: Entity, initial_definition: AbilityDefinition) -> void:
 	ability = initial_ability
 	definition = initial_definition
