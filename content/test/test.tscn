@@ -1,370 +1,295 @@
 [gd_scene format=3 uid="uid://bdmgmui74oixw"]
 
-[ext_resource type="Script" uid="uid://doab2vybixpto" path="res://content/test/test.gd" id="1_test"]
-[ext_resource type="Script" uid="uid://cdu5tlyk72uu4" path="res://addons/gecs/ecs/world.gd" id="2_world"]
-[ext_resource type="Script" uid="uid://b3vi2ingux88g" path="res://addons/gecs/lib/system_group.gd" id="3_group"]
-[ext_resource type="Script" uid="uid://b41mt42bb2231" path="res://content/ecs/systems/attributes/s_stat_rebuild.gd" id="4_stats"]
-[ext_resource type="Script" uid="uid://b4j7uxpx3vcp" path="res://content/ecs/observers/attributes/o_stat_modifier_changed.gd" id="5_stat_observer"]
-[ext_resource type="Script" uid="uid://pvboq43dv3wg" path="res://content/ecs/observers/attributes/o_health_bounds.gd" id="6_health_bounds"]
-[ext_resource type="Script" uid="uid://dydqshqygseho" path="res://content/ecs/systems/controller/s_ai_chase.gd" id="7_ai_chase"]
-[ext_resource type="Script" uid="uid://cayftpflei2nh" path="res://content/ecs/systems/input/s_input_player.gd" id="8_input"]
-[ext_resource type="Script" uid="uid://c7bgi68a5v1vl" path="res://content/ecs/systems/controller/s_ai_controller.gd" id="9_ai_controller"]
-[ext_resource type="Script" uid="uid://bbu6lx21c5qtt" path="res://content/ecs/systems/interaction/s_interaction_intent.gd" id="10_interact"]
-[ext_resource type="Script" uid="uid://bk6eyxxc21s18" path="res://content/ecs/systems/ability/s_ability_intent.gd" id="11_ability_intent"]
-[ext_resource type="Script" uid="uid://cuhllyyl4bc3b" path="res://content/ecs/systems/ability/s_ability_activate.gd" id="12_activate"]
-[ext_resource type="Script" uid="uid://bhbckiyhftqkn" path="res://content/ecs/systems/ability/s_casting.gd" id="13_casting"]
-[ext_resource type="Script" uid="uid://csdus4k706di5" path="res://content/ecs/systems/ability/s_cooldown.gd" id="14_cooldown"]
-[ext_resource type="Script" uid="uid://bhtwlnexmnwb1" path="res://content/ecs/systems/effect/s_effect_tick.gd" id="15_effect_tick"]
-[ext_resource type="Script" uid="uid://cbbrg7ssdnmma" path="res://content/ecs/systems/effect/s_effect_duration.gd" id="16_effect_duration"]
-[ext_resource type="Script" uid="uid://yognxp1g7kkf" path="res://content/ecs/systems/motion/s_motion.gd" id="17_motion"]
-[ext_resource type="Script" uid="uid://dp144k8jljuue" path="res://content/ecs/systems/motion/s_rotation.gd" id="18_rotation"]
-[ext_resource type="Script" uid="uid://dg8fahba2w4ef" path="res://content/ecs/systems/physics/s_gravity.gd" id="19_gravity"]
-[ext_resource type="Script" uid="uid://wuq6aida0f7d" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="20_character"]
-[ext_resource type="Script" uid="uid://by5h21g3yuubp" path="res://content/ecs/systems/combat/s_projectile.gd" id="21_projectile"]
-[ext_resource type="Script" uid="uid://j1i4vxfpf58k" path="res://content/ecs/systems/presentation/s_rig_locomotion.gd" id="22_rig_locomotion"]
-[ext_resource type="Script" uid="uid://cwafuywjcvni3" path="res://content/ecs/observers/combat/o_damage.gd" id="23_damage"]
-[ext_resource type="Script" uid="uid://cc4tkr20nwq47" path="res://content/ecs/observers/combat/o_death.gd" id="24_death"]
-[ext_resource type="Script" uid="uid://cyias3muoiu21" path="res://content/ecs/observers/effect/o_effect_apply.gd" id="25_effect_apply"]
-[ext_resource type="Script" uid="uid://dlyt633hu2pka" path="res://content/ecs/observers/effect/o_heal.gd" id="26_heal"]
-[ext_resource type="Script" uid="uid://48xsggo0yyx3" path="res://content/ecs/observers/item/o_equipment.gd" id="27_equipment"]
-[ext_resource type="Script" uid="uid://buorbq0uq2arv" path="res://content/ecs/observers/interaction/o_interaction.gd" id="28_interaction"]
-[ext_resource type="Script" uid="uid://b1w163pwhepdf" path="res://content/ecs/observers/interaction/o_activatable.gd" id="29_activatable"]
-[ext_resource type="Script" uid="uid://cjiw7o67lu0if" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
-[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
-[ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_rigid"]
-[ext_resource type="Script" uid="uid://1cwik3pnwfh4" path="res://content/ecs/systems/controller/s_player_controller.gd" id="33_player_controller"]
+[ext_resource type="Script" path="res://content/test/test.gd" id="1_test"]
+[ext_resource type="Script" path="res://addons/gecs/ecs/world.gd" id="2_world"]
+[ext_resource type="Script" path="res://addons/gecs/lib/system_group.gd" id="3_group"]
+[ext_resource type="Script" path="res://content/ecs/systems/attributes/s_stat_rebuild.gd" id="4_stats"]
+[ext_resource type="Script" path="res://content/ecs/observers/attributes/o_stat_modifier_changed.gd" id="5_stat_observer"]
+[ext_resource type="Script" path="res://content/ecs/observers/attributes/o_health_bounds.gd" id="6_health_bounds"]
+[ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_chase.gd" id="7_ai_chase"]
+[ext_resource type="Script" path="res://content/ecs/systems/input/s_input_player.gd" id="8_input"]
+[ext_resource type="Script" path="res://content/ecs/systems/controller/s_ai_controller.gd" id="9_ai_controller"]
+[ext_resource type="Script" path="res://content/ecs/systems/interaction/s_interaction_intent.gd" id="10_interact"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_intent.gd" id="11_ability_intent"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_ability_activate.gd" id="12_activate"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_casting.gd" id="13_casting"]
+[ext_resource type="Script" path="res://content/ecs/systems/ability/s_cooldown.gd" id="14_cooldown"]
+[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_tick.gd" id="15_effect_tick"]
+[ext_resource type="Script" path="res://content/ecs/systems/effect/s_effect_duration.gd" id="16_effect_duration"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_motion.gd" id="17_motion"]
+[ext_resource type="Script" path="res://content/ecs/systems/motion/s_rotation.gd" id="18_rotation"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_gravity.gd" id="19_gravity"]
+[ext_resource type="Script" path="res://content/ecs/systems/physics/s_kinematic_character.gd" id="20_character"]
+[ext_resource type="Script" path="res://content/ecs/systems/combat/s_projectile.gd" id="21_projectile"]
+[ext_resource type="Script" path="res://content/ecs/systems/presentation/s_rig_locomotion.gd" id="22_rig_locomotion"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_damage.gd" id="23_damage"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_death.gd" id="24_death"]
+[ext_resource type="Script" path="res://content/ecs/observers/effect/o_effect_apply.gd" id="25_effect_apply"]
+[ext_resource type="Script" path="res://content/ecs/observers/effect/o_heal.gd" id="26_heal"]
+[ext_resource type="Script" path="res://content/ecs/observers/item/o_equipment.gd" id="27_equipment"]
+[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_interaction.gd" id="28_interaction"]
+[ext_resource type="Script" path="res://content/ecs/observers/interaction/o_activatable.gd" id="29_activatable"]
+[ext_resource type="Script" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
+[ext_resource type="PackedScene" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_rigid"]
+[ext_resource type="Script" path="res://content/ecs/systems/controller/s_player_controller.gd" id="33_player_controller"]
 [ext_resource type="PackedScene" path="res://content/ecs/entities/interaction/e_activatable.tscn" id="34_activatable_scene"]
 [ext_resource type="PackedScene" path="res://content/test/entities/e_demo_effect_station.tscn" id="35_effect_station"]
 [ext_resource type="PackedScene" path="res://content/test/entities/e_demo_item_station.tscn" id="36_item_station"]
 [ext_resource type="PackedScene" path="res://content/test/entities/e_demo_target_dummy.tscn" id="37_dummy"]
-[ext_resource type="Script" uid="uid://rpfyk12wwnka" path="res://content/test/observers/o_demo_effect_station.gd" id="38_effect_observer"]
-[ext_resource type="Script" uid="uid://c25qlkcjdc5yq" path="res://content/test/observers/o_demo_item_station.gd" id="39_item_observer"]
-[ext_resource type="Script" uid="uid://te73hhbwki5p" path="res://content/test/observers/o_demo_activatable_visual.gd" id="40_activate_visual"]
-[ext_resource type="Script" uid="uid://r2p0ijy2bmi0" path="res://content/test/demo_controller_switcher.gd" id="41_switcher"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_effect_station.gd" id="38_effect_observer"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_item_station.gd" id="39_item_observer"]
+[ext_resource type="Script" path="res://content/test/observers/o_demo_activatable_visual.gd" id="40_activate_visual"]
+[ext_resource type="Script" path="res://content/test/demo_controller_switcher.gd" id="41_switcher"]
+[ext_resource type="Script" path="res://content/ecs/systems/interaction/s_player_interaction_selection.gd" id="42_player_interaction"]
+[ext_resource type="Script" path="res://content/ecs/systems/interaction/s_ai_interaction_selection.gd" id="43_ai_interaction"]
+[ext_resource type="Script" path="res://content/ecs/systems/combat/s_combat_state.gd" id="44_combat_state"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_combat_damage.gd" id="45_combat_damage"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.16, 0.18, 0.2, 1)
-
 [sub_resource type="BoxMesh" id="GroundMesh"]
 size = Vector3(36, 0.5, 34)
-
 [sub_resource type="BoxShape3D" id="GroundShape"]
 size = Vector3(36, 0.5, 34)
-
 [sub_resource type="BoxMesh" id="WallMesh"]
 size = Vector3(36, 2, 0.5)
-
 [sub_resource type="BoxShape3D" id="WallShape"]
 size = Vector3(36, 2, 0.5)
-
 [sub_resource type="BoxMesh" id="SideWallMesh"]
 size = Vector3(0.5, 2, 34)
-
 [sub_resource type="BoxShape3D" id="SideWallShape"]
 size = Vector3(0.5, 2, 34)
-
 [sub_resource type="BoxMesh" id="RampMesh"]
 size = Vector3(5, 0.5, 3)
-
 [sub_resource type="BoxShape3D" id="RampShape"]
 size = Vector3(5, 0.5, 3)
-
 [sub_resource type="StandardMaterial3D" id="CrateMaterial"]
 albedo_color = Color(0.45, 0.27, 0.12, 1)
-
 [sub_resource type="BoxMesh" id="CrateMesh"]
 size = Vector3(1.2, 1.2, 1.2)
-
 [sub_resource type="BoxShape3D" id="CrateShape"]
 size = Vector3(1.2, 1.2, 1.2)
 
-[node name="Test" type="Node" unique_id=2141926759 node_paths=PackedStringArray("world")]
+[node name="Test" type="Node" node_paths=PackedStringArray("world")]
 script = ExtResource("1_test")
 world = NodePath("World")
-
-[node name="World" type="Node" parent="." unique_id=273514950]
+[node name="World" type="Node" parent="."]
 script = ExtResource("2_world")
 entity_nodes_root = NodePath("../Entities")
 system_nodes_root = NodePath("Systems")
-
-[node name="Systems" type="Node" parent="World" unique_id=1979471905]
-
-[node name="O_StatModifierChanged" type="Node" parent="World/Systems" unique_id=1834878131]
+[node name="Systems" type="Node" parent="World"]
+[node name="O_StatModifierChanged" type="Node" parent="World/Systems"]
 script = ExtResource("5_stat_observer")
-
-[node name="O_HealthBounds" type="Node" parent="World/Systems" unique_id=2126504249]
+[node name="O_HealthBounds" type="Node" parent="World/Systems"]
 script = ExtResource("6_health_bounds")
-
-[node name="O_Damage" type="Node" parent="World/Systems" unique_id=840186123]
+[node name="O_Damage" type="Node" parent="World/Systems"]
 script = ExtResource("23_damage")
-
-[node name="O_Death" type="Node" parent="World/Systems" unique_id=1154432514]
+[node name="O_CombatDamage" type="Node" parent="World/Systems"]
+script = ExtResource("45_combat_damage")
+[node name="O_Death" type="Node" parent="World/Systems"]
 script = ExtResource("24_death")
-
-[node name="O_EffectApply" type="Node" parent="World/Systems" unique_id=96186651]
+[node name="O_EffectApply" type="Node" parent="World/Systems"]
 script = ExtResource("25_effect_apply")
-
-[node name="O_Heal" type="Node" parent="World/Systems" unique_id=1423532463]
+[node name="O_Heal" type="Node" parent="World/Systems"]
 script = ExtResource("26_heal")
-
-[node name="O_Equipment" type="Node" parent="World/Systems" unique_id=1772115786]
+[node name="O_Equipment" type="Node" parent="World/Systems"]
 script = ExtResource("27_equipment")
-
-[node name="O_Interaction" type="Node" parent="World/Systems" unique_id=591090218]
+[node name="O_Interaction" type="Node" parent="World/Systems"]
 script = ExtResource("28_interaction")
-
-[node name="O_Activatable" type="Node" parent="World/Systems" unique_id=62769444]
+[node name="O_Activatable" type="Node" parent="World/Systems"]
 script = ExtResource("29_activatable")
-
-[node name="O_RigPresentation" type="Node" parent="World/Systems" unique_id=1349213881]
+[node name="O_RigPresentation" type="Node" parent="World/Systems"]
 script = ExtResource("30_rig_presentation")
-
-[node name="O_DemoEffectStation" type="Node" parent="World/Systems" unique_id=2141521119]
+[node name="O_DemoEffectStation" type="Node" parent="World/Systems"]
 script = ExtResource("38_effect_observer")
-
-[node name="O_DemoItemStation" type="Node" parent="World/Systems" unique_id=6931895]
+[node name="O_DemoItemStation" type="Node" parent="World/Systems"]
 script = ExtResource("39_item_observer")
-
-[node name="O_DemoActivatableVisual" type="Node" parent="World/Systems" unique_id=464794539]
+[node name="O_DemoActivatableVisual" type="Node" parent="World/Systems"]
 script = ExtResource("40_activate_visual")
 
-[node name="Attributes" type="Node" parent="World/Systems" unique_id=1631304616]
+[node name="Attributes" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_StatRebuild" type="Node" parent="World/Systems/Attributes" unique_id=1547703594]
+[node name="S_StatRebuild" type="Node" parent="World/Systems/Attributes"]
 script = ExtResource("4_stats")
 
-[node name="AI" type="Node" parent="World/Systems" unique_id=1215845986]
+[node name="Combat" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
+[node name="S_CombatState" type="Node" parent="World/Systems/Combat"]
+script = ExtResource("44_combat_state")
 
-[node name="S_AIChase" type="Node" parent="World/Systems/AI" unique_id=1977521134]
+[node name="AI" type="Node" parent="World/Systems"]
+script = ExtResource("3_group")
+[node name="S_AIChase" type="Node" parent="World/Systems/AI"]
 script = ExtResource("7_ai_chase")
+[node name="S_AIInteractionSelection" type="Node" parent="World/Systems/AI"]
+script = ExtResource("43_ai_interaction")
 
-[node name="Input" type="Node" parent="World/Systems" unique_id=642406921]
+[node name="Input" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_InputPlayer" type="Node" parent="World/Systems/Input" unique_id=1916784668]
+[node name="S_InputPlayer" type="Node" parent="World/Systems/Input"]
 script = ExtResource("8_input")
-
-[node name="S_PlayerController" type="Node" parent="World/Systems/Input" unique_id=1055148794]
+[node name="S_PlayerController" type="Node" parent="World/Systems/Input"]
 script = ExtResource("33_player_controller")
-
-[node name="S_AIController" type="Node" parent="World/Systems/Input" unique_id=603360102]
+[node name="S_AIController" type="Node" parent="World/Systems/Input"]
 script = ExtResource("9_ai_controller")
 
-[node name="Gameplay" type="Node" parent="World/Systems" unique_id=1513620253]
+[node name="Gameplay" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_InteractionIntent" type="Node" parent="World/Systems/Gameplay" unique_id=1450903525]
+[node name="S_PlayerInteractionSelection" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("42_player_interaction")
+[node name="S_InteractionIntent" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("10_interact")
-
-[node name="S_AbilityIntent" type="Node" parent="World/Systems/Gameplay" unique_id=554733137]
+[node name="S_AbilityIntent" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("11_ability_intent")
-
-[node name="S_AbilityActivate" type="Node" parent="World/Systems/Gameplay" unique_id=1571312234]
+[node name="S_AbilityActivate" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("12_activate")
-
-[node name="S_Casting" type="Node" parent="World/Systems/Gameplay" unique_id=953759886]
+[node name="S_Casting" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("13_casting")
-
-[node name="S_Cooldown" type="Node" parent="World/Systems/Gameplay" unique_id=449600508]
+[node name="S_Cooldown" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("14_cooldown")
-
-[node name="S_EffectTick" type="Node" parent="World/Systems/Gameplay" unique_id=228268416]
+[node name="S_EffectTick" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("15_effect_tick")
-
-[node name="S_EffectDuration" type="Node" parent="World/Systems/Gameplay" unique_id=1465866834]
+[node name="S_EffectDuration" type="Node" parent="World/Systems/Gameplay"]
 script = ExtResource("16_effect_duration")
 
-[node name="Motion" type="Node" parent="World/Systems" unique_id=1079490658]
+[node name="Motion" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_Motion" type="Node" parent="World/Systems/Motion" unique_id=1100369259]
+[node name="S_Motion" type="Node" parent="World/Systems/Motion"]
 script = ExtResource("17_motion")
-
-[node name="S_Rotation" type="Node" parent="World/Systems/Motion" unique_id=501481175]
+[node name="S_Rotation" type="Node" parent="World/Systems/Motion"]
 script = ExtResource("18_rotation")
 
-[node name="Physics" type="Node" parent="World/Systems" unique_id=982684353]
+[node name="Physics" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_Gravity" type="Node" parent="World/Systems/Physics" unique_id=2092492042]
+[node name="S_Gravity" type="Node" parent="World/Systems/Physics"]
 script = ExtResource("19_gravity")
-
-[node name="S_KinematicCharacter" type="Node" parent="World/Systems/Physics" unique_id=2053821103]
+[node name="S_KinematicCharacter" type="Node" parent="World/Systems/Physics"]
 script = ExtResource("20_character")
-
-[node name="S_Projectile" type="Node" parent="World/Systems/Physics" unique_id=304008077]
+[node name="S_Projectile" type="Node" parent="World/Systems/Physics"]
 script = ExtResource("21_projectile")
 
-[node name="Presentation" type="Node" parent="World/Systems" unique_id=767168813]
+[node name="Presentation" type="Node" parent="World/Systems"]
 script = ExtResource("3_group")
-
-[node name="S_RigLocomotion" type="Node" parent="World/Systems/Presentation" unique_id=801058862]
+[node name="S_RigLocomotion" type="Node" parent="World/Systems/Presentation"]
 script = ExtResource("22_rig_locomotion")
 
-[node name="Environment" type="Node3D" parent="." unique_id=935759603]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment" unique_id=1992317848]
+[node name="Environment" type="Node3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Environment"]
 transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
 shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment" unique_id=875644181]
-
-[node name="Ground" type="MeshInstance3D" parent="Environment" unique_id=1744187826]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Environment"]
+[node name="Ground" type="MeshInstance3D" parent="Environment"]
 material_override = SubResource("GroundMaterial")
 mesh = SubResource("GroundMesh")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ground" unique_id=1406142629]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D" unique_id=2030328516]
+[node name="StaticBody3D" type="StaticBody3D" parent="Environment/Ground"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Environment/Ground/StaticBody3D"]
 shape = SubResource("GroundShape")
-
-[node name="NorthWall" type="StaticBody3D" parent="Environment" unique_id=304382057]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -17)
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/NorthWall" unique_id=50252905]
+[node name="NorthWall" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,-17)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/NorthWall"]
 mesh = SubResource("WallMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/NorthWall" unique_id=795652085]
+[node name="Collision" type="CollisionShape3D" parent="Environment/NorthWall"]
 shape = SubResource("WallShape")
-
-[node name="SouthWall" type="StaticBody3D" parent="Environment" unique_id=1738588389]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 17)
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/SouthWall" unique_id=691392998]
+[node name="SouthWall" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1,17)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/SouthWall"]
 mesh = SubResource("WallMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/SouthWall" unique_id=1524362980]
+[node name="Collision" type="CollisionShape3D" parent="Environment/SouthWall"]
 shape = SubResource("WallShape")
-
-[node name="WestWall" type="StaticBody3D" parent="Environment" unique_id=2045398956]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 1, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/WestWall" unique_id=73366656]
+[node name="WestWall" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-18,1,0)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/WestWall"]
 mesh = SubResource("SideWallMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/WestWall" unique_id=1512998206]
+[node name="Collision" type="CollisionShape3D" parent="Environment/WestWall"]
 shape = SubResource("SideWallShape")
-
-[node name="EastWall" type="StaticBody3D" parent="Environment" unique_id=1642886879]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 1, 0)
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/EastWall" unique_id=682209306]
+[node name="EastWall" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,18,1,0)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/EastWall"]
 mesh = SubResource("SideWallMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/EastWall" unique_id=1044640794]
+[node name="Collision" type="CollisionShape3D" parent="Environment/EastWall"]
 shape = SubResource("SideWallShape")
-
-[node name="Ramp" type="StaticBody3D" parent="Environment" unique_id=144576737]
-transform = Transform3D(0.95105654, 0.309017, 0, -0.309017, 0.95105654, 0, 0, 0, 1, 10, 1, 2)
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/Ramp" unique_id=309759652]
+[node name="Ramp" type="StaticBody3D" parent="Environment"]
+transform = Transform3D(0.95105654,0.309017,0,-0.309017,0.95105654,0,0,0,1,10,1,2)
+[node name="Mesh" type="MeshInstance3D" parent="Environment/Ramp"]
 mesh = SubResource("RampMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/Ramp" unique_id=1753429150]
+[node name="Collision" type="CollisionShape3D" parent="Environment/Ramp"]
 shape = SubResource("RampShape")
-
-[node name="FallingCrateA" type="RigidBody3D" parent="Environment" unique_id=1181938387]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 7, 2)
+[node name="FallingCrateA" type="RigidBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,8.5,7,2)
 mass = 10.0
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateA" unique_id=635720828]
+[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateA"]
 material_override = SubResource("CrateMaterial")
 mesh = SubResource("CrateMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateA" unique_id=477202986]
+[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateA"]
 shape = SubResource("CrateShape")
-
-[node name="FallingCrateB" type="RigidBody3D" parent="Environment" unique_id=1450837645]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 9, 1.5)
+[node name="FallingCrateB" type="RigidBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,11,9,1.5)
 mass = 14.0
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateB" unique_id=58056957]
+[node name="Mesh" type="MeshInstance3D" parent="Environment/FallingCrateB"]
 material_override = SubResource("CrateMaterial")
 mesh = SubResource("CrateMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateB" unique_id=869346353]
+[node name="Collision" type="CollisionShape3D" parent="Environment/FallingCrateB"]
 shape = SubResource("CrateShape")
-
-[node name="PushCrate" type="RigidBody3D" parent="Environment" unique_id=1490783598]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 3)
+[node name="PushCrate" type="RigidBody3D" parent="Environment"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,5,1,3)
 mass = 18.0
-
-[node name="Mesh" type="MeshInstance3D" parent="Environment/PushCrate" unique_id=1749800743]
+[node name="Mesh" type="MeshInstance3D" parent="Environment/PushCrate"]
 material_override = SubResource("CrateMaterial")
 mesh = SubResource("CrateMesh")
-
-[node name="Collision" type="CollisionShape3D" parent="Environment/PushCrate" unique_id=203837090]
+[node name="Collision" type="CollisionShape3D" parent="Environment/PushCrate"]
 shape = SubResource("CrateShape")
 
-[node name="Entities" type="Node3D" parent="." unique_id=26783009]
-
-[node name="Player" parent="Entities" unique_id=370447861 instance=ExtResource("31_player")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 4)
-
-[node name="RigidWarrior" parent="Entities" unique_id=654184400 instance=ExtResource("32_rigid")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -3)
-
-[node name="RigidArcher" parent="Entities" unique_id=2116583824 instance=ExtResource("32_rigid")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -7)
-
-[node name="RigidMage" parent="Entities" unique_id=433753350 instance=ExtResource("32_rigid")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -3)
-
-[node name="TargetDummy" parent="Entities" unique_id=2056720150 instance=ExtResource("37_dummy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -13)
-
-[node name="InteractionCube" parent="Entities" unique_id=1187297774 instance=ExtResource("34_activatable_scene")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.75, 4)
-
-[node name="InteractionLabel" type="Label3D" parent="Entities" unique_id=1540461841]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 2, 4)
+[node name="Entities" type="Node3D" parent="."]
+[node name="Player" parent="Entities" instance=ExtResource("31_player")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,4)
+[node name="RigidWarrior" parent="Entities" instance=ExtResource("32_rigid")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-7,1.5,-3)
+[node name="RigidArcher" parent="Entities" instance=ExtResource("32_rigid")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,1.5,-7)
+[node name="RigidMage" parent="Entities" instance=ExtResource("32_rigid")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,7,1.5,-3)
+[node name="TargetDummy" parent="Entities" instance=ExtResource("37_dummy")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.25,-13)
+[node name="InteractionCube" parent="Entities" instance=ExtResource("34_activatable_scene")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-12,0.75,4)
+[node name="InteractionLabel" type="Label3D" parent="Entities"]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-12,2,4)
 text = "E: Toggle Activatable"
 font_size = 30
 outline_size = 8
-
-[node name="EffectPoison" parent="Entities" unique_id=995177364 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.4, 10)
-
-[node name="EffectBurning" parent="Entities" unique_id=785311029 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0.4, 10)
+[node name="EffectPoison" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-10,0.4,10)
+[node name="EffectBurning" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-6,0.4,10)
 effect_kind = 1
-
-[node name="EffectHeal" parent="Entities" unique_id=1120232605 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.4, 10)
+[node name="EffectHeal" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-2,0.4,10)
 effect_kind = 2
-
-[node name="EffectRegen" parent="Entities" unique_id=1948312659 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.4, 10)
+[node name="EffectRegen" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,2,0.4,10)
 effect_kind = 3
-
-[node name="EffectHaste" parent="Entities" unique_id=1838249151 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0.4, 10)
+[node name="EffectHaste" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,6,0.4,10)
 effect_kind = 4
-
-[node name="EffectSlow" parent="Entities" unique_id=1367083719 instance=ExtResource("35_effect_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.4, 10)
+[node name="EffectSlow" parent="Entities" instance=ExtResource("35_effect_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,10,0.4,10)
 effect_kind = 5
-
-[node name="ItemSword" parent="Entities" unique_id=2147270288 instance=ExtResource("36_item_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.25, 14)
-
-[node name="ItemBow" parent="Entities" unique_id=1861390213 instance=ExtResource("36_item_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 14)
+[node name="ItemSword" parent="Entities" instance=ExtResource("36_item_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,-5,0.25,14)
+[node name="ItemBow" parent="Entities" instance=ExtResource("36_item_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,0,0.25,14)
 item_kind = 1
-
-[node name="ItemStaff" parent="Entities" unique_id=247547316 instance=ExtResource("36_item_station")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.25, 14)
+[node name="ItemStaff" parent="Entities" instance=ExtResource("36_item_station")]
+transform = Transform3D(1,0,0,0,1,0,0,0,1,5,0.25,14)
 item_kind = 2
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1584517297]
-transform = Transform3D(1, 0, 0, 0, 0.6819984, 0.7313537, 0, -0.7313537, 0.6819984, 0, 22, 20)
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1,0,0,0,0.6819984,0.7313537,0,-0.7313537,0.6819984,0,22,20)
 current = true
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=1449194697]
-
-[node name="ControllerSwitcher" type="Control" parent="UI" unique_id=1416556122]
+[node name="UI" type="CanvasLayer" parent="."]
+[node name="ControllerSwitcher" type="Control" parent="UI"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -374,33 +299,29 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("41_switcher")
 candidates = Array[NodePath]([NodePath("../../Entities/Player"), NodePath("../../Entities/RigidWarrior"), NodePath("../../Entities/RigidArcher"), NodePath("../../Entities/RigidMage")])
-
-[node name="Panel" type="PanelContainer" parent="UI/ControllerSwitcher" unique_id=1033708036]
+[node name="Panel" type="PanelContainer" parent="UI/ControllerSwitcher"]
 layout_mode = 0
 offset_left = 16.0
 offset_top = 16.0
-offset_right = 390.0
-offset_bottom = 230.0
-
-[node name="VBox" type="VBoxContainer" parent="UI/ControllerSwitcher/Panel" unique_id=1351472191]
+offset_right = 470.0
+offset_bottom = 315.0
+[node name="VBox" type="VBoxContainer" parent="UI/ControllerSwitcher/Panel"]
 layout_mode = 2
-
-[node name="Title" type="Label" parent="UI/ControllerSwitcher/Panel/VBox" unique_id=1785523601]
+[node name="Title" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
 layout_mode = 2
 text = "GECS ACTION RPG PLAYGROUND"
-
-[node name="SwitchButton" type="Button" parent="UI/ControllerSwitcher/Panel/VBox" unique_id=1084697497]
+[node name="SwitchButton" type="Button" parent="UI/ControllerSwitcher/Panel/VBox"]
 layout_mode = 2
 text = "Switch Controller"
-
-[node name="Status" type="Label" parent="UI/ControllerSwitcher/Panel/VBox" unique_id=1394587003]
+[node name="EnemiesButton" type="Button" parent="UI/ControllerSwitcher/Panel/VBox"]
+layout_mode = 2
+text = "Enemies: ON"
+[node name="Status" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
 layout_mode = 2
 text = "Waiting for ECS..."
-
-[node name="Controls" type="Label" parent="UI/ControllerSwitcher/Panel/VBox" unique_id=1742377263]
+[node name="Controls" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
 layout_mode = 2
-text = "WASD Move | Space Primary | F Shoot | Q Fireball | E Interact"
-
-[node name="Help" type="Label" parent="UI/ControllerSwitcher/Panel/VBox" unique_id=894746681]
+text = "WASD Move | Space Primary | F Shoot | Q Fireball | E Interact | Aim: Mouse"
+[node name="Help" type="Label" parent="UI/ControllerSwitcher/Panel/VBox"]
 layout_mode = 2
-text = "Stations: effects + weapons | Red box: combat | Orange cube: interaction"
+text = "Area3D interaction selects nearest valid object | Combat faces cursor"

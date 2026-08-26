@@ -19,6 +19,10 @@ func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 		var controller: C_AIController = controllers[index] as C_AIController
 		var goal: C_AIInteractionGoal = goals[index] as C_AIInteractionGoal
 		var sensor: C_InteractionSensor = sensors[index] as C_InteractionSensor
+		if not controller.enabled:
+			InteractionSelectionService.set_target(actor, null)
+			goal.request_interaction = false
+			continue
 		var selected: Entity = goal.target if InteractionTargeting.contains_valid(actor, sensor, goal.target) else null
 		InteractionSelectionService.set_target(actor, selected)
 		if goal.request_interaction and selected != null:

@@ -52,7 +52,7 @@ func _update_cursor_aim(actor: Node3D, camera: Camera3D, pointer: Vector2, inten
 	if intersection == null:
 		intent.aim_direction = Vector3.ZERO
 		return
-	var aim_position: Vector3 = intersection as Vector3
+	var aim_position: Vector3 = intersection
 	var aim_direction: Vector3 = aim_position - actor.global_position
 	aim_direction.y = 0.0
 	intent.aim_world_position = aim_position
