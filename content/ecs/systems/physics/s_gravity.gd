@@ -4,10 +4,12 @@ extends System
 class_name S_Gravity
 
 
+## Выбирает только CharacterBody actors с gravity multiplier stat.
 func query() -> QueryBuilder:
 	return q.with_all([C_IsCharacter, C_Gravity]).iterate([C_Gravity])
 
 
+## Добавляет body.get_gravity() * multiplier * delta только пока CharacterBody не стоит на floor.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var gravities: Array = components[0]
 	for index in entities.size():

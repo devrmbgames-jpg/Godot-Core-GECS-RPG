@@ -6,6 +6,8 @@ class_name AbilityResolver
 const EVENT_RESOLVED: StringName = &"ability_resolved"
 
 
+## Выполняет delivery конкретной runtime ability и публикует AbilityResolvedEvent.
+## Projectile spawn откладывается через CommandBuffer, melee resolve выполняется немедленно.
 static func resolve(actor: Entity, ability: Entity, target: Entity, target_position: Vector3, command_buffer: CommandBuffer) -> void:
 	if actor == null or ability == null:
 		return
@@ -23,12 +25,14 @@ static func resolve(actor: Entity, ability: Entity, target: Entity, target_posit
 	ECS.world.emit_event(EVENT_RESOLVED, actor, AbilityResolvedEvent.new(ability, definition))
 
 
+## Вычисляет pre-mitigation damage из flat_damage и resolved actor C_Damage scale.
 static func _calculate_raw_damage(actor: Entity, definition: AbilityDefinition) -> float:
 	var damage_stat := actor.get_component(C_Damage) as C_Damage
 	var actor_damage: float = damage_stat.value if damage_stat != null else 0.0
 	return maxf(0.0, definition.flat_damage + actor_damage * definition.damage_scale)
 
 
+## Разрешает delivery direction в порядке target Entity -> explicit target_position -> current facing.
 static func _resolve_direction(actor: Entity, target: Entity, target_position: Vector3) -> Vector3:
 	var actor_node := actor as Node as Node3D
 	if actor_node == null:
@@ -42,6 +46,7 @@ static func _resolve_direction(actor: Entity, target: Entity, target_position: V
 	return CombatQuery.facing(actor)
 
 
+## Делает один forward ray в ability range, затем отправляет Damage/Effect requests только valid enemy.
 static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, definition: AbilityDefinition, raw_damage: float) -> void:
 	var actor_node := actor as Node as Node3D
 	if actor_node == null:

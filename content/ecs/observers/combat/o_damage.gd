@@ -3,10 +3,12 @@ extends Observer
 class_name O_Damage
 
 
+## Слушает damage requests только на targets с C_Health.
 func query() -> QueryBuilder:
 	return q.with_all([C_Health]).on_event(DamageService.EVENT_DAMAGE_REQUESTED)
 
 
+## Валидирует CombatRules, применяет Armor mitigation, мутирует Health, публикует result и deferred-add C_Dead.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var damage := payload as DamageRequest
 	if target == null or damage == null or not CombatRules.can_damage(damage.source, target):
@@ -25,6 +27,7 @@ func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 		cmd.add_component(target, C_Dead.new())
 
 
+## Применяет hyperbolic armor formula; отрицательная Armor увеличивает входящий damage.
 func _mitigate(raw_damage: float, armor: float) -> float:
 	if armor >= 0.0:
 		return raw_damage * (100.0 / (100.0 + armor))

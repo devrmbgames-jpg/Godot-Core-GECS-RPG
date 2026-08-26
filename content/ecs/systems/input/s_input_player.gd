@@ -4,10 +4,12 @@ extends System
 class_name S_InputPlayer
 
 
+## Выбирает local-input actors и кеширует profile/state pair для device sampling.
 func query() -> QueryBuilder:
 	return q.with_all([C_InputPlayer, C_InputState]).iterate([C_InputPlayer, C_InputState])
 
 
+## Снимает mouse position, movement vector и one-shot actions из InputMap; dead actors получают zero actions.
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var inputs: Array = components[0]
 	var states: Array = components[1]

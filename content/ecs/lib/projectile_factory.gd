@@ -5,6 +5,8 @@ class_name ProjectileFactory
 const PROJECTILE_SCENE: PackedScene = preload("res://content/ecs/entities/combat/e_projectile.tscn")
 
 
+## Инстанцирует spatial projectile Node3D, задаёт initial transform/C_Projectile и регистрирует в ECS.world.
+## Возвращает runtime projectile Entity либо null, если actor/scene не могут дать Node3D context.
 static func spawn(
 	actor: Entity,
 	ability: Entity,

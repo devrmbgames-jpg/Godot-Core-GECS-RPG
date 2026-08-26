@@ -4,10 +4,13 @@ extends System
 class_name S_AIController
 
 
+## Выбирает живых actors, для которых AI data нужно перевести в общий controller contract.
 func query() -> QueryBuilder:
 	return q.with_all([C_AIController, C_ControllerIntent]).with_none([C_Dead]).iterate([C_AIController, C_ControllerIntent])
 
 
+## Копирует desired/one-shot AI fields в C_ControllerIntent и consume-ит one-shot flags.
+## Disabled controller полностью обнуляет intent, не удаляя components/archetype.
 func process(_entities: Array[Entity], components: Array, _delta: float) -> void:
 	var controllers: Array = components[0]
 	var intents: Array = components[1]

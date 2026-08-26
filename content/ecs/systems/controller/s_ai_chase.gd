@@ -3,10 +3,12 @@ extends System
 class_name S_AIChase
 
 
+## Выбирает живых AI actors с chase behavior и combat-target output.
 func query() -> QueryBuilder:
 	return q.with_all([C_AIController, C_AIChase, C_CombatTarget]).with_none([C_Dead]).iterate([C_AIController, C_AIChase, C_CombatTarget])
 
 
+## Записывает desired movement/facing и one-shot primary request; actual intent формирует S_AIController.
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var controllers: Array = components[0]
 	var chases: Array = components[1]

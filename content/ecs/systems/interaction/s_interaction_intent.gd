@@ -3,10 +3,12 @@ extends System
 class_name S_InteractionIntent
 
 
+## Выбирает живых actors, у которых controller intent может активировать selected interaction target.
 func query() -> QueryBuilder:
 	return q.with_all([C_ControllerIntent, C_InteractionSensor]).with_none([C_Dead]).iterate([C_ControllerIntent, C_InteractionSensor])
 
 
+## На interact one-shot повторно валидирует selected target в overlap set и публикует InteractionService request.
 func process(entities: Array[Entity], components: Array, _delta: float) -> void:
 	var intents: Array = components[0]
 	var sensors: Array = components[1]

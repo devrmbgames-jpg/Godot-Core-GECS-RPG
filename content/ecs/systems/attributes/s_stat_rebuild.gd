@@ -6,10 +6,12 @@ extends System
 class_name S_StatRebuild
 
 
+## Выбирает только actors с dirty marker; отсутствие marker означает отсутствие работы.
 func query() -> QueryBuilder:
 	return q.with_all([C_StatsDirty])
 
 
+## Выполняет full/partial StatResolver rebuild и deferred-remove C_StatsDirty marker.
 func process(entities: Array[Entity], _components: Array, _delta: float) -> void:
 	for entity in entities:
 		var dirty := entity.get_component(C_StatsDirty) as C_StatsDirty

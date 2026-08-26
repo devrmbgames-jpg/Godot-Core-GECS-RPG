@@ -3,10 +3,12 @@ extends System
 class_name S_CombatState
 
 
+## Выбирает живых actors с C_CombatState и кеширует сам state для hot iteration.
 func query() -> QueryBuilder:
 	return q.with_all([C_CombatState]).with_none([C_Dead]).iterate([C_CombatState])
 
 
+## Обновляет nearby enemy count через CombatAwareness; enemies refresh linger, иначе timer истекает.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var states: Array = components[0]
 	for index in entities.size():

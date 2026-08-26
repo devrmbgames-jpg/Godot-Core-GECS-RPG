@@ -3,10 +3,12 @@ extends Observer
 class_name O_Activatable
 
 
+## Слушает activated interaction events только на targets с C_Activatable.
 func query() -> QueryBuilder:
 	return q.with_all([C_Activatable]).on_event(InteractionService.EVENT_ACTIVATED)
 
 
+## Применяет toggle/one-way activation state и публикует typed InteractionStateChangedEvent.
 func each(_event: Variant, target: Entity, payload: Variant = null) -> void:
 	var request := payload as InteractionRequest
 	var activatable := target.get_component(C_Activatable) as C_Activatable

@@ -5,10 +5,13 @@ extends System
 class_name S_AbilityActivate
 
 
+## Выбирает actors с ability queue, persistent casting state и mana-cost runtime stats.
 func query() -> QueryBuilder:
 	return q.with_all([C_AbilityQueue, C_Casting, C_Mana, C_ManaCostMultiplier])
 
 
+## Consumes один slot, проверяет death/cast/cooldown/mana, списывает cost и запускает instant/cast delivery.
+## Player target_position берётся из cursor aim; AI target — из C_CombatTarget.
 func process(entities: Array[Entity], _components: Array, _delta: float) -> void:
 	for actor in entities:
 		var queue := actor.get_component(C_AbilityQueue) as C_AbilityQueue

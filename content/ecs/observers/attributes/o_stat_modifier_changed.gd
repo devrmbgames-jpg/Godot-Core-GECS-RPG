@@ -6,10 +6,12 @@ extends Observer
 class_name O_StatModifierChanged
 
 
+## Слушает structural add/remove всех R_ModifiesStat relationships.
 func query() -> QueryBuilder:
 	return q.on_relationship_added([R_ModifiesStat]).on_relationship_removed([R_ModifiesStat])
 
 
+## Помечает конкретный stat Script dirty; если marker отсутствует, добавляет C_StatsDirty через CommandBuffer.
 func each(_event: Variant, actor: Entity, payload: Variant = null) -> void:
 	var relationship := payload as Relationship
 	if actor == null or relationship == null or not (relationship.target is Script):
