@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://b6brg8iiwuwmc"]
+
+[ext_resource type="Script" uid="uid://4ljolwc4og16" path="res://content/vfx/prototype/explotion.gd" id="1_eskdx"]
+
+[sub_resource type="Gradient" id="Gradient_ktsle"]
+offsets = PackedFloat32Array(0, 0.41369864, 0.68767124, 0.9479452)
+colors = PackedColorArray(1, 1, 0.13725491, 1, 0.8117647, 0.105882354, 0, 1, 0.23728508, 0.030950226, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rthl4"]
+gradient = SubResource("Gradient_ktsle")
+
+[sub_resource type="Curve" id="Curve_eskdx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7877238, 0.9230768), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_o5mei"]
+curve = SubResource("Curve_eskdx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_mn5t4"]
+use_rotation_3d = true
+rotation_3d_min = Vector3(0, 0, 0)
+rotation_3d_max = Vector3(360, 360, 360)
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 4.75
+initial_velocity_max = 8.599999
+angular_velocity_min = -720.0
+angular_velocity_max = 719.99994
+orbit_velocity_min = 9.49949e-08
+orbit_velocity_max = 0.87700015
+use_rotation_velocity_3d = true
+rotation_velocity_3d_min = Vector3(-720, -720, -720)
+rotation_velocity_3d_max = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_o5mei")
+color_ramp = SubResource("GradientTexture1D_rthl4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_f5i5i"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_lqn1g"]
+material = SubResource("StandardMaterial3D_f5i5i")
+size = Vector3(0.5, 0.5, 0.5)
+
+[node name="Explotion" type="Node3D" unique_id=135337448]
+script = ExtResource("1_eskdx")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1295156773]
+emitting = false
+amount = 160
+lifetime = 1.5
+one_shot = true
+explosiveness = 0.87
+process_material = SubResource("ParticleProcessMaterial_mn5t4")
+draw_pass_1 = SubResource("BoxMesh_lqn1g")

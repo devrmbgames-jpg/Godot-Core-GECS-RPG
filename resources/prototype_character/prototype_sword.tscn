@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cnaasnvb4hhuu"]
+
+[ext_resource type="PackedScene" uid="uid://dh5pjgg0qvtko" path="res://content/vfx/prototype/trail_sword.tscn" id="1_3mi0q"]
+[ext_resource type="Script" uid="uid://dddercy6ckkl4" path="res://resources/prototype_character/prototype_sword.gd" id="1_s40wg"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_bghjr"]
+size = Vector3(0.34570313, 0.16113281, 0.099609375)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4sew3"]
+size = Vector3(0.16992188, 1.4996948, 0.043945313)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3mi0q"]
+size = Vector3(0.10131836, 0.52526855, 0.04711914)
+
+[node name="PrototypeSword" type="Node3D" unique_id=850821310]
+script = ExtResource("1_s40wg")
+
+[node name="Core" type="Node3D" parent="." unique_id=1088907560]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Core" unique_id=1250651140]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.29896766, 0)
+mesh = SubResource("BoxMesh_bghjr")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Core" unique_id=132633991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96824867, 0)
+mesh = SubResource("BoxMesh_4sew3")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Core" unique_id=1168321261]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03145057, 0)
+mesh = SubResource("BoxMesh_3mi0q")
+
+[node name="TrailSword" parent="." unique_id=985892579 instance=ExtResource("1_3mi0q")]
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, -5.0521027e-08, 1.1557864, 0)
+visible = false
