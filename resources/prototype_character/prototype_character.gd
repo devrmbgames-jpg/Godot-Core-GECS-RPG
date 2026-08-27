@@ -36,6 +36,12 @@ signal anim_cast_finished()
 @export var animation_tree: AnimationTree = null
 
 
+## Activates the prototype AnimationTree explicitly so runtime behavior does not depend on editor state.
+func _ready() -> void:
+	if animation_tree != null:
+		animation_tree.active = true
+
+
 ## Requests the AnimationTree locomotion transition to walk.
 func play_walk() -> void:
 	has_walk = true
