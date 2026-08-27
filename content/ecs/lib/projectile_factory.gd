@@ -45,8 +45,10 @@ static func spawn(
 static func _attach_visual(projectile: Node3D, definition: AbilityDefinition) -> void:
 	if projectile == null or definition == null or definition.projectile_visual_scene == null:
 		return
-	var visual := definition.projectile_visual_scene.instantiate() as Node3D
+	var raw_visual := definition.projectile_visual_scene.instantiate()
+	var visual := raw_visual as Node3D
 	if visual == null:
+		raw_visual.free()
 		return
 	var fallback := projectile.get_node_or_null("Mesh") as GeometryInstance3D
 	if fallback != null:

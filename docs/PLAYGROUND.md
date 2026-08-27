@@ -1,4 +1,4 @@
-# Primitive ARPG Playground
+# ARPG Integration Playground
 
 `res://content/test/test.tscn` — основная запускаемая сцена проекта. Все spatial объекты расставлены вручную в `.tscn`; `test.gd` не задаёт им позиции и не строит arena кодом.
 
@@ -29,7 +29,7 @@ Actors также имеют `CombatSensor: Area3D` радиусом 8 м. Nearb
 
 ## Что находится на сцене
 
-- `Player` — CharacterBody3D motor.
+- `Player` — CharacterBody3D/ECS actor с `PrototypeCharacterRig` и `prototype_character.tscn` как visual model.
 - `RigidWarrior` — RigidBody3D, Sword/Attack.
 - `RigidArcher` — RigidBody3D, Bow/Shoot.
 - `RigidMage` — RigidBody3D, Staff/Fireball.
@@ -39,8 +39,19 @@ Actors также имеют `CombatSensor: Area3D` радиусом 8 м. Nearb
 - 3 equipment stations: Sword, Bow, Magic Staff.
 - PushCrate, ramp и падающие RigidBody crates для physics interaction.
 
-Все эти spatial nodes уже стоят в `test.tscn` и редактируются через Godot editor.
+Все spatial nodes уже стоят в `test.tscn` и редактируются через Godot editor.
 
-## Rig
+## Prototype rig, sword и VFX
 
-Primitive actors используют `PrimitiveCharacterRig`, реализующий тот же `CharacterRig` contract. При замене на готовую модель Ability/Effect/Equipment/Combat systems менять не требуется.
+Player стартует с Demo Sword. `EquipmentRuntime` публикует typed equipment presentation event, а `PrototypeCharacterRig` разрешает semantic socket `main_hand` в правую руку prototype model. Поэтому `prototype_sword.tscn` действительно появляется в руке; при экипировке Bow/Staff socket очищается, при повторной экипировке Sword visual возвращается.
+
+Attack использует animation method-track signals `anim_attack_started/finished`: только presentation adapter включает и выключает `TrailSword`. Melee damage resolver о trail ничего не знает.
+
+Fireball использует два prototype VFX из `AbilityDefinition`:
+
+- `projectile_visual_scene = fireball.tscn` — child projectile на время полёта;
+- `impact_vfx_scene = explotion.tscn` — независимый world-space one-shot на первом collision.
+
+Projectile movement/collision остаются authority `C_Projectile + S_Projectile`; VFX не участвуют в damage/effect rules.
+
+Primitive RigidBody actors продолжают использовать `PrimitiveCharacterRig` как fallback и позволяют сравнить оба presentation adapters в одной сцене.

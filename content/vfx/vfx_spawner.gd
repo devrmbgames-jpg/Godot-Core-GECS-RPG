@@ -11,8 +11,10 @@ class_name VFXSpawner
 static func spawn_world(scene: PackedScene, world_position: Vector3, context: Node) -> Node3D:
 	if scene == null or context == null:
 		return null
-	var instance := scene.instantiate() as Node3D
+	var raw_instance := scene.instantiate()
+	var instance := raw_instance as Node3D
 	if instance == null:
+		raw_instance.free()
 		return null
 	var parent: Node = context.get_tree().current_scene if context.is_inside_tree() else null
 	if parent == null:
