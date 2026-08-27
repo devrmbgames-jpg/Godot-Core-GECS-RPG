@@ -30,7 +30,7 @@
 [ext_resource type="Script" uid="uid://buorbq0uq2arv" path="res://content/ecs/observers/interaction/o_interaction.gd" id="28_interaction"]
 [ext_resource type="Script" uid="uid://b1w163pwhepdf" path="res://content/ecs/observers/interaction/o_activatable.gd" id="29_activatable"]
 [ext_resource type="Script" uid="uid://cjiw7o67lu0if" path="res://content/ecs/observers/presentation/o_rig_presentation.gd" id="30_rig_presentation"]
-[ext_resource type="PackedScene" uid="uid://b7eggt1ka1wyc" path="res://content/ecs/entities/character/e_kinematic_character.tscn" id="31_player"]
+[ext_resource type="PackedScene" path="res://content/test/entities/e_prototype_kinematic_character.tscn" id="31_player"]
 [ext_resource type="PackedScene" uid="uid://bpsk33ple18v6" path="res://content/ecs/entities/character/e_rigid_character.tscn" id="32_rigid"]
 [ext_resource type="Script" uid="uid://1cwik3pnwfh4" path="res://content/ecs/systems/controller/s_player_controller.gd" id="33_player_controller"]
 [ext_resource type="PackedScene" path="res://content/ecs/entities/interaction/e_activatable.tscn" id="34_activatable_scene"]

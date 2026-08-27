@@ -2,13 +2,17 @@
 extends RefCounted
 class_name DemoItemCatalog
 
+const PROTOTYPE_SWORD_SCENE: PackedScene = preload("res://resources/prototype_character/prototype_sword.tscn")
 
-## Создаёт Sword definition: +10 Damage и primary melee Attack.
+
+## Создаёт Sword definition: +10 Damage, primary melee Attack и prototype visual в main-hand socket.
 static func sword() -> ItemDefinition:
 	var item := ItemDefinition.new()
 	item.id = &"sword"; item.display_name = "Sword"; item.equipment_slot = &"main_hand"
 	item.stat_modifiers = [StatModifierDefinition.new(C_Damage, R_ModifiesStat.Operation.ADDED, 10.0)]
 	item.granted_abilities = [GrantedAbilityDefinition.new(DemoAbilityCatalog.attack(), &"primary")]
+	item.visual_scene = PROTOTYPE_SWORD_SCENE
+	item.rig_socket = &"main_hand"
 	return item
 
 
