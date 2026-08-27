@@ -12,8 +12,9 @@
 - `items/` — ItemDefinition, inventory/equipment runtime and services.
 - `rig/` — semantic presentation bridge and CharacterRig.
 - `stats/` — shared stat modifier definitions.
+- `vfx/` — visual-only VFX scenes/helpers; gameplay mechanics не должны зависеть от конкретного effect scene.
 - `ecs/` — GECS data/processors.
-- `test/` — integration playground only; не переносить demo-specific logic в production core.
+- `test/` — integration playground only; не переносить demo-specific logic в production directories.
 
 ## Search strategy
 
