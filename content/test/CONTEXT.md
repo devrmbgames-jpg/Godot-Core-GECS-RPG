@@ -14,6 +14,10 @@ Playground должен демонстрировать production core API, но
 - `entities/e_demo_target_dummy.*` — static combat target.
 - `observers/o_demo_*` — visual/demo responses.
 
-Player starts with Demo Sword: equipment runtime attaches `prototype_sword.tscn` to the model's right-hand socket, and the prototype attack animation controls its trail through rig signals.
+## Visual integration exercised here
+
+- Player starts with Demo Sword: equipment runtime attaches `prototype_sword.tscn` to the model's right-hand socket.
+- Prototype attack animation drives the sword `TrailSword` through `anim_attack_started/finished`.
+- Q/Fireball uses `prototype/fireball.tscn` during flight and `prototype/explotion.tscn` on first collision.
 
 При добавлении механики в core желательно добавить минимальный example здесь, не внедряя demo dependency обратно в production directories.

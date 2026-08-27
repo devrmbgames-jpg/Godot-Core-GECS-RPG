@@ -5,9 +5,9 @@
 ## Entry points
 
 - `prototype/fireball.tscn` — looping projectile visual для demo Fireball.
-- `prototype/explotion.tscn` — one-shot impact visual; имя файла сохранено как в prototype asset.
+- `prototype/explotion.tscn` — self-cleaning one-shot impact visual; имя файла сохранено как в prototype asset.
 - `prototype/trail_sword.tscn` — sword trail visual, вложенный в prototype sword prop.
-- `vfx_spawner.gd` — canonical stateless helper для независимых world-space one-shot VFX после интеграции.
+- `vfx_spawner.gd` — canonical stateless helper для независимых world-space one-shot VFX.
 
 ## Rules
 
