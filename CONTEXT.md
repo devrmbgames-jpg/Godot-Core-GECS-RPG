@@ -9,9 +9,11 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 - `addons/gecs` — git submodule, внешняя зависимость. Не изменять в обычных gameplay-задачах.
 - `content/` — project-owned runtime/gameplay код.
 - `content/ecs/` — Components, Entity types, Systems, Observers и stat/ability helpers.
+- `content/vfx/` — runtime/prototype VFX scenes и их integration helpers.
+- `resources/` — reusable prototype/imported content, не gameplay authority.
 - `docs/` — архитектурная документация и smoke-checklist.
 - `tools/` — project maintenance checks; начать с `tools/CONTEXT.md`.
-- `content/test/test.tscn` — primitive integration playground и main scene.
+- `content/test/test.tscn` — integration playground и main scene.
 
 ## Куда идти по задаче
 
@@ -26,7 +28,9 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 | Input / rebinding | `content/input/CONTEXT.md` |
 | Player / AI controller | `content/ecs/systems/CONTEXT.md`, `docs/CONTROLLERS_INTERACTION.md` |
 | Motion / physics | `content/ecs/systems/CONTEXT.md`, `docs/MOTION_CONTROLLERS_INPUT.md` |
-| Rig / animations / presentation | `content/rig/CONTEXT.md` |
+| Rig / animations / presentation | `content/rig/CONTEXT.md`, `resources/prototype_character/CONTEXT.md` |
+| VFX / projectile visuals / impact visuals | `content/vfx/CONTEXT.md` |
+| Prototype character / sword assets | `resources/prototype_character/CONTEXT.md` |
 | Demo / reproduction | `content/test/CONTEXT.md` |
 | Documentation coverage | `tools/CONTEXT.md`, `tools/check_gdscript_docs.py` |
 | Architecture rules | `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.md` |
@@ -41,7 +45,8 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 6. GECS v8 exact relationship target влияет на archetype key. High-cardinality Entity refs обычно хранятся в relation/component data, а target пары держится стабильным Script/type.
 7. Interaction selection использует `Area3D` overlap, а не постоянный raycast.
 8. Projectile swept-ray — осознанное исключение: это collision-delivery, а не interaction/awareness polling.
-9. Любой новый project-owned GDScript должен иметь `##` class/file documentation; функции должны иметь `##` contract/intent documentation.
+9. Visual model, equipment prop и VFX не становятся gameplay authority; они подключаются через presentation contracts.
+10. Любой новый project-owned GDScript должен иметь `##` class/file documentation; функции должны иметь `##` contract/intent documentation.
 
 ## System order в playground
 

@@ -6,7 +6,7 @@ const PROJECTILE_SCENE: PackedScene = preload("res://content/ecs/entities/combat
 
 
 ## Инстанцирует spatial projectile Node3D, задаёт initial transform/C_Projectile и регистрирует в ECS.world.
-## Возвращает runtime projectile Entity либо null, если actor/scene не могут дать Node3D context.
+## Optional AbilityDefinition.projectile_visual_scene заменяет generic fallback mesh только визуально.
 static func spawn(
 	actor: Entity,
 	ability: Entity,
@@ -36,5 +36,21 @@ static func spawn(
 			definition,
 		)
 	)
+	_attach_visual(projectile_node, definition)
 	ECS.world.add_entity(projectile)
 	return projectile
+
+
+## Attaches ability-specific flight visual and hides the generic projectile mesh when successful.
+static func _attach_visual(projectile: Node3D, definition: AbilityDefinition) -> void:
+	if projectile == null or definition == null or definition.projectile_visual_scene == null:
+		return
+	var raw_visual := definition.projectile_visual_scene.instantiate()
+	var visual := raw_visual as Node3D
+	if visual == null:
+		raw_visual.free()
+		return
+	var fallback := projectile.get_node_or_null("Mesh") as GeometryInstance3D
+	if fallback != null:
+		fallback.visible = false
+	projectile.add_child(visual)
