@@ -24,6 +24,11 @@ enum Timing { ATTACK, CAST, INSTANT }
 @export_group("Damage")
 @export var flat_damage: float = 0.0
 @export var damage_scale: float = 1.0
+@export var damage_type: StringName = &"PHYSICAL"
+## Scales damage-derived status buildup without changing HP damage. Zero disables automatic buildup.
+@export_range(0.0, 100.0, 0.01) var buildup_scale: float = 1.0
+## Extra direct status buildup delivered by the hit independently of damage-derived buildup.
+@export var status_applications: Array[ElementalStatusApplication] = []
 @export var range: float = 2.0
 
 @export_group("Projectile")
