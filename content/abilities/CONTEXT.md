@@ -13,4 +13,6 @@
 
 Definitions не мутируются runtime modifiers. Cost/cooldown/cast work рассчитываются из actor stats во время execution. Player attack/cast uses cursor aim from `C_ControllerIntent`; AI uses its controller target/facing.
 
+`AbilityDefinition.damage_type` и `status_buildup_scale` питают общий elemental damage pipeline. `elemental_statuses` может накладывать buildup напрямую даже при `flat_damage == 0`; delivery отправляет typed status requests после валидного попадания.
+
 Projectile VFX является presentation data: `projectile_visual_scene` следует за projectile Entity, а `impact_vfx_scene` спавнится отдельно на collision. Ни одна scene не владеет damage/collision logic.

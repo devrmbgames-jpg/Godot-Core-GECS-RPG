@@ -28,6 +28,10 @@ Bindings находятся в Godot InputMap и могут быть измен�
 8. Interaction cube переключает `C_Activatable.active` через `E`.
 9. При Health <= 0 добавляется `C_Dead`, AI/cast останавливаются, публикуется `actor_died`.
 10. Подключить реальную модель в `CharacterRig.model_scene` + `RigProfile`; semantic actions не должны требовать изменений Ability code.
+11. Вызвать `ElementalReactionScenarios.run_all()`; результат должен быть пустым.
+12. FIRE damage по WET subject должен уменьшить WET пропорционально силе, активировать BURNING после threshold и отправить `wet_mist_zone` world action.
+13. ELECTRIC damage по subject с material `water` должен заменить tag на `electrified_water`.
+14. Проверить отдельно: damage resistance `+2` не блокирует status buildup, а `C_StatusImmunities` не меняет HP damage.
 
 ## Profiling targets
 

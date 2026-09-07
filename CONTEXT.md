@@ -23,6 +23,7 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 | --- | --- |
 | Ability / cast / cooldown / projectile | `content/abilities/CONTEXT.md`, `content/ecs/CONTEXT.md` |
 | Damage / teams / combat state / targeting | `content/combat/CONTEXT.md` |
+| Elemental damage / statuses / resistances / environment reactions | `content/elemental/CONTEXT.md`, `docs/ELEMENTAL_REACTIONS.md` |
 | Attributes / modifiers | `content/stats/CONTEXT.md`, `docs/ATTRIBUTES.md` |
 | Effects / buffs / DoT / HoT | `content/effects/CONTEXT.md` |
 | Interaction / Area3D selection | `content/interaction/CONTEXT.md` |

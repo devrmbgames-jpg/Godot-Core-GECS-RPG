@@ -26,8 +26,8 @@
 - [x] Интегрировать resolver с существующим typed damage pipeline без поломки generic damage.
 - [x] Добавить action executor hooks для spawn/transform/presentation.
 - [x] Добавить электрическую воду, влажный туман и ядовитое облако в prototype data.
-- [ ] Добавить тестовые сценарии без запуска Godot.
-- [ ] Обновить `CONTEXT.md` и документацию.
+- [x] Добавить тестовые сценарии без запуска Godot.
+- [x] Обновить `CONTEXT.md` и документацию.
 - [ ] Запустить `python tools/check_gdscript_docs.py` и другие доступные статические проверки.
 - [ ] Отправить ветку и открыть отдельный PR в `feature/data-driven-elemental-reactions`.
 
@@ -46,3 +46,6 @@
 - 2026-09-07: добавлены накопительный runtime status state, отдельные status immunities, resistance profile/modifiers и material tags; реализован strongest-positive/strongest-negative resolver.
 - 2026-09-07: реализованы bounded FIFO action queue, depth/fingerprint guards, damage/status/material reactions и typed world-action events.
 - 2026-09-07: существующие melee/projectile/periodic DamageRequest расширены damage type/buildup; Fireball и DoT definitions получили elemental types; actors и dummy подключены к runtime components.
+- 2026-09-07: добавлен world action adapter для PackedScene/EffectDefinition, environment subjects без Health, дополнительный electric overload damage и глобальная priority-сортировка reaction candidates.
+- 2026-09-07: добавлены `docs/ELEMENTAL_REACTIONS.md`, context links и executable source scenarios для thresholds/resists/immunities/reactions/environment/guards.
+- 2026-09-07: EffectDefinition получил typed resistance modifiers с lifecycle sync/remove; они участвуют в общем strongest-per-sign stacking.
