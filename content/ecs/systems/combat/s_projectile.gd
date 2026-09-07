@@ -9,7 +9,7 @@ func query() -> QueryBuilder:
 
 
 ## Продвигает lifetime/Node3D position и делает swept ray между old/new position.
-## На первом collision отдельно спавнит optional impact VFX, применяет damage/effects к valid victim и удаляет projectile.
+## На первом collision отдельно спавнит optional impact VFX, применяет elemental damage/effects и удаляет projectile.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var projectiles: Array = components[0]
 	for index in entities.size():
@@ -31,6 +31,7 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 				VFXSpawner.spawn_world(projectile.definition.impact_vfx_scene, hit.position, node)
 			var victim := hit.entity
 			if victim != null and victim != projectile.source and CombatRules.can_damage(projectile.source, victim):
+				var definition := projectile.definition
 				DamageService.request(
 					victim,
 					DamageRequest.new(
@@ -39,10 +40,14 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 						projectile.damage,
 						hit.position,
 						projectile.velocity.normalized(),
+						DamageRequest.Kind.DIRECT,
+						definition.damage_type if definition != null else &"PHYSICAL",
+						definition.buildup_scale if definition != null else 1.0,
+						definition.status_applications if definition != null else [],
 					),
 				)
-				if projectile.definition != null:
-					EffectService.request_all(victim, projectile.definition.effects, projectile.source, projectile.ability)
+				if definition != null:
+					EffectService.request_all(victim, definition.effects, projectile.source, projectile.ability)
 			cmd.remove_entity(entity)
 			continue
 		node.global_position = to
