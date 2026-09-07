@@ -1,42 +1,46 @@
 # Elemental reactions — work journal
 
-## Scope and recovery
+## Recovery and constraints
 
-Base: `feature/data-driven-elemental-reactions` at `3f5539d644ef3deb94443d12e0eb1d0d1c9adc16` (the user-specified `origin/` prefix is a remote-tracking prefix, not part of the branch name).
-Working branch: `feature/elemental-reactions-implementation`.
-Do not run Godot or `gh`. Runtime verification belongs to the user. Do not modify the GECS submodule or merge the PR.
+Base: `feature/data-driven-elemental-reactions` at `3f5539d644ef3deb94443d12e0eb1d0d1c9adc16`. Working branch: `feature/elemental-reactions-implementation`. The original branch is untouched. Do not run Godot or `gh`, modify the GECS submodule, or merge the PR. Runtime verification belongs to the user.
 
-Read root `CONTEXT.md`, `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.md`, and the nearest subsystem contexts before changing their code. Preserve typed semantic contracts and the existing combat/effect authority boundaries.
+Read root `CONTEXT.md`, `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.md`, and the nearest subsystem contexts before changes. Preserve typed semantic contracts and existing combat/effect/physics authority boundaries.
 
-## Architecture decisions
+## Architecture
 
-- Prototype tables live inside a typed Resource catalog adapter. Runtime code uses typed definitions and queries, never raw Dictionary tables.
-- Independent damage channels and status gauges; a status is active only above its activation threshold. Gauge, remaining duration and source are runtime state. Opposing energy consumes accumulated strength rather than cancelling a status merely because a new type arrives.
-- Snapshot initial statuses for damage multipliers. Resolve resistance modifiers, then health damage/healing; status buildup uses the original impact strength independently of damage immunity. Apply gauge changes, then deterministic priority-ordered reactions. Bound chains by depth, action budget and repeated state/rule detection.
-- Damage resistance and status immunity are separate. Resistance stacking chooses the strongest positive and negative modifier within each source category, then sums categories and clamps the final value to -1..4.
-- Materials are tags/surface definitions, not extra damage enum entries. Environment operations use typed actions; spatial spawning/transformation is handled by an adapter, never by a global gameplay manager.
-- Integrate through existing DamageService, EffectService, and GECS systems/observers. Do not replace existing effect lifecycles or Godot physics authority.
+- Dictionary prototype tables are converted to typed Resource definitions through ElementalCatalog; gameplay reads typed APIs.
+- C_ElementalState owns independent gauges, durations, material/tags, status immunities and source-addressable resistance modifiers. NONE is absence of active statuses, not a gauge.
+- Damage multipliers and resistance use the pre-impact active-status snapshot. Buildup uses original impact strength, independently of damage resistance and armor. Opposing gauges exchange equal strength, preserving residual buildup.
+- Resistance stacking selects strongest positive and negative modifiers per category, sums categories with the base and clamps -1..4. Status immunity is independent.
+- ElementalResolver and ElementalReactionEngine mutate only state and return typed action intents. Rules are priority-descending/id-ascending, re-evaluated after mutations, executed at most once per impact, with repeated-state and action/depth budgets.
+- Materials are tags/surfaces rather than damage enum entries. Spatial operations must be handled by an adapter, not a global gameplay manager.
+- O_Damage owns HP/death, O_Heal owns healing, EffectRuntime owns Effect Entity lifecycles. Preserve existing positional DamageRequest arguments and GECS event contracts.
 
 ## Tasks
 
-- [x] Audit requested branch and read root/combat/effects/ECS contexts and architecture rules.
-- [x] Create separate working branch and this recovery journal.
-- [x] Read exact damage, ability, effect, ECS and playground contracts; finish integration design.
-- [x] Add typed definition records, runtime gauge state and source-addressable resistance API.
-- [x] Recover the existing six-commit work branch without rewriting history.
-- [ ] Implement catalog adapter, prototype rules and resistance/gauge resolution.
-- [ ] Implement deterministic resolver, damage/effect bridge and status lifecycle.
-- [ ] Implement environment action adapter and sample water/fog/poison/lava rules.
-- [ ] Add integration hooks, documentation and regression scenarios.
-- [ ] Run non-Godot static/documentation checks; document unverified runtime behavior.
-- [ ] Update journal with actual commits and verification; create a separate PR against the requested base branch.
+- [x] Audit requested branch, recover existing six-commit work branch and checkpoint history.
+- [x] Read root/combat/effects/ECS/ability contexts and architecture rules.
+- [x] Add typed definitions, gauges, resistance API, catalog adapter and direct status request.
+- [x] Implement pure damage/status resolution and bounded reaction interpreter.
+- [x] Extend DamageRequest with optional elemental fields without changing old positional arguments.
+- [ ] Complete prototype data normalization/validation and environment definitions.
+- [ ] Integrate signed damage/healing, direct status events, ability/projectile/DoT delivery and effect lifecycle.
+- [ ] Implement spatial action adapter and concrete water/fog/poison/lava examples.
+- [ ] Add actor/environment components, playground integration, documentation and regression scenarios.
+- [ ] Run non-Godot static/documentation checks; record unverified runtime behavior.
+- [ ] Review diff, update this journal and create a separate PR against the requested base.
 
 ## Commits and checkpoint
 
-- `b5b7e8a` — create recovery journal.
-- `2a00577` — link journal from root context.
-- `d4b88b8` — typed gauges, rule/action definitions and resistance state.
-- Recovered head: `c14baa52ce3462969ac19fd90bfcaa39f68fec93`, six commits ahead of the requested base.
-- This checkpoint records recovery and the remaining tasks before further implementation.
+- `b5b7e8a`, `2a00577`, `d4b88b8` — original recovery journal/context and typed groundwork.
+- `c14baa52` — recovered existing six-commit head.
+- `9b35e5de` — recovery checkpoint.
+- `9c469fb0` — catalog adapter, gauge invariants, typed request/result helpers.
+- `670e2b32` — direct status request.
+- `44ce5b2f` — shared chain budget.
+- `2f4630c8` — typed resolution context.
+- `57d690b5` — damage/status/tick resolver.
+- `0e5a33a2` — prioritized reaction interpreter.
+- `0f5a9517` — backward-compatible DamageRequest extension (latest checkpoint).
 
-The original branch is untouched. No Godot runtime tests have been run. Next: catalog and resolver. Existing DamageRequest constructor is positional; append new optional fields only. O_Damage owns health/death, O_Heal owns healing, EffectRuntime owns effect Entity lifecycles. AbilityResolver and S_Projectile are the delivery entry points; S_EffectTick creates periodic DamageRequest. Do not replace those contracts or modify GECS. All new GDScript must have `##` documentation.
+Next: finish the catalog and integrate the resolver with existing combat/effect contracts. The branch is intentionally in active development; Godot runtime and full-project documentation checks have not been run. Do not claim completion until integration, tests, and PR are finished. Existing EffectRuntime.apply/remove and O_Heal are the canonical lifecycle/healing paths. AbilityResolver and S_Projectile are delivery entry points; S_EffectTick produces periodic DamageRequest.
