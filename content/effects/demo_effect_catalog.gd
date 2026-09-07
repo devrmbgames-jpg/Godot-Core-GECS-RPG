@@ -8,6 +8,7 @@ static func poison() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"poison"; effect.display_name = "Poison"
 	effect.duration = 6.0; effect.tick_interval = 1.0; effect.damage_per_tick = 4.0
+	effect.periodic_damage_type = ElementalIds.DAMAGE_POISON
 	effect.stack_policy = EffectDefinition.StackPolicy.STACK; effect.max_stacks = 5
 	effect.presentation_action = &"poison"
 	return effect
@@ -18,6 +19,7 @@ static func burning() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"burning"; effect.display_name = "Burning"
 	effect.duration = 4.0; effect.tick_interval = 0.5; effect.damage_per_tick = 3.0
+	effect.periodic_damage_type = ElementalIds.DAMAGE_FIRE
 	effect.stack_policy = EffectDefinition.StackPolicy.REFRESH
 	effect.presentation_action = &"burning"
 	return effect

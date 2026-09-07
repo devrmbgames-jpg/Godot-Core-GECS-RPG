@@ -13,6 +13,7 @@ Playground должен демонстрировать production core API, но
 - `entities/e_demo_*_station.*` — interaction consumers for effects/items.
 - `entities/e_demo_target_dummy.*` — static combat target.
 - `observers/o_demo_*` — visual/demo responses.
+- `elemental/elemental_reaction_scenarios.gd` — source-level executable scenarios for thresholds, resistance stacking, separate immunities, environment reactions and chain guards.
 
 ## Visual integration exercised here
 

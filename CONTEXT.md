@@ -2,6 +2,8 @@
 
 Этот файл — первая точка входа для человека или ИИ, который меняет проект. Перед поиском по всему репозиторию прочитайте этот файл, затем ближайший `CONTEXT.md` в нужной подсистеме.
 
+Текущий прогресс активной разработки фиксируется в [`WORK.md`](WORK.md), чтобы незавершённые задачи и решения переживали смену контекста.
+
 ## Что это за проект
 
 Action RPG core на Godot 4.7 + GECS v8. Проект демонстрирует production-oriented границы между ECS gameplay data, Godot physics/scene tree и presentation.
@@ -21,6 +23,7 @@ Action RPG core на Godot 4.7 + GECS v8. Проект демонстрируе�
 | --- | --- |
 | Ability / cast / cooldown / projectile | `content/abilities/CONTEXT.md`, `content/ecs/CONTEXT.md` |
 | Damage / teams / combat state / targeting | `content/combat/CONTEXT.md` |
+| Elemental damage / statuses / resistances / environment reactions | `content/elemental/CONTEXT.md`, `docs/ELEMENTAL_REACTIONS.md` |
 | Attributes / modifiers | `content/stats/CONTEXT.md`, `docs/ATTRIBUTES.md` |
 | Effects / buffs / DoT / HoT | `content/effects/CONTEXT.md` |
 | Interaction / Area3D selection | `content/interaction/CONTEXT.md` |

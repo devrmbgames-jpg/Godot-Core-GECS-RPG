@@ -42,6 +42,7 @@ static func remove(effect: Entity) -> void:
 	var context := effect.get_component(C_EffectContext) as C_EffectContext
 	if context != null and context.target != null and is_instance_valid(context.target):
 		_remove_stat_modifiers(context.target, effect)
+		_remove_resistance_modifiers(context.target, effect)
 		for relationship in context.target.get_relationships(Relationship.new(R_HasEffect.new(), E_Effect)):
 			var data := relationship.relation as R_HasEffect
 			if data != null and data.effect == effect:
@@ -63,6 +64,7 @@ static func _spawn(target: Entity, request: EffectApplyRequest) -> Entity:
 	ECS.world.add_entity(effect, null, false)
 	target.add_relationship(Relationship.new(R_HasEffect.new(effect, definition.id), E_Effect))
 	_sync_stat_modifiers(effect)
+	_sync_resistance_modifiers(effect)
 	PresentationService.publish(
 		target,
 		PresentationActionEvent.for_effect(definition.presentation_action, &"effect_applied", effect),
@@ -100,6 +102,23 @@ static func _sync_stat_modifiers(effect: Entity) -> void:
 		)
 
 
+## Replaces elemental resistance modifiers contributed by this runtime Effect Entity.
+## Stack count does not multiply integer resistance strength; resolver still chooses strongest per sign.
+static func _sync_resistance_modifiers(effect: Entity) -> void:
+	var effect_component := effect.get_component(C_Effect) as C_Effect
+	var context := effect.get_component(C_EffectContext) as C_EffectContext
+	if effect_component == null or effect_component.definition == null or context == null or context.target == null:
+		return
+	var profile := context.target.get_component(C_DamageResistances) as C_DamageResistances
+	if profile == null:
+		return
+	var source_id := _resistance_source_id(effect)
+	profile.remove_modifiers_from(source_id)
+	for modifier in effect_component.definition.resistance_modifiers:
+		if modifier != null and modifier.damage_type != &"" and modifier.strength != 0:
+			profile.set_modifier(modifier.damage_type, source_id, modifier.strength)
+
+
 ## Масштабирует modifier по stacks: MORE возводится в степень, остальные операции умножаются.
 static func _scaled_modifier_amount(definition: StatModifierDefinition, stacks: int) -> float:
 	var count := maxi(stacks, 1)
@@ -114,6 +133,18 @@ static func _remove_stat_modifiers(target: Entity, effect: Entity) -> void:
 		var modifier := relationship.relation as R_ModifiesStat
 		if modifier != null and modifier.modifier_source == effect:
 			target.remove_relationship(relationship, 1)
+
+
+## Removes elemental resistance modifiers owned by one expiring/replaced effect instance.
+static func _remove_resistance_modifiers(target: Entity, effect: Entity) -> void:
+	var profile := target.get_component(C_DamageResistances) as C_DamageResistances
+	if profile != null:
+		profile.remove_modifiers_from(_resistance_source_id(effect))
+
+
+## Builds a runtime-stable source ID for replace/remove operations during one effect lifetime.
+static func _resistance_source_id(effect: Entity) -> StringName:
+	return StringName("effect:%d" % effect.get_instance_id())
 
 
 ## Возвращает живые runtime effects target с указанным stable effect id.

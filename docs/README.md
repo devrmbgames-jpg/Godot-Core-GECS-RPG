@@ -29,6 +29,7 @@
 - [MOTION_CONTROLLERS_INPUT.md](MOTION_CONTROLLERS_INPUT.md) — Input → Controller → Motion и physics authority.
 - [ABILITIES_RELATIONSHIPS.md](ABILITIES_RELATIONSHIPS.md) — ability instances, casts и relationships.
 - [COMBAT_ABILITIES.md](COMBAT_ABILITIES.md) — Attack/Shoot/Fireball, projectiles и damage.
+- [ELEMENTAL_REACTIONS.md](ELEMENTAL_REACTIONS.md) — data-driven damage types, buildup statuses, resistances, reactions и environment actions.
 - [EFFECTS.md](EFFECTS.md) — Poison/Burning/Heal/Regen/Haste/Slow.
 - [ITEMS_EQUIPMENT.md](ITEMS_EQUIPMENT.md) — Sword/Bow/Staff, inventory/equipment.
 - [CONTROLLERS_INTERACTION.md](CONTROLLERS_INTERACTION.md) — AI, teams и interaction.

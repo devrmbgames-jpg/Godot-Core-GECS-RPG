@@ -16,4 +16,5 @@ func define_components() -> Array:
 		C_Damage.new(), C_Armor.new(), C_AttackSpeed.new(), C_CastSpeed.new(),
 		C_CooldownRecovery.new(), C_ManaCostMultiplier.new(),
 		C_AbilityQueue.new(), C_Casting.new(), C_CombatTarget.new(), C_Inventory.new(), C_Team.new(), C_StatsDirty.new(),
+		C_ElementalState.new(), C_DamageResistances.new(ElementalIds.TARGET_LIVING), C_StatusImmunities.new(), C_ReactiveMaterials.new(),
 	]

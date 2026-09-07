@@ -10,6 +10,9 @@ var amount: float = 0.0
 var hit_position: Vector3 = Vector3.ZERO
 var direction: Vector3 = Vector3.ZERO
 var kind: Kind = Kind.DIRECT
+var damage_type: StringName = ElementalIds.DAMAGE_PHYSICAL
+var status_buildup_scale: float = 1.0
+var elemental_context: ElementalResolutionContext
 
 
 ## Создаёт damage command snapshot. Kind.DIRECT может удерживать combat state,
@@ -21,6 +24,9 @@ func _init(
 	initial_hit_position: Vector3 = Vector3.ZERO,
 	initial_direction: Vector3 = Vector3.ZERO,
 	initial_kind: Kind = Kind.DIRECT,
+	initial_damage_type: StringName = ElementalIds.DAMAGE_PHYSICAL,
+	initial_status_buildup_scale: float = 1.0,
+	initial_elemental_context: ElementalResolutionContext = null,
 ) -> void:
 	source = initial_source
 	ability = initial_ability
@@ -28,3 +34,6 @@ func _init(
 	hit_position = initial_hit_position
 	direction = initial_direction
 	kind = initial_kind
+	damage_type = initial_damage_type
+	status_buildup_scale = maxf(initial_status_buildup_scale, 0.0)
+	elemental_context = initial_elemental_context

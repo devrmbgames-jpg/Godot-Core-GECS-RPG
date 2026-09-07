@@ -45,6 +45,8 @@
 [ext_resource type="Script" uid="uid://ca0q21qemhxja" path="res://content/ecs/systems/interaction/s_ai_interaction_selection.gd" id="43_ai_interaction"]
 [ext_resource type="Script" uid="uid://x507mue6nlmi" path="res://content/ecs/systems/combat/s_combat_state.gd" id="44_combat_state"]
 [ext_resource type="Script" uid="uid://dr60mvth60omg" path="res://content/ecs/observers/combat/o_combat_damage.gd" id="45_combat_damage"]
+[ext_resource type="Script" path="res://content/ecs/observers/combat/o_elemental_status.gd" id="46_elemental_observer"]
+[ext_resource type="Script" path="res://content/ecs/systems/combat/s_elemental_status.gd" id="47_elemental_system"]
 
 [sub_resource type="StandardMaterial3D" id="GroundMaterial"]
 albedo_color = Color(0.16, 0.18, 0.2, 1)
@@ -104,6 +106,9 @@ script = ExtResource("23_damage")
 
 [node name="O_CombatDamage" type="Node" parent="World/Systems" unique_id=1506790337]
 script = ExtResource("45_combat_damage")
+
+[node name="O_ElementalStatus" type="Node" parent="World/Systems"]
+script = ExtResource("46_elemental_observer")
 
 [node name="O_Death" type="Node" parent="World/Systems" unique_id=1748259730]
 script = ExtResource("24_death")
@@ -200,6 +205,10 @@ group = &"Gameplay"
 
 [node name="S_Cooldown" type="Node" parent="World/Systems/Gameplay" unique_id=1048855111]
 script = ExtResource("14_cooldown")
+group = &"Gameplay"
+
+[node name="S_ElementalStatus" type="Node" parent="World/Systems/Gameplay"]
+script = ExtResource("47_elemental_system")
 group = &"Gameplay"
 
 [node name="S_EffectTick" type="Node" parent="World/Systems/Gameplay" unique_id=298672880]

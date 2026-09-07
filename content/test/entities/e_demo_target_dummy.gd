@@ -15,6 +15,10 @@ func define_components() -> Array:
 		C_Armor.new(armor),
 		C_Team.new(&"enemy"),
 		C_StatsDirty.new(),
+		C_ElementalState.new(),
+		C_DamageResistances.new(ElementalIds.TARGET_CONSTRUCT),
+		C_StatusImmunities.new(),
+		C_ReactiveMaterials.new(),
 	]
 
 
