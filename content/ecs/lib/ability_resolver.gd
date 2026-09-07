@@ -50,7 +50,7 @@ static func _resolve_direction(actor: Entity, target: Entity, target_position: V
 	return CombatQuery.facing(actor)
 
 
-## Делает один forward ray в ability range, затем отправляет Damage/Effect requests только valid enemy.
+## Делает один forward ray в ability range, затем отправляет elemental Damage/Effect requests только valid enemy.
 static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, definition: AbilityDefinition, raw_damage: float) -> void:
 	var actor_node := actor as Node as Node3D
 	if actor_node == null:
@@ -61,5 +61,18 @@ static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, defin
 	var victim: Entity = hit.entity if hit != null else null
 	if victim == null or victim == actor or not CombatRules.can_damage(actor, victim):
 		return
-	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.position, direction))
+	DamageService.request(
+		victim,
+		DamageRequest.new(
+			actor,
+			ability,
+			raw_damage,
+			hit.position,
+			direction,
+			DamageRequest.Kind.DIRECT,
+			definition.damage_type,
+			definition.buildup_scale,
+			definition.status_applications,
+		),
+	)
 	EffectService.request_all(victim, definition.effects, actor, ability)
