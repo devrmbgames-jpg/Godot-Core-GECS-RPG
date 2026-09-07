@@ -27,8 +27,9 @@ static func resolve_damage(
 	result.resistance_level = ElementalResistanceResolver.get_final_resistance(profile, state, catalog, request.damage_type)
 	result.resistance_multiplier = catalog.get_resistance_multiplier(result.resistance_level)
 	result.health_amount_before_armor = result.raw_amount * result.status_multiplier * result.resistance_multiplier
-	_enqueue_damage_reactions(target, request, state, catalog, context)
-	_enqueue_material_reactions(target, request, catalog, context)
+	var impact_matches := _collect_damage_reactions(request, state, catalog)
+	impact_matches.append_array(_collect_material_reactions(target, request, catalog))
+	_enqueue_matches(target, impact_matches, request.source, request.ability, request.hit_position, request.direction, context)
 	_drain_actions(target, catalog, context)
 	var damage_definition := catalog.get_damage_type(request.damage_type)
 	if state != null and damage_definition != null and damage_definition.buildup_status_id != &"":
@@ -100,16 +101,15 @@ static func _get_combined_status_multiplier(
 	return multiplier
 
 
-## Queues damage+active-status reactions using only power that can interact with existing buildup.
-static func _enqueue_damage_reactions(
-	target: Entity,
+## Collects damage+active-status reactions using only power that can interact with existing buildup.
+static func _collect_damage_reactions(
 	request: DamageRequest,
 	state: C_ElementalState,
 	catalog: ElementalCatalog,
-	context: ElementalResolutionContext,
-) -> void:
+) -> Array[ElementalReactionMatch]:
+	var matches: Array[ElementalReactionMatch] = []
 	if state == null:
-		return
+		return matches
 	var impact_power := request.amount * request.status_buildup_scale
 	for status in state.statuses:
 		if not status.active or status.definition == null:
@@ -120,26 +120,28 @@ static func _enqueue_damage_reactions(
 			request.damage_type,
 			status.definition.id,
 		):
-			_enqueue_reaction(target, reaction, power, request.source, request.ability, request.hit_position, request.direction, context)
+			matches.append(ElementalReactionMatch.new(reaction, power))
+	return matches
 
 
-## Queues damage+material reactions for environment tags on the same subject.
-static func _enqueue_material_reactions(
+## Collects damage+material reactions for environment tags on the same subject.
+static func _collect_material_reactions(
 	target: Entity,
 	request: DamageRequest,
 	catalog: ElementalCatalog,
-	context: ElementalResolutionContext,
-) -> void:
+) -> Array[ElementalReactionMatch]:
+	var matches: Array[ElementalReactionMatch] = []
 	var materials := target.get_component(C_ReactiveMaterials) as C_ReactiveMaterials
 	if materials == null:
-		return
+		return matches
 	for material_id in materials.material_ids.duplicate():
 		for reaction in catalog.get_reactions(
 			ElementalReactionDefinition.TriggerKind.DAMAGE_MATERIAL,
 			request.damage_type,
 			material_id,
 		):
-			_enqueue_reaction(target, reaction, request.amount, request.source, request.ability, request.hit_position, request.direction, context)
+			matches.append(ElementalReactionMatch.new(reaction, request.amount))
+	return matches
 
 
 ## Queues reactions between the newly strengthened active status and every other active status.
@@ -151,6 +153,7 @@ static func _enqueue_status_reactions(
 	catalog: ElementalCatalog,
 	context: ElementalResolutionContext,
 ) -> void:
+	var matches: Array[ElementalReactionMatch] = []
 	for other in state.statuses:
 		if other == applied_state or not other.active or other.definition == null:
 			continue
@@ -160,7 +163,33 @@ static func _enqueue_status_reactions(
 			applied_state.definition.id,
 			other.definition.id,
 		):
-			_enqueue_reaction(target, reaction, power, request.source, request.ability, request.hit_position, request.direction, context)
+			matches.append(ElementalReactionMatch.new(reaction, power))
+	_enqueue_matches(target, matches, request.source, request.ability, request.hit_position, request.direction, context)
+
+
+## Sorts candidates globally by priority before placing their actions in the FIFO queue.
+static func _enqueue_matches(
+	target: Entity,
+	matches: Array[ElementalReactionMatch],
+	source: Entity,
+	ability: Entity,
+	hit_position: Vector3,
+	direction: Vector3,
+	context: ElementalResolutionContext,
+) -> void:
+	matches.sort_custom(_sort_matches)
+	for reaction_match in matches:
+		_enqueue_reaction(
+			target, reaction_match.reaction, reaction_match.power, source, ability,
+			hit_position, direction, context,
+		)
+
+
+## Orders reaction candidates by descending priority and stable reaction ID.
+static func _sort_matches(left: ElementalReactionMatch, right: ElementalReactionMatch) -> bool:
+	if left.reaction.priority != right.reaction.priority:
+		return left.reaction.priority > right.reaction.priority
+	return String(left.reaction.id) < String(right.reaction.id)
 
 
 ## Marks one reaction and appends its ordered actions to the shared FIFO queue.

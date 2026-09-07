@@ -15,7 +15,7 @@ Data-driven damage types, accumulated statuses, resistances, reactions and envir
 - Immutable rules are typed `Resource` definitions owned by `ElementalCatalog`.
 - Runtime buildup/duration is owned by `C_ElementalState` on the affected Entity.
 - Damage resistances are owned by `C_DamageResistances`; status immunity is separate in `C_StatusImmunities`.
-- Cells, zones, clouds, surfaces, projectiles and actors use the same elemental components. Spatial transforms remain owned by their Godot Nodes.
+- Cells, zones, clouds, surfaces, projectiles and actors use the same elemental components; `C_Health` is optional for environment-only impacts. Spatial transforms remain owned by their Godot Nodes.
 - Spawn/transform/VFX integration is a typed event boundary. Core rules choose semantic IDs; scene adapters choose PackedScenes and mutate the world.
 
 ## Resolution order
