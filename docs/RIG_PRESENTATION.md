@@ -5,7 +5,7 @@ Gameplay systems не обращаются к `AnimationPlayer`, `AnimationTree`
 ```text
 PresentationActionEvent
   action = attack / cast_fireball / burning / equip_item / death
-  phase = start / effect_applied / ...
+  phase = start / resolve / effect_applied / ...
   optional typed context = ability / item / item_definition / effect / target
 ```
 
@@ -21,10 +21,38 @@ PresentationActionEvent
 - найти/использовать AnimationTree или AnimationPlayer;
 - переводить semantic action через `RigProfile.action_bindings`;
 - обновлять locomotion blend;
-- находить semantic sockets через `RigProfile.socket_bindings`;
+- находить semantic sockets через `RigProfile.socket_bindings` или specialized adapter;
 - присоединять/отсоединять visual equipment через typed `RigEquipmentAttachment`.
 
 Таким образом gameplay prefab персонажа не зависит от структуры конкретного FBX/GLTF rig.
+
+## PrototypeCharacterRig
+
+Playground Player использует specialized `PrototypeCharacterRig`, который инстанцирует `resources/prototype_character/prototype_character.tscn` как visual model, сохраняя CharacterBody3D/ECS actor отдельным authority.
+
+Adapter переводит:
+
+- locomotion speed -> `play_walk()/play_idle()`;
+- `attack:start` -> `play_attack()`;
+- `cast_fireball:start` -> `play_cast()`;
+- `cast_fireball:resolve` -> `complete_cast()`.
+
+Prototype model сам владеет AnimationTree state machine и method-track signals. Attack signals включают/выключают trail текущего `PrototypeSword`, поэтому gameplay resolver не зависит от weapon VFX timing.
+
+Для equipment specialized adapter разрешает `main_hand` через typed `slot_arm_right`, а `off_hand` через `slot_arm_left`.
+
+## Visual equipment
+
+`ItemDefinition.visual_scene` и `ItemDefinition.rig_socket` являются design-time presentation data. Equip route:
+
+```text
+EquipmentRuntime
+  -> PresentationActionEvent.for_item(...)
+  -> O_RigPresentation
+  -> CharacterRig.attach_equipment(socket, visual_scene)
+```
+
+Runtime Item Entity и attached Node3D prop — разные identities. Снятие/замена предмета удаляет visual из socket, но не переносит ownership gameplay в SceneTree.
 
 ## RigProfile
 
@@ -42,7 +70,7 @@ Array[RigSocketBinding]
   head      -> NodePath(...)
 ```
 
-Также profile хранит путь state machine playback и locomotion blend property. Для другой модели меняется Resource/profile, а Ability/Effect systems остаются прежними.
+Также profile хранит путь state machine playback и locomotion blend property. Для другой модели меняется Resource/profile или specialized adapter, а Ability/Effect systems остаются прежними.
 
 ## Locomotion
 

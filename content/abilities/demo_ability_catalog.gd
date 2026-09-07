@@ -2,6 +2,9 @@
 extends RefCounted
 class_name DemoAbilityCatalog
 
+const FIREBALL_PROJECTILE_VFX: PackedScene = preload("res://content/vfx/prototype/fireball.tscn")
+const FIREBALL_IMPACT_VFX: PackedScene = preload("res://content/vfx/prototype/explotion.tscn")
+
 
 ## Создаёт melee Attack definition; cadence определяется AttackSpeed, а не cooldown.
 static func attack() -> AbilityDefinition:
@@ -31,7 +34,7 @@ static func shoot() -> AbilityDefinition:
 	return definition
 
 
-## Создаёт mana-consuming Fireball definition с CastSpeed timing, cooldown и Burning effect.
+## Создаёт mana-consuming Fireball с prototype flight/impact VFX и Burning effect.
 static func fireball() -> AbilityDefinition:
 	var definition := AbilityDefinition.new()
 	definition.id = &"fireball"; definition.display_name = "Fireball"
@@ -44,4 +47,6 @@ static func fireball() -> AbilityDefinition:
 	definition.projectile_speed = 20.0; definition.projectile_lifetime = 4.0
 	definition.effects = [DemoEffectCatalog.burning()]
 	definition.presentation_action = &"cast_fireball"
+	definition.projectile_visual_scene = FIREBALL_PROJECTILE_VFX
+	definition.impact_vfx_scene = FIREBALL_IMPACT_VFX
 	return definition

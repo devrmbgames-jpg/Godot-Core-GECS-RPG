@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://content/ecs/entities/character/e_kinematic_character.gd" id="1_character"]
+[ext_resource type="Script" path="res://content/rig/prototype_character_rig.gd" id="2_rig"]
+[ext_resource type="PackedScene" path="res://resources/prototype_character/prototype_character.tscn" id="3_model"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_character"]
+
+[sub_resource type="SphereShape3D" id="InteractionSensorShape"]
+radius = 2.0
+
+[sub_resource type="SphereShape3D" id="CombatSensorShape"]
+radius = 8.0
+
+[node name="EPrototypeKinematicCharacter" type="CharacterBody3D"]
+script = ExtResource("1_character")
+
+[node name="Rig" type="Node3D" parent="."]
+script = ExtResource("2_rig")
+model_scene = ExtResource("3_model")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape_character")
+
+[node name="InteractionSensor" type="Area3D" parent="."]
+position = Vector3(0, 1, 0)
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="InteractionSensor"]
+shape = SubResource("InteractionSensorShape")
+
+[node name="CombatSensor" type="Area3D" parent="."]
+position = Vector3(0, 1, 0)
+collision_layer = 0
+collision_mask = 1
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CombatSensor"]
+shape = SubResource("CombatSensorShape")
