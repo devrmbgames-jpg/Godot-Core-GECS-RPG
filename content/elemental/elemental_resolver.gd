@@ -4,6 +4,14 @@ extends RefCounted
 class_name ElementalResolver
 
 
+## Previews signed damage without mutating state, so team policy can distinguish harmful hits from affinity healing.
+static func preview_damage(state: C_ElementalState, catalog: ElementalCatalog, damage_type: StringName, amount: float) -> float:
+	if not catalog.has_damage_type(damage_type) or not _valid_amount(amount):
+		return 0.0
+	var result := amount * catalog.get_combined_status_multiplier(damage_type, state.active_statuses(catalog)) * catalog.get_resistance_multiplier(state.get_resistance(damage_type, catalog))
+	return result if not is_nan(result) and not is_inf(result) else 0.0
+
+
 ## Calculates signed damage from the pre-impact snapshot, then accumulates gauges and resolves reactions.
 ## Incoming strength is independent of HP resistance; buildup_scale=0 explicitly disables damage buildup.
 static func resolve_damage(state: C_ElementalState, catalog: ElementalCatalog, request: DamageRequest) -> ElementalResolution:
@@ -14,9 +22,7 @@ static func resolve_damage(state: C_ElementalState, catalog: ElementalCatalog, r
 	var raw := maxf(0.0, request.amount)
 	result.impact_strength = raw
 	result.resistance = state.get_resistance(request.damage_type, catalog)
-	result.signed_damage = raw * catalog.get_combined_status_multiplier(request.damage_type, result.status_before) * catalog.get_resistance_multiplier(result.resistance)
-	if is_nan(result.signed_damage) or is_inf(result.signed_damage):
-		result.signed_damage = 0.0
+	result.signed_damage = preview_damage(state, catalog, request.damage_type, raw)
 	if request.buildup_scale > 0.0 and _valid_amount(request.buildup_scale):
 		for status_id in catalog.buildup_statuses(request.damage_type):
 			var strength := raw * request.buildup_scale * catalog.get_buildup_rate(request.damage_type, status_id)
