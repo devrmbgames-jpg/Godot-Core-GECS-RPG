@@ -9,7 +9,7 @@ func query() -> QueryBuilder:
 
 
 ## Выполняет накопившиеся ticks, масштабирует amount stacks и публикует typed damage/heal requests.
-## Periodic damage всегда маркируется DamageRequest.Kind.PERIODIC.
+## Periodic damage не удерживает combat linger; buildup explicitly controlled by EffectDefinition.
 func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 	var effects: Array = components[0]
 	var contexts: Array = components[1]
@@ -35,8 +35,15 @@ func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 						Vector3.ZERO,
 						Vector3.ZERO,
 						DamageRequest.Kind.PERIODIC,
+						definition.damage_type,
+						definition.buildup_scale,
+						definition.status_applications,
 					),
 				)
+			elif not definition.status_applications.is_empty():
+				for application in definition.status_applications:
+					if application != null:
+						ElementalService.apply_status(context.target, application.status_id, application.amount * stacks, context.source, context.ability)
 			if definition.heal_per_tick > 0.0:
 				HealService.request(
 					context.target,
