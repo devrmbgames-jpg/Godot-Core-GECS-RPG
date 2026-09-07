@@ -29,7 +29,7 @@
 - [x] Добавить тестовые сценарии без запуска Godot.
 - [x] Обновить `CONTEXT.md` и документацию.
 - [x] Запустить `python tools/check_gdscript_docs.py` и другие доступные статические проверки.
-- [ ] Отправить ветку и открыть отдельный PR в `feature/data-driven-elemental-reactions`.
+- [x] Отправить ветку и открыть отдельный PR в `feature/data-driven-elemental-reactions`.
 
 ## Принятые решения
 
@@ -50,3 +50,4 @@
 - 2026-09-07: добавлены `docs/ELEMENTAL_REACTIONS.md`, context links и executable source scenarios для thresholds/resists/immunities/reactions/environment/guards.
 - 2026-09-07: EffectDefinition получил typed resistance modifiers с lifecycle sync/remove; они участвуют в общем strongest-per-sign stacking.
 - 2026-09-07: финальный static audit пройден: docs checker, `git diff --check`, unique `class_name`, наличие всех обязательных damage/status IDs. Godot по условию задачи не запускался.
+- 2026-09-07: ветка опубликована, открыт PR #5: https://github.com/devrmbgames-jpg/Godot-Core-GECS-RPG/pull/5
