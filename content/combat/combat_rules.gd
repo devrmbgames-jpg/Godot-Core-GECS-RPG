@@ -1,5 +1,4 @@
-## Stateless глобальные базовые combat rules.
-## Более сложные faction/reputation rules могут заменить реализацию, сохранив API.
+## Stateless global combat rules. More complex faction/reputation rules can replace these APIs.
 extends RefCounted
 class_name CombatRules
 
@@ -42,3 +41,13 @@ static func can_damage(source: Entity, target: Entity) -> bool:
 	if source_team.team_id == &"neutral" or target_team.team_id == &"neutral":
 		return true
 	return source_team.team_id != target_team.team_id
+
+
+## Allows a deliberate or affinity-derived heal, including self/allied healing, but never revives a dead target.
+## This API must only authorize healing or explicitly friendly status requests, never positive harmful damage.
+static func can_heal(source: Entity, target: Entity) -> bool:
+	if target == null or not is_instance_valid(target) or target.has_component(C_Dead):
+		return false
+	if source != null and (not is_instance_valid(source) or source.has_component(C_Dead)):
+		return false
+	return true
