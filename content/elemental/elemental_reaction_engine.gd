@@ -12,7 +12,7 @@ static func resolve(state: C_ElementalState, catalog: ElementalCatalog, incoming
 	var executed: Dictionary = {}
 	var seen_states: Dictionary = {}
 	seen_states[_signature(state)] = true
-	for step in MAX_RULES:
+	for _step in MAX_RULES:
 		var candidates: Array[ElementalRule] = []
 		if incoming != &"":
 			candidates.append_array(catalog.matching_rules(&"damage", incoming, state))
@@ -31,19 +31,27 @@ static func resolve(state: C_ElementalState, catalog: ElementalCatalog, incoming
 		if selected == null:
 			return
 		executed[selected.id] = true
-		result.fired_rules.append(selected.id)
 		var before := _signature(state)
+		var actions_before := result.actions.size()
 		var strength := impact
 		if selected.trigger == &"status" and selected.required_status != &"":
 			strength = minf(state.get_amount(selected.incoming), state.get_amount(selected.required_status))
+		var applied := false
 		for action in selected.actions:
 			if not result.chain.spend():
 				result.truncated = true
 				return
-			_execute_action(state, catalog, action, strength, impact, selected.id, result)
+			applied = _execute_action(state, catalog, action, strength, impact, selected.id, result) or applied
 		var after := _signature(state)
 		if before != after:
 			result.changed = true
+			applied = true
+		if result.actions.size() > actions_before:
+			applied = true
+		if not applied:
+			continue
+		result.fired_rules.append(selected.id)
+		if before != after:
 			if seen_states.has(after):
 				result.truncated = true
 				return
@@ -51,62 +59,75 @@ static func resolve(state: C_ElementalState, catalog: ElementalCatalog, incoming
 	result.truncated = true
 
 
-## Executes gauge/material instructions and queues damage, effects, spawning and spatial transformations.
-static func _execute_action(state: C_ElementalState, catalog: ElementalCatalog, action: ElementalAction, strength: float, impact: float, rule_id: StringName, result: ElementalResolution) -> void:
+## Executes one action and returns whether it mutated state or queued an external action.
+static func _execute_action(state: C_ElementalState, catalog: ElementalCatalog, action: ElementalAction, strength: float, impact: float, rule_id: StringName, result: ElementalResolution) -> bool:
 	if action == null:
-		return
+		return false
 	var magnitude := impact if action.use_impact else action.magnitude(strength)
 	if is_nan(magnitude) or is_inf(magnitude):
-		return
+		return false
 	match action.kind:
 		ElementalAction.Kind.EXCHANGE:
-			var available := minf(state.get_amount(action.status_id), state.get_amount(action.other_status))
-			var exchange := available
+			var first_amount := state.get_amount(action.status_id)
+			var second_amount := state.get_amount(action.other_status)
+			var exchange := minf(first_amount, second_amount)
 			if action.amount > 0.0 or action.scale > 0.0:
 				exchange = minf(exchange, action.magnitude(strength))
 			if exchange <= EPSILON or exchange < action.minimum:
-				return
-			var exhausted := exchange >= state.get_amount(action.status_id) - EPSILON or exchange >= state.get_amount(action.other_status) - EPSILON
+				return false
+			var exhausted := exchange >= first_amount - EPSILON or exchange >= second_amount - EPSILON
 			if action.require_exhausted and not exhausted:
-				return
-			state.consume_gauge(action.status_id, exchange)
-			state.consume_gauge(action.other_status, exchange)
+				return false
+			var first_consumed := state.consume_gauge(action.status_id, exchange)
+			var second_consumed := state.consume_gauge(action.other_status, exchange)
+			var changed := first_consumed > EPSILON or second_consumed > EPSILON
 			if action.output_status != &"" and (not action.output_on_exhausted or exhausted):
-				state.add_gauge(action.output_status, exchange * action.output_scale, catalog, result.source, result.ability)
+				changed = state.add_gauge(action.output_status, exchange * action.output_scale, catalog, result.source, result.ability) > EPSILON or changed
+			return changed
 		ElementalAction.Kind.ADD_GAUGE:
-			if magnitude >= action.minimum:
-				state.add_gauge(action.status_id, magnitude, catalog, result.source, result.ability)
+			return magnitude >= action.minimum and state.add_gauge(action.status_id, magnitude, catalog, result.source, result.ability) > EPSILON
 		ElementalAction.Kind.REMOVE_GAUGE:
-			if magnitude >= action.minimum:
-				state.consume_gauge(action.status_id, magnitude)
+			return magnitude >= action.minimum and state.consume_gauge(action.status_id, magnitude) > EPSILON
 		ElementalAction.Kind.TRANSFORM:
-			if action.material_id != &"" and state.material != action.material_id:
-				state.material = action.material_id
-				result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			if action.material_id == &"" or state.material == action.material_id:
+				return false
+			result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			return true
 		ElementalAction.Kind.ADD_TAG:
-			if action.tag != &"" and not state.tags.has(action.tag):
-				state.tags.append(action.tag)
+			return state.add_tag(action.tag)
 		ElementalAction.Kind.REMOVE_TAG:
-			state.tags.erase(action.tag)
+			return state.remove_tag(action.tag)
 		ElementalAction.Kind.DAMAGE:
-			if magnitude > 0.0 and catalog.has_damage_type(action.damage_type):
-				result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			if magnitude <= EPSILON or not catalog.has_damage_type(action.damage_type):
+				return false
+			result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			return true
 		ElementalAction.Kind.APPLY_EFFECT:
-			if action.effect != null:
-				result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			if action.effect == null:
+				return false
+			result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			return true
 		ElementalAction.Kind.SPAWN:
-			if action.entity_id != &"":
-				result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			if action.entity_id == &"":
+				return false
+			result.actions.append(ElementalActionExecution.new(action, strength, rule_id))
+			return true
+	return false
 
 
 ## Produces a stable reaction-state signature independent of gauge insertion order and object identity.
 static func _signature(state: C_ElementalState) -> String:
 	var parts := PackedStringArray([String(state.material)])
-	var tags := PackedStringArray()
+	var all_tags: Array[StringName] = []
 	for tag in state.tags:
-		tags.append(String(tag))
-	tags.sort()
-	parts.append_array(tags)
+		if not all_tags.has(tag):
+			all_tags.append(tag)
+	for tag in state.material_tags:
+		if not all_tags.has(tag):
+			all_tags.append(tag)
+	all_tags.sort()
+	for tag in all_tags:
+		parts.append(String(tag))
 	var gauges: Array[ElementalGauge] = state.gauges.duplicate()
 	gauges.sort_custom(func(a: ElementalGauge, b: ElementalGauge) -> bool: return String(a.id) < String(b.id))
 	for item in gauges:
