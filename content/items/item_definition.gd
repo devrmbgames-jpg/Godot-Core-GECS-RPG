@@ -9,5 +9,7 @@ class_name ItemDefinition
 @export var granted_abilities: Array[GrantedAbilityDefinition] = []
 
 @export_group("Presentation")
+## Optional visual prop instantiated by CharacterRig when this item is equipped.
 @export var visual_scene: PackedScene
+## Semantic CharacterRig socket that receives visual_scene.
 @export var rig_socket: StringName = &"main_hand"

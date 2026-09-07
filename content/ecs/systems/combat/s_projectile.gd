@@ -9,7 +9,7 @@ func query() -> QueryBuilder:
 
 
 ## Продвигает lifetime/Node3D position и делает swept ray между old/new position.
-## При первом hit отправляет damage/effects и deferred-remove projectile независимо от victim type.
+## На первом collision отдельно спавнит optional impact VFX, применяет damage/effects к valid victim и удаляет projectile.
 func process(entities: Array[Entity], components: Array, delta: float) -> void:
 	var projectiles: Array = components[0]
 	for index in entities.size():
@@ -27,6 +27,8 @@ func process(entities: Array[Entity], components: Array, delta: float) -> void:
 		var to := from + projectile.velocity * delta
 		var hit: CombatHit = CombatQuery.raycast_entity(projectile.source, from, to)
 		if hit != null:
+			if projectile.definition != null:
+				VFXSpawner.spawn_world(projectile.definition.impact_vfx_scene, hit.position, node)
 			var victim := hit.entity
 			if victim != null and victim != projectile.source and CombatRules.can_damage(projectile.source, victim):
 				DamageService.request(

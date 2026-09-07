@@ -35,3 +35,7 @@ enum Timing { ATTACK, CAST, INSTANT }
 
 @export_group("Presentation")
 @export var presentation_action: StringName = &"ability"
+## Optional visual scene attached to the spatial projectile Entity for its flight lifetime.
+@export var projectile_visual_scene: PackedScene
+## Optional independent world-space one-shot spawned at the first projectile collision.
+@export var impact_vfx_scene: PackedScene

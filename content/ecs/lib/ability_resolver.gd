@@ -6,7 +6,7 @@ class_name AbilityResolver
 const EVENT_RESOLVED: StringName = &"ability_resolved"
 
 
-## Выполняет delivery конкретной runtime ability и публикует AbilityResolvedEvent.
+## Выполняет delivery конкретной runtime ability, публикует presentation phase `resolve` и AbilityResolvedEvent.
 ## Projectile spawn откладывается через CommandBuffer, melee resolve выполняется немедленно.
 static func resolve(actor: Entity, ability: Entity, target: Entity, target_position: Vector3, command_buffer: CommandBuffer) -> void:
 	if actor == null or ability == null:
@@ -22,6 +22,10 @@ static func resolve(actor: Entity, ability: Entity, target: Entity, target_posit
 		AbilityDefinition.Delivery.PROJECTILE:
 			var direction: Vector3 = _resolve_direction(actor, target, target_position)
 			command_buffer.add_custom(func(): ProjectileFactory.spawn(actor, ability, definition, raw_damage, direction))
+	PresentationService.publish(
+		actor,
+		PresentationActionEvent.for_ability(definition.presentation_action, &"resolve", ability),
+	)
 	ECS.world.emit_event(EVENT_RESOLVED, actor, AbilityResolvedEvent.new(ability, definition))
 
 
