@@ -1,12 +1,10 @@
-## Shared bounded reaction-chain context; child damage requests inherit this object.
-## It carries only transient safety bookkeeping, never gameplay authority.
+## Shared transient safety budget for one root impact and all secondary damage requests.
 extends RefCounted
 class_name ElementalChain
 
 const MAX_DEPTH: int = 4
 const MAX_ACTIONS: int = 64
 
-var depth: int = 0
 var remaining_actions: int = MAX_ACTIONS
 var visited: Dictionary = {}
 var truncated: bool = false
@@ -21,10 +19,18 @@ func spend() -> bool:
 	return true
 
 
-## Returns a child context sharing the budget and visit set through its parent.
-## A child is only permitted below the fixed maximum depth.
-func can_descend() -> bool:
+## Rejects a secondary impact beyond the maximum depth; the caller supplies its current depth.
+func can_descend(depth: int) -> bool:
 	if depth >= MAX_DEPTH:
 		truncated = true
 		return false
+	return true
+
+
+## Claims one target/rule/channel signature to prevent repeated secondary damage cycles.
+func claim(key: String) -> bool:
+	if visited.has(key):
+		truncated = true
+		return false
+	visited[key] = true
 	return true
