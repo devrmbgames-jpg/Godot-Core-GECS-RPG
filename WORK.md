@@ -21,7 +21,7 @@
 - [x] Создать рабочую ветку и журнал прогресса.
 - [x] Описать design/runtime модель и допущения.
 - [x] Добавить идентификаторы, definitions и API-каталог prototype-конфигурации.
-- [ ] Добавить runtime-компоненты статусов, резистов и материалов окружения.
+- [x] Добавить runtime-компоненты статусов, резистов и материалов окружения.
 - [ ] Реализовать детерминированный resolver с лимитом цепочки реакций.
 - [ ] Интегрировать resolver с существующим typed damage pipeline без поломки generic damage.
 - [ ] Добавить action executor hooks для spawn/transform/presentation.
@@ -43,3 +43,4 @@
 
 - 2026-09-07: аудит ветки и архитектурных правил; создана рабочая ветка и этот журнал.
 - 2026-09-07: добавлены открытые StringName ID, typed Resource definitions, каталог-обёртка и полная prototype Dictionary-конфигурация множителей/резистов/реакций.
+- 2026-09-07: добавлены накопительный runtime status state, отдельные status immunities, resistance profile/modifiers и material tags; реализован strongest-positive/strongest-negative resolver.
