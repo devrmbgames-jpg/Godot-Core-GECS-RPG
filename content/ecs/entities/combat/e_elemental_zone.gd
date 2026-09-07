@@ -4,6 +4,6 @@ extends Entity
 class_name E_ElementalZone
 
 
-## Provides persistent elemental state; C_ElementalZone is attached by the spawn adapter with a profile.
+## Runtime zone components are attached by ElementalWorldActions because they depend on the spawned profile.
 func define_components() -> Array:
-	return [C_ElementalState.new()]
+	return []
