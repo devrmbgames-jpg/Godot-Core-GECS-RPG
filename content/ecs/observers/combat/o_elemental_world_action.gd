@@ -45,7 +45,13 @@ func _spawn(scene: PackedScene, position: Vector3) -> void:
 	if parent == null:
 		return
 	var instance := scene.instantiate()
-	parent.add_child(instance)
 	var spatial := instance as Node3D
+	var entity := instance as Entity
+	if entity != null and ECS.world != null:
+		ECS.world.add_entity(entity)
+		if spatial != null:
+			spatial.global_position = position
+		return
+	parent.add_child(instance)
 	if spatial != null:
 		spatial.global_position = position
