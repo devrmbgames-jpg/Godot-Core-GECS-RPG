@@ -1,4 +1,4 @@
-## Immutable, priority-ordered reaction rule. Triggers are damage, status or material.
+## Immutable priority-ordered reaction rule. Status-pair matching is symmetric; action operands are explicit.
 extends Resource
 class_name ElementalRule
 
@@ -12,14 +12,20 @@ class_name ElementalRule
 @export var actions: Array[ElementalAction] = []
 
 
-## Matches an impact or a status-pair candidate without changing runtime state.
+## Checks an impact or active status pair without changing runtime state.
 func matches(trigger_id: StringName, incoming_id: StringName, state: C_ElementalState, catalog: ElementalCatalog) -> bool:
-	if trigger != trigger_id or (incoming != &"" and incoming != incoming_id):
+	if trigger != trigger_id:
 		return false
 	if required_tag != &"" and not state.has_tag(required_tag):
 		return false
+	if trigger == &"status":
+		if not state.is_active(incoming, catalog):
+			return false
+		if required_status == &"":
+			return true
+		return state.is_active(required_status, catalog) and state.get_amount(required_status) >= minimum_gauge
+	if incoming != &"" and incoming != incoming_id:
+		return false
 	if required_status != &"":
-		if trigger == &"status":
-			return state.is_active(required_status, catalog)
-		return state.get_amount(required_status) > 0.0001
+		return state.get_amount(required_status) > 0.0001 and state.get_amount(required_status) >= minimum_gauge
 	return true
