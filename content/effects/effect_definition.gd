@@ -14,6 +14,8 @@ enum StackPolicy { REFRESH, STACK, REPLACE, INDEPENDENT }
 @export_group("Instant / Periodic")
 @export var instant_heal: float = 0.0
 @export var damage_per_tick: float = 0.0
+@export var periodic_damage_type: StringName = ElementalIds.DAMAGE_PHYSICAL
+@export_range(0.0, 100.0, 0.01) var periodic_status_buildup_scale: float = 1.0
 @export var heal_per_tick: float = 0.0
 
 @export_group("Attributes")

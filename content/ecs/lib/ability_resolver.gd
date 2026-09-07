@@ -61,5 +61,9 @@ static func _resolve_melee(actor: Entity, ability: Entity, target: Entity, defin
 	var victim: Entity = hit.entity if hit != null else null
 	if victim == null or victim == actor or not CombatRules.can_damage(actor, victim):
 		return
-	DamageService.request(victim, DamageRequest.new(actor, ability, raw_damage, hit.position, direction))
+	DamageService.request(victim, DamageRequest.new(
+		actor, ability, raw_damage, hit.position, direction, DamageRequest.Kind.DIRECT,
+		definition.damage_type, definition.status_buildup_scale,
+	))
+	ElementalService.request_statuses(victim, definition.elemental_statuses, actor, ability, hit.position, direction)
 	EffectService.request_all(victim, definition.effects, actor, ability)

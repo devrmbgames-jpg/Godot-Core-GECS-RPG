@@ -22,10 +22,10 @@
 - [x] Описать design/runtime модель и допущения.
 - [x] Добавить идентификаторы, definitions и API-каталог prototype-конфигурации.
 - [x] Добавить runtime-компоненты статусов, резистов и материалов окружения.
-- [ ] Реализовать детерминированный resolver с лимитом цепочки реакций.
-- [ ] Интегрировать resolver с существующим typed damage pipeline без поломки generic damage.
-- [ ] Добавить action executor hooks для spawn/transform/presentation.
-- [ ] Добавить электрическую воду, влажный туман и ядовитое облако в prototype data.
+- [x] Реализовать детерминированный resolver с лимитом цепочки реакций.
+- [x] Интегрировать resolver с существующим typed damage pipeline без поломки generic damage.
+- [x] Добавить action executor hooks для spawn/transform/presentation.
+- [x] Добавить электрическую воду, влажный туман и ядовитое облако в prototype data.
 - [ ] Добавить тестовые сценарии без запуска Godot.
 - [ ] Обновить `CONTEXT.md` и документацию.
 - [ ] Запустить `python tools/check_gdscript_docs.py` и другие доступные статические проверки.
@@ -44,3 +44,5 @@
 - 2026-09-07: аудит ветки и архитектурных правил; создана рабочая ветка и этот журнал.
 - 2026-09-07: добавлены открытые StringName ID, typed Resource definitions, каталог-обёртка и полная prototype Dictionary-конфигурация множителей/резистов/реакций.
 - 2026-09-07: добавлены накопительный runtime status state, отдельные status immunities, resistance profile/modifiers и material tags; реализован strongest-positive/strongest-negative resolver.
+- 2026-09-07: реализованы bounded FIFO action queue, depth/fingerprint guards, damage/status/material reactions и typed world-action events.
+- 2026-09-07: существующие melee/projectile/periodic DamageRequest расширены damage type/buildup; Fireball и DoT definitions получили elemental types; actors и dummy подключены к runtime components.

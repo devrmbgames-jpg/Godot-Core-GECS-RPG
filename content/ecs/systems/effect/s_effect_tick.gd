@@ -35,6 +35,8 @@ func process(_entities: Array[Entity], components: Array, delta: float) -> void:
 						Vector3.ZERO,
 						Vector3.ZERO,
 						DamageRequest.Kind.PERIODIC,
+						definition.periodic_damage_type,
+						definition.periodic_status_buildup_scale,
 					),
 				)
 			if definition.heal_per_tick > 0.0:

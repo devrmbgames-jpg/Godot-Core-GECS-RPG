@@ -6,7 +6,7 @@ Components — данные, не workflow.
 
 - `ability/` — ability queue, persistent casting, cooldown and grant ownership.
 - `attributes/` — resolved stats, Health/Mana current values, dirty marker.
-- `combat/` — team, combat state/target, projectile payload, death tag.
+- `combat/` — team, combat state/target, projectile payload, death tag, elemental state/resistances/materials/status immunities.
 - `controller/` — player/AI/controller intent and AI goals.
 - `core/` — generic ownership.
 - `effect/` — effect runtime duration/tick/context.

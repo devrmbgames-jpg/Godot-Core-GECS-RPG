@@ -24,6 +24,8 @@ enum Timing { ATTACK, CAST, INSTANT }
 @export_group("Damage")
 @export var flat_damage: float = 0.0
 @export var damage_scale: float = 1.0
+@export var damage_type: StringName = ElementalIds.DAMAGE_PHYSICAL
+@export_range(0.0, 100.0, 0.01) var status_buildup_scale: float = 1.0
 @export var range: float = 2.0
 
 @export_group("Projectile")
@@ -32,6 +34,7 @@ enum Timing { ATTACK, CAST, INSTANT }
 
 @export_group("Effects")
 @export var effects: Array[EffectDefinition] = []
+@export var elemental_statuses: Array[ElementalStatusApplicationDefinition] = []
 
 @export_group("Presentation")
 @export var presentation_action: StringName = &"ability"

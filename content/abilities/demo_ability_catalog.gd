@@ -44,6 +44,7 @@ static func fireball() -> AbilityDefinition:
 	definition.base_cast_work = 0.65
 	definition.base_cooldown = 2.0
 	definition.flat_damage = 25.0; definition.damage_scale = 1.25; definition.range = 35.0
+	definition.damage_type = ElementalIds.DAMAGE_FIRE
 	definition.projectile_speed = 20.0; definition.projectile_lifetime = 4.0
 	definition.effects = [DemoEffectCatalog.burning()]
 	definition.presentation_action = &"cast_fireball"
