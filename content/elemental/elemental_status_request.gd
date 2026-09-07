@@ -13,6 +13,8 @@ var hit_position: Vector3 = Vector3.ZERO
 var direction: Vector3 = Vector3.ZERO
 var chain: ElementalChain
 var reaction_depth: int = 0
+## Explicit opt-in for beneficial self/allied status applications; never authorizes harmful HP damage.
+var allow_friendly: bool = false
 
 
 ## Captures a status command; amount is gauge strength and is ignored for CLEAR.
