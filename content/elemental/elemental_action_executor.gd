@@ -43,14 +43,16 @@ static func _modify_status(target: Entity, status_id: StringName, amount: float)
 		return
 	var status := state.get_status(status_id)
 	if status != null:
-		status.apply_delta(amount)
+		var transition := status.apply_delta(amount)
+		_emit_transition(target, transition)
 
 
 ## Clears status buildup and activity.
 static func _remove_status(target: Entity, status_id: StringName) -> void:
 	var state := target.get_component(C_ElementalState) as C_ElementalState
 	if state != null:
-		state.remove_status(status_id)
+		var transition := state.remove_status(status_id)
+		_emit_transition(target, transition)
 
 
 ## Sends nested reaction damage through the same typed DamageService pipeline with zero automatic buildup.
@@ -106,3 +108,13 @@ static func _publish_world_action(
 		target, queued.source, queued.ability, action.kind, action.semantic_id, amount,
 		queued.hit_position, queued.direction,
 	))
+
+
+## Publishes reaction-driven status changes for UI/presentation observers.
+static func _emit_transition(target: Entity, transition: ElementalStatusTransition) -> void:
+	if ECS.world != null and transition != null:
+		ECS.world.emit_event(
+			ElementalService.EVENT_STATUS_RESOLVED,
+			target,
+			ElementalStatusResolvedEvent.new(null, transition),
+		)

@@ -128,6 +128,14 @@ static func _data() -> Dictionary:
 				],
 			},
 			{
+				"id": "electric_overload", "trigger": "damage_status",
+				"first": "electric", "second": "electrified", "priority": 80,
+				"actions": [
+					{"kind": "deal_damage", "damage_type": "electric", "amount": 0.25, "scale_with_power": true},
+					{"kind": "emit_effect", "semantic_id": "electric_overload"},
+				],
+			},
+			{
 				"id": "poison_cloud_from_material", "trigger": "damage_material",
 				"first": "poison", "second": "poison_material", "priority": 60,
 				"actions": [

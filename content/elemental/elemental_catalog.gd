@@ -228,6 +228,23 @@ func _validate_references() -> void:
 	for level in [-1, 0, 1, 2, 3, 4]:
 		if not _resistance_levels.has(level):
 			_validation_errors.append("missing resistance multiplier for level %d" % level)
+	var reaction_ids: Dictionary = {}
+	for reaction in _reactions:
+		if reaction.id == &"" or reaction_ids.has(reaction.id):
+			_validation_errors.append("invalid or duplicate reaction: %s" % String(reaction.id))
+		else:
+			reaction_ids[reaction.id] = true
+		if reaction.trigger_kind != ElementalReactionDefinition.TriggerKind.STATUS_STATUS and not _damage_types.has(reaction.first_id):
+			_validation_errors.append("reaction %s references unknown damage type %s" % [reaction.id, reaction.first_id])
+		if reaction.trigger_kind != ElementalReactionDefinition.TriggerKind.DAMAGE_MATERIAL and not _statuses.has(reaction.second_id):
+			_validation_errors.append("reaction %s references unknown status %s" % [reaction.id, reaction.second_id])
+		if reaction.trigger_kind == ElementalReactionDefinition.TriggerKind.STATUS_STATUS and not _statuses.has(reaction.first_id):
+			_validation_errors.append("reaction %s references unknown status %s" % [reaction.id, reaction.first_id])
+		for action in reaction.actions:
+			if action.status_id != &"" and not _statuses.has(action.status_id):
+				_validation_errors.append("reaction %s action references unknown status %s" % [reaction.id, action.status_id])
+			if action.damage_type != &"" and not _damage_types.has(action.damage_type):
+				_validation_errors.append("reaction %s action references unknown damage type %s" % [reaction.id, action.damage_type])
 
 
 ## Builds an internal collision-safe key for a sparse two-dimensional table.

@@ -154,7 +154,7 @@ static func _enqueue_status_reactions(
 	for other in state.statuses:
 		if other == applied_state or not other.active or other.definition == null:
 			continue
-		var power := minf(request.buildup_amount, minf(applied_state.buildup, other.buildup))
+		var power := minf(applied_state.buildup, other.buildup)
 		for reaction in catalog.get_reactions(
 			ElementalReactionDefinition.TriggerKind.STATUS_STATUS,
 			applied_state.definition.id,
