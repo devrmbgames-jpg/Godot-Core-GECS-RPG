@@ -1,9 +1,9 @@
 ## Typed runtime override for one target's base resistance level.
-extends RefCounted
+extends Resource
 class_name ElementalResistanceValue
 
-var damage_type: StringName = &""
-var level: int = 0
+@export var damage_type: StringName = &""
+@export_range(-1, 4, 1) var level: int = 0
 
 
 ## Creates a clamped base override.

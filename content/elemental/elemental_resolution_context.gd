@@ -45,7 +45,7 @@ func try_mark_reaction(target: Entity, reaction_id: StringName) -> bool:
 
 ## Queues an action while budget remains; execution consumes the budget separately.
 func enqueue(action: ElementalQueuedAction) -> bool:
-	if action == null or remaining_actions <= 0:
+	if action == null or action_queue.size() >= remaining_actions:
 		return false
 	action_queue.append(action)
 	return true

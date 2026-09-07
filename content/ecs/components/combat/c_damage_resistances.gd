@@ -3,7 +3,7 @@ extends Component
 class_name C_DamageResistances
 
 @export var target_type: StringName = ElementalIds.TARGET_LIVING
-var base_overrides: Array[ElementalResistanceValue] = []
+@export var base_overrides: Array[ElementalResistanceValue] = []
 var modifiers: Array[ElementalResistanceModifier] = []
 
 

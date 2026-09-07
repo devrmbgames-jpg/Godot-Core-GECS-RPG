@@ -24,8 +24,9 @@ static func request_statuses(
 	ability: Entity = null,
 	hit_position: Vector3 = Vector3.ZERO,
 	direction: Vector3 = Vector3.ZERO,
+	initial_context: ElementalResolutionContext = null,
 ) -> void:
-	var context := ElementalResolutionContext.new()
+	var context := initial_context if initial_context != null else ElementalResolutionContext.new()
 	for application in applications:
 		if application != null and application.status_id != &"" and application.buildup_amount > 0.0:
 			request_status(target, ElementalStatusRequest.new(

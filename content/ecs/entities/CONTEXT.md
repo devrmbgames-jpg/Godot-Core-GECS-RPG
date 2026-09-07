@@ -1,5 +1,7 @@
 # ECS Entities Context
 
+`combat/e_elemental_subject.gd` is a reusable no-Health Entity for cells, zones, clouds and surfaces. Generic projectiles also define elemental state/resistance/immunity/material components so they can receive impacts without owning Health.
+
 Entity types используются только когда объект имеет собственную identity/lifecycle.
 
 - `character/e_kinematic_character.*` — CharacterBody3D actor baseline.
