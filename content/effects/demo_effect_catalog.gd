@@ -4,20 +4,24 @@ class_name DemoEffectCatalog
 
 
 ## Создаёт stackable periodic Poison definition до пяти stacks.
+## Periodic poison damage is typed but does not rebuild POISONED unless explicitly configured elsewhere.
 static func poison() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"poison"; effect.display_name = "Poison"
 	effect.duration = 6.0; effect.tick_interval = 1.0; effect.damage_per_tick = 4.0
+	effect.damage_type = &"POISON"; effect.buildup_scale = 0.0
 	effect.stack_policy = EffectDefinition.StackPolicy.STACK; effect.max_stacks = 5
 	effect.presentation_action = &"poison"
 	return effect
 
 
 ## Создаёт refreshable periodic Burning definition.
+## Burning ticks are FIRE damage but cannot perpetually refresh BURNING buildup by themselves.
 static func burning() -> EffectDefinition:
 	var effect := EffectDefinition.new()
 	effect.id = &"burning"; effect.display_name = "Burning"
 	effect.duration = 4.0; effect.tick_interval = 0.5; effect.damage_per_tick = 3.0
+	effect.damage_type = &"FIRE"; effect.buildup_scale = 0.0
 	effect.stack_policy = EffectDefinition.StackPolicy.REFRESH
 	effect.presentation_action = &"burning"
 	return effect
