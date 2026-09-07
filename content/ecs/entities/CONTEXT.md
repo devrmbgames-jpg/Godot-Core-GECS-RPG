@@ -7,6 +7,7 @@ Entity types используются только когда объект им�
 - `character/e_kinematic_character.*` — CharacterBody3D actor baseline.
 - `character/e_rigid_character.*` — RigidBody3D actor baseline.
 - `combat/e_projectile.*` — spatial projectile Entity.
+- `combat/e_elemental_subject.gd` — reusable no-Health reaction subject for a cell, zone, cloud or surface.
 - `ability/e_ability.gd` — off-tree runtime ability identity.
 - `effect/e_effect.gd` — off-tree runtime effect identity.
 - `item/e_item.gd` — off-tree runtime inventory item identity.

@@ -28,7 +28,7 @@
 - [x] Добавить электрическую воду, влажный туман и ядовитое облако в prototype data.
 - [x] Добавить тестовые сценарии без запуска Godot.
 - [x] Обновить `CONTEXT.md` и документацию.
-- [ ] Запустить `python tools/check_gdscript_docs.py` и другие доступные статические проверки.
+- [x] Запустить `python tools/check_gdscript_docs.py` и другие доступные статические проверки.
 - [ ] Отправить ветку и открыть отдельный PR в `feature/data-driven-elemental-reactions`.
 
 ## Принятые решения
@@ -49,3 +49,4 @@
 - 2026-09-07: добавлен world action adapter для PackedScene/EffectDefinition, environment subjects без Health, дополнительный electric overload damage и глобальная priority-сортировка reaction candidates.
 - 2026-09-07: добавлены `docs/ELEMENTAL_REACTIONS.md`, context links и executable source scenarios для thresholds/resists/immunities/reactions/environment/guards.
 - 2026-09-07: EffectDefinition получил typed resistance modifiers с lifecycle sync/remove; они участвуют в общем strongest-per-sign stacking.
+- 2026-09-07: финальный static audit пройден: docs checker, `git diff --check`, unique `class_name`, наличие всех обязательных damage/status IDs. Godot по условию задачи не запускался.

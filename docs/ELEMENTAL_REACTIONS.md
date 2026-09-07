@@ -38,6 +38,7 @@ flowchart TD
 | `O_Damage` | Существующая точка изменения Health: resolver → Armor или HealService → events/death. |
 | `O_ElementalStatus` / `S_ElementalStatus` | Direct status requests и duration/decay без component churn. |
 | `O_ElementalWorldAction` | Опциональное world-owned сопоставление semantic IDs с PackedScene/EffectDefinition. |
+| `E_ElementalSubject` | Готовый no-Health Entity contract для клетки, зоны, облака или поверхности. |
 
 ## Накопление и длительность
 
@@ -92,6 +93,8 @@ final = clamp(base + strongest_negative + strongest_positive, -1, 4)
 ```
 
 Модификаторы одинакового знака не суммируются независимо от количества предметов, статусов или эффектов. Stable `source_id` не позволяет одному источнику случайно продублировать modifier.
+
+Активные статусы читаются прямо из их definitions. Длительные `EffectDefinition.resistance_modifiers` добавляются в target profile с ID конкретного runtime Effect Entity и удаляются при expiry/replace. Предметы, ауры и окружение используют тот же `C_DamageResistances.set_modifier(damage_type, source_id, strength)` / `remove_modifiers_from(source_id)` API.
 
 | Level | Семантика | Damage multiplier |
 | ---: | --- | ---: |
@@ -179,7 +182,7 @@ Ability может иметь `elemental_statuses: Array[ElementalStatusApplicat
 
 Клетка grid, Area3D-зона, облако, поверхность и projectile становятся участниками одинаково: им добавляются `C_ElementalState`, `C_DamageResistances`, `C_StatusImmunities`, `C_ReactiveMaterials` по необходимости. `C_Health` для environment subject необязателен: `O_Damage` всё равно разрешит material/status reactions, но не станет менять HP. Transform/position остаются authority Godot Node.
 
-`TransformSurface` немедленно меняет gameplay material tag. Scene mesh, particles и audio меняются adapter-ом по `ElementalWorldActionEvent`. `SpawnEntity` создаёт настроенный PackedScene через `O_ElementalWorldAction`; если spawned object должен стать GECS Entity, конкретный world adapter обязан зарегистрировать его согласно lifecycle этого мира.
+`TransformSurface` немедленно меняет gameplay material tag. Scene mesh, particles и audio меняются adapter-ом по `ElementalWorldActionEvent`. `SpawnEntity` создаёт настроенный PackedScene через `O_ElementalWorldAction`: обычный Node добавляется под configured parent, а GECS `Entity` регистрируется через `ECS.world.add_entity()`.
 
 ## Тестовые сценарии
 

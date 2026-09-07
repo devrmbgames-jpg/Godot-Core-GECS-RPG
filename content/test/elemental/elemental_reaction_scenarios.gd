@@ -18,6 +18,7 @@ static func run_all() -> Array[String]:
 	_check_status_immunity_does_not_block_damage(catalog, failures)
 	_check_affinity_healing(catalog, failures)
 	_check_environment_reactions(catalog, failures)
+	_check_world_action_definitions(catalog, failures)
 	_check_reaction_budget(catalog, failures)
 	_check_duration_and_decay(catalog, failures)
 	return failures
@@ -26,8 +27,23 @@ static func run_all() -> Array[String]:
 ## Requires the prototype catalog to resolve every mandatory cross-reference.
 static func _check_catalog(catalog: ElementalCatalog, failures: Array[String]) -> void:
 	_expect(catalog.get_validation_errors().is_empty(), "catalog has validation errors", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_FIRE, ElementalIds.STATUS_BURNING), 1.2), "FIRE+BURNING multiplier must be 1.2", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_FIRE, ElementalIds.STATUS_WET), 0.8), "FIRE+WET multiplier must be 0.8", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_FIRE, ElementalIds.STATUS_COLD), 0.65), "FIRE+COLD multiplier must be 0.65", failures)
 	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_FIRE, ElementalIds.STATUS_FROZEN), 0.4), "FIRE+FROZEN multiplier must be 0.4", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ICE, ElementalIds.STATUS_WET), 1.2), "ICE+WET multiplier must be 1.2", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ICE, ElementalIds.STATUS_FROZEN), 1.25), "ICE+FROZEN multiplier must be 1.25", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ICE, ElementalIds.STATUS_COLD), 1.5), "ICE+COLD multiplier must be 1.5", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_PHYSICAL, ElementalIds.STATUS_FROZEN), 2.5), "PHYSICAL+FROZEN multiplier must be 2.5", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ELECTRIC, ElementalIds.STATUS_WET), 1.5), "ELECTRIC+WET multiplier must be 1.5", failures)
+	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ELECTRIC, ElementalIds.STATUS_ELECTRIFIED), 1.2), "ELECTRIC+ELECTRIFIED multiplier must be 1.2", failures)
 	_expect(is_equal_approx(catalog.get_damage_multiplier(ElementalIds.DAMAGE_ACID, ElementalIds.STATUS_WET), 1.0), "unspecified multiplier must default to 1.0", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(-1), 2.0), "resistance -1 multiplier must be 2.0", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(0), 1.0), "resistance 0 multiplier must be 1.0", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(1), 0.5), "resistance +1 multiplier must be 0.5", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(2), 0.0), "resistance +2 multiplier must be 0.0", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(3), -0.5), "resistance +3 multiplier must be -0.5", failures)
+	_expect(is_equal_approx(catalog.get_resistance_multiplier(4), -1.0), "resistance +4 multiplier must be -1.0", failures)
 
 
 ## Verifies activation thresholds and proportional opposition instead of boolean cancellation.
@@ -68,6 +84,12 @@ static func _check_damage_multiplier(catalog: ElementalCatalog, failures: Array[
 ## Verifies strongest-per-sign modifier stacking and final range clamp.
 static func _check_resistance_stacking(catalog: ElementalCatalog, failures: Array[String]) -> void:
 	var profile := C_DamageResistances.new(ElementalIds.TARGET_LIVING)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_LIVING, ElementalIds.DAMAGE_NEGATIVE) == -1, "living NEGATIVE base must be -1", failures)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_LIVING, ElementalIds.DAMAGE_POSITIVE) == 4, "living POSITIVE base must be +4", failures)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_CONSTRUCT, ElementalIds.DAMAGE_NEGATIVE) == 2, "construct NEGATIVE base must be +2", failures)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_CONSTRUCT, ElementalIds.DAMAGE_POSITIVE) == 2, "construct POSITIVE base must be +2", failures)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_UNDEAD, ElementalIds.DAMAGE_POSITIVE) == -1, "undead POSITIVE base must be -1", failures)
+	_expect(catalog.get_base_resistance(ElementalIds.TARGET_UNDEAD, ElementalIds.DAMAGE_NEGATIVE) == 4, "undead NEGATIVE base must be +4", failures)
 	profile.set_modifier(ElementalIds.DAMAGE_NEGATIVE, &"blessing_a", 1)
 	profile.set_modifier(ElementalIds.DAMAGE_NEGATIVE, &"blessing_b", 2)
 	var level := ElementalResistanceResolver.get_final_resistance(profile, null, catalog, ElementalIds.DAMAGE_NEGATIVE)
@@ -137,6 +159,28 @@ static func _check_environment_reactions(catalog: ElementalCatalog, failures: Ar
 	_expect(earth_materials.has_material(ElementalIds.SURFACE_LAVA), "FIRE+EARTH must transform the surface to LAVA", failures)
 
 
+## Verifies prototype reactions expose spawn, transform and nested damage action variants.
+static func _check_world_action_definitions(catalog: ElementalCatalog, failures: Array[String]) -> void:
+	var fire_wet := catalog.get_reactions(
+		ElementalReactionDefinition.TriggerKind.DAMAGE_STATUS,
+		ElementalIds.DAMAGE_FIRE,
+		ElementalIds.STATUS_WET,
+	)
+	var poison_material := catalog.get_reactions(
+		ElementalReactionDefinition.TriggerKind.DAMAGE_MATERIAL,
+		ElementalIds.DAMAGE_POISON,
+		ElementalIds.MATERIAL_POISON,
+	)
+	var overload := catalog.get_reactions(
+		ElementalReactionDefinition.TriggerKind.DAMAGE_STATUS,
+		ElementalIds.DAMAGE_ELECTRIC,
+		ElementalIds.STATUS_ELECTRIFIED,
+	)
+	_expect(_has_action(fire_wet, ElementalReactionActionDefinition.Kind.SPAWN_ENTITY, ElementalIds.ENTITY_WET_MIST), "FIRE+WET must request wet mist spawn", failures)
+	_expect(_has_action(poison_material, ElementalReactionActionDefinition.Kind.SPAWN_ENTITY, ElementalIds.ENTITY_POISON_CLOUD), "POISON material reaction must request poison cloud spawn", failures)
+	_expect(_has_action(overload, ElementalReactionActionDefinition.Kind.DEAL_DAMAGE), "ELECTRIC overload must demonstrate nested damage", failures)
+
+
 ## Verifies a deliberately tiny queue budget terminates a multi-action reaction.
 static func _check_reaction_budget(catalog: ElementalCatalog, failures: Array[String]) -> void:
 	var target := _subject(ElementalIds.TARGET_LIVING)
@@ -171,6 +215,19 @@ static func _subject(target_type: StringName) -> Entity:
 	subject.add_component(C_StatusImmunities.new())
 	subject.add_component(C_ReactiveMaterials.new())
 	return subject
+
+
+## Finds an action kind and optional semantic ID in typed reaction definitions.
+static func _has_action(
+	reactions: Array[ElementalReactionDefinition],
+	kind: ElementalReactionActionDefinition.Kind,
+	semantic_id: StringName = &"",
+) -> bool:
+	for reaction in reactions:
+		for action in reaction.actions:
+			if action.kind == kind and (semantic_id == &"" or action.semantic_id == semantic_id):
+				return true
+	return false
 
 
 ## Appends a readable failure without aborting later scenarios.
