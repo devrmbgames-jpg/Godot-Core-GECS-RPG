@@ -21,5 +21,8 @@ enum StackPolicy { REFRESH, STACK, REPLACE, INDEPENDENT }
 @export_group("Attributes")
 @export var stat_modifiers: Array[StatModifierDefinition] = []
 
+@export_group("Elemental Resistances")
+@export var resistance_modifiers: Array[ElementalResistanceModifierDefinition] = []
+
 @export_group("Presentation")
 @export var presentation_action: StringName = &"effect"
