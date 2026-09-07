@@ -23,15 +23,17 @@ static func resolve_damage(state: C_ElementalState, catalog: ElementalCatalog, r
 	result.impact_strength = raw
 	result.resistance = state.get_resistance(request.damage_type, catalog)
 	result.signed_damage = preview_damage(state, catalog, request.damage_type, raw)
-	if request.buildup_scale > 0.0 and _valid_amount(request.buildup_scale):
+	if raw > 0.0 and request.buildup_scale > 0.0 and _valid_amount(request.buildup_scale):
 		for status_id in catalog.buildup_statuses(request.damage_type):
 			var strength := raw * request.buildup_scale * catalog.get_buildup_rate(request.damage_type, status_id)
-			if state.add_gauge(status_id, strength, catalog, request.source, request.ability) > 0.0:
-				result.changed = true
+			_mark_gauge_add(state, status_id, strength, catalog, request.source, request.ability, result)
 	for application in request.status_applications:
-		if application != null and state.add_gauge(application.status_id, application.amount, catalog, request.source, request.ability) > 0.0:
-			result.changed = true
-	ElementalReactionEngine.resolve(state, catalog, request.damage_type, raw, result)
+		if application != null:
+			_mark_gauge_add(state, application.status_id, application.amount, catalog, request.source, request.ability, result)
+	if raw > 0.0:
+		ElementalReactionEngine.resolve(state, catalog, request.damage_type, raw, result)
+	elif result.changed:
+		ElementalReactionEngine.resolve(state, catalog, &"", 0.0, result)
 	return _finish(state, catalog, result)
 
 
@@ -42,30 +44,36 @@ static func resolve_status(state: C_ElementalState, catalog: ElementalCatalog, r
 		return _finish(state, catalog, result)
 	match request.operation:
 		ElementalStatusRequest.Operation.ADD:
-			if state.add_gauge(request.status_id, request.amount, catalog, request.source, request.ability) > 0.0:
-				result.changed = true
+			var before_revision := state.revision
+			state.add_gauge(request.status_id, request.amount, catalog, request.source, request.ability)
+			result.changed = state.revision != before_revision
 			result.impact_strength = maxf(0.0, request.amount) if _valid_amount(request.amount) else 0.0
-			ElementalReactionEngine.resolve(state, catalog, &"", result.impact_strength, result)
+			if result.changed:
+				ElementalReactionEngine.resolve(state, catalog, &"", result.impact_strength, result)
 		ElementalStatusRequest.Operation.REMOVE:
 			result.changed = state.consume_gauge(request.status_id, request.amount) > 0.0
 		ElementalStatusRequest.Operation.CLEAR:
-			var before := state.get_amount(request.status_id)
+			var before_revision := state.revision
 			state.clear_gauge(request.status_id)
-			result.changed = before > 0.0
+			result.changed = state.revision != before_revision
 	return _finish(state, catalog, result)
 
 
 ## Advances gauge lifetimes and decay. Decay cannot introduce a new reaction, so no chain is run.
 static func tick(state: C_ElementalState, catalog: ElementalCatalog, delta: float) -> ElementalResolution:
 	var result := _begin(state, catalog, null, null, Vector3.ZERO, Vector3.ZERO, null, 0)
-	var before: Dictionary = {}
-	for item in state.gauges:
-		before[item.id] = item.revision
+	var before_revision := state.revision
 	state.advance(delta, catalog)
-	for item in state.gauges:
-		if item.revision != int(before.get(item.id, -1)):
-			result.changed = true
+	result.changed = state.revision != before_revision
 	return _finish(state, catalog, result)
+
+
+## Adds one status and marks any strength/lifetime/source refresh, even when max_gauge prevents numeric growth.
+static func _mark_gauge_add(state: C_ElementalState, status_id: StringName, amount: float, catalog: ElementalCatalog, source: Entity, ability: Entity, result: ElementalResolution) -> void:
+	var before_revision := state.revision
+	state.add_gauge(status_id, amount, catalog, source, ability)
+	if state.revision != before_revision:
+		result.changed = true
 
 
 ## Creates a request-local result with a shared chain budget and immutable initial status snapshot.
