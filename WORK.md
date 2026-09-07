@@ -23,6 +23,7 @@ Read root `CONTEXT.md`, `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.
 - [x] Create separate working branch and this recovery journal.
 - [x] Read exact damage, ability, effect, ECS and playground contracts; finish integration design.
 - [x] Add typed definition records, runtime gauge state and source-addressable resistance API.
+- [x] Recover the existing six-commit work branch without rewriting history.
 - [ ] Implement catalog adapter, prototype rules and resistance/gauge resolution.
 - [ ] Implement deterministic resolver, damage/effect bridge and status lifecycle.
 - [ ] Implement environment action adapter and sample water/fog/poison/lava rules.
@@ -34,7 +35,8 @@ Read root `CONTEXT.md`, `SKILL.md`, `docs/ARCHITECTURE.md`, `docs/STRICT_TYPING.
 
 - `b5b7e8a` — create recovery journal.
 - `2a00577` — link journal from root context.
-- `d4b88b8` — typed gauges, rule/action definitions and resistance state (pushed to working branch).
-- Latest checkpoint: `d4b88b8e66fdc98249e9355a638f627d087ceef2` plus this journal commit.
+- `d4b88b8` — typed gauges, rule/action definitions and resistance state.
+- Recovered head: `c14baa52ce3462969ac19fd90bfcaa39f68fec93`, six commits ahead of the requested base.
+- This checkpoint records recovery and the remaining tasks before further implementation.
 
 The original branch is untouched. No Godot runtime tests have been run. Next: catalog and resolver. Existing DamageRequest constructor is positional; append new optional fields only. O_Damage owns health/death, O_Heal owns healing, EffectRuntime owns effect Entity lifecycles. AbilityResolver and S_Projectile are the delivery entry points; S_EffectTick creates periodic DamageRequest. Do not replace those contracts or modify GECS. All new GDScript must have `##` documentation.
